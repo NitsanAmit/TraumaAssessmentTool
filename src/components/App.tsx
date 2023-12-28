@@ -1,8 +1,11 @@
 import questions from  '../data/questions.json';
 import { MinMaxScale } from './questionnaires/base/MinMaxScale';
+import { ApplicationStateStore } from '../store/ApplicationStateStore';
+import { useState } from 'react';
 
 export const App: React.FC = () => {
 
+  const [appStateStore, setAppStateStore] = useState(new ApplicationStateStore());
   return (
     <div className="App">
       <h1>hello</h1>
