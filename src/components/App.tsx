@@ -2,7 +2,7 @@ import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationSta
 import { useState } from 'react';
 import { WelcomeScreen } from './WelcomeScreen';
 import { PersonalDetails } from './PersonalDetails';
-import { QuestionnairesFlow } from './questionnaires/base/QuestionnairesFlow';
+import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
 import { Summary } from './Summary';
 import { observer } from "mobx-react-lite"
 import "monday-ui-react-core/tokens";

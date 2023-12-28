@@ -15,7 +15,7 @@ export class ApplicationStateStore {
 
   questionnairesStore: QuestionnairesStore;
 
-  step: APPLICATION_STEP = APPLICATION_STEP.WELCOME;
+  step: APPLICATION_STEP = APPLICATION_STEP.QUESTIONNAIRES;
 
   constructor() {
     makeAutoObservable(this)
