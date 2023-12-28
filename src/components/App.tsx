@@ -1,32 +1,32 @@
-import questions from  '../data/questions.json';
-import { MinMaxScale } from './questionnaires/base/MinMaxScale';
-import { ApplicationStateStore } from '../store/ApplicationStateStore';
+import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationStateStore';
 import { useState } from 'react';
+import { WelcomeScreen } from './WelcomeScreen';
+import { PersonalDetails } from './PersonalDetails';
+import { QuestionnairesFlow } from './questionnaires/base/QuestionnairesFlow';
+import { Summary } from './Summary';
 
 export const App: React.FC = () => {
 
   const [appStateStore, setAppStateStore] = useState(new ApplicationStateStore());
+
   return (
     <div className="App">
-      <h1>hello</h1>
       {
-        questions.map((question: Question, index) => {
-          const QuestionComponent = questionTypeToComponentMap[question.questionnaireType];
-          if (!QuestionComponent) {
-            return null;
-          }
-          return <QuestionComponent key={index} {...question} />
-        })
+        appStateStore.step === APPLICATION_STEP.WELCOME &&
+        <WelcomeScreen />
+      }
+      {
+        appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
+        <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore} />
+      }
+      {
+        appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
+        <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore} />
+      }
+      {
+        appStateStore.step === APPLICATION_STEP.SUMMARY &&
+        <Summary appStateStore={appStateStore} />
       }
     </div>
   );
 }
-
-export type Question = {
-  questionnaire: string;
-  questionnaireType: string;
-}
-
-const questionTypeToComponentMap: Record<string, React.FC<any>> = {
-  'min-max-scale': MinMaxScale,
-};

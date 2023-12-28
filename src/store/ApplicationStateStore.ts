@@ -2,6 +2,13 @@ import { observable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
 
+export enum APPLICATION_STEP {
+  WELCOME = 'WELCOME',
+  PERSONAL_DETAILS = 'PERSONAL_DETAILS',
+  QUESTIONNAIRES = 'QUESTIONNAIRES',
+  SUMMARY = 'SUMMARY',
+}
+
 export class ApplicationStateStore {
 
   @observable
@@ -9,6 +16,9 @@ export class ApplicationStateStore {
 
   @observable
   questionnairesStore: QuestionnairesStore;
+
+  @observable
+  step: APPLICATION_STEP = APPLICATION_STEP.WELCOME;
 
   constructor() {
     this.personalDetailsStore = new PersonalDetailsStore();

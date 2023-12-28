@@ -1,4 +1,4 @@
-import { Question } from '../../App';
+import { Question } from './QuestionnairesFlow';
 
 export type MinMaxScaleProps = Question & {
   scoreBar: number;
