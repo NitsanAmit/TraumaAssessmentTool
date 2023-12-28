@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { DropdownOption } from '../components/types';
 
 export class PersonalDetailsStore {
 
@@ -6,11 +7,11 @@ export class PersonalDetailsStore {
 
   lastName: string = "";
 
-  gender: string = "";
+  gender: DropdownOption | undefined;
 
   age: string = "";
 
-  familyStatus: string = "";
+  familyStatus: DropdownOption | undefined;
 
   childNumber: string = "";
 

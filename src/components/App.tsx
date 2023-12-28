@@ -10,7 +10,6 @@ import "monday-ui-react-core/tokens";
 export const App: React.FC = observer(() => {
 
   const [appStateStore, setAppStateStore] = useState(new ApplicationStateStore());
-  console.log("render app");
 
   return (
     <div className="flex-column align-center justify-center">

@@ -3,7 +3,7 @@ import questions from '../data/questions.json';
 
 export class QuestionnairesStore {
 
-  questionnaireIndex: number = 6;
+  questionnaireIndex: number = 0;
   questionnaireScores = {};
 
   constructor() {

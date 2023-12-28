@@ -1,20 +1,18 @@
 import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
-import { TextField } from 'monday-ui-react-core';
-import { Dropdown } from 'monday-ui-react-core';
+import { TextField, Dropdown, Button } from 'monday-ui-react-core';
 import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Button } from 'monday-ui-react-core';
 import styled from 'styled-components';
+import { DropdownOption } from './types';
 
-type Option = { label: string, value: string };
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
   const onFirstNameChanged = useCallback(value => personalDetailsStore.firstName = value, [personalDetailsStore]);
   const onLastNameChanged = useCallback(value => personalDetailsStore.lastName = value, [personalDetailsStore]);
-  const onGenderChanged = useCallback((value: Option) => personalDetailsStore.gender = value.label, [personalDetailsStore]);
+  const onGenderChanged = useCallback((value: DropdownOption) => personalDetailsStore.gender = value, [personalDetailsStore]);
   const onAgeChanged = useCallback(value => personalDetailsStore.age = value, [personalDetailsStore]);
-  const onFamilyStatusChanged = useCallback((value: Option) => personalDetailsStore.familyStatus = value.label, [personalDetailsStore]);
+  const onFamilyStatusChanged = useCallback((value: DropdownOption) => personalDetailsStore.familyStatus = value, [personalDetailsStore]);
   const onchildnumberChanged = useCallback(value => personalDetailsStore.childNumber = value, [personalDetailsStore]);
   const onGeneralHealthStatusChanged = useCallback(value => personalDetailsStore.generalHealthStatus = value, [personalDetailsStore]);
   const onGeneralStateChanged = useCallback(value => personalDetailsStore.generalState = value, [personalDetailsStore]);

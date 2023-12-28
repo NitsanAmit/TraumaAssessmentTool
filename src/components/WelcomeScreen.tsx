@@ -1,10 +1,9 @@
-import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationStateStore';
+import { ApplicationStateStore } from '../store/ApplicationStateStore';
 import { Button } from 'monday-ui-react-core';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ appStateStore }) => {
-  console.log("render welcome screen");
   return (
     <WelcomeScreenContainer>
       <Header>כלי אבחון פוסט-טראומה ראשוני</Header>

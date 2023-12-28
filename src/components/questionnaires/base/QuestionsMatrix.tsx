@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
 import { RadioButton } from 'monday-ui-react-core';
+import styled from 'styled-components';
 
 
 export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({ questions, answers, onChange }) => {
@@ -14,10 +15,10 @@ export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({ quest
   };
 
   return (
-    <table className="full-width" style={{ tableLayout: 'fixed'}}>
+    <StyledTable>
       <thead>
       <tr>
-        <th style={{width: '40%'}}></th>
+        <StyledTableHeader/>
         {
           answers.map(answer => <th key={answer.label}>{answer.label}</th>)
         }
@@ -40,7 +41,7 @@ export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({ quest
         ))
       }
       </tbody>
-    </table>
+    </StyledTable>
   );
 });
 
@@ -52,3 +53,11 @@ export type QuestionsMatrixProps = {
     value: number;
   }[];
 }
+
+const StyledTable = styled.table`
+          table-layout: fixed;
+          width: 100%;
+  `,
+  StyledTableHeader = styled.th`
+    width: 40%;
+  `;

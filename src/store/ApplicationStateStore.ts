@@ -28,5 +28,6 @@ export class ApplicationStateStore {
   }
   onPersonalDetailsFinished(): void {
     this.step = APPLICATION_STEP.QUESTIONNAIRES;
-  } 
+    console.log(this.personalDetailsStore);
+  }
 }
