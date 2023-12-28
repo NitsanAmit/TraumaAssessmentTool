@@ -9,7 +9,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ appStateS
     <WelcomeScreenContainer>
       <Header>כלי אבחון פוסט-טראומה ראשוני</Header>
       <h2>הכלי פותח ע"י המועצה הישראלית לפוסט טראומה</h2>
-      <Button onClick={() => appStateStore.step = APPLICATION_STEP.PERSONAL_DETAILS}>התחל</Button>
+      <Button onClick={() => appStateStore.onWelcomeFinished()}>התחל</Button>
     </WelcomeScreenContainer>
   );
 });
@@ -24,5 +24,5 @@ const WelcomeScreenContainer = styled.div`
   align-items: center;
 `,
   Header = styled.h1`
-  color: salmon;
+  color: green;
 `;

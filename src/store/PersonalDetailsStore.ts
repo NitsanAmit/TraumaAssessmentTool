@@ -2,13 +2,25 @@ import { makeAutoObservable } from 'mobx';
 
 export class PersonalDetailsStore {
 
-  firstName: string = "Noam ";
+  firstName: string = "";
 
-  lastName?: string;
+  lastName: string = "";
 
-  idNumber?: string;
+  gender: string = "";
 
-  phoneNumber?: string;
+  age: string = "";
+
+  familyStatus: string = "";
+
+  childNumber: string = "";
+
+  generalHealthStatus: string = "";
+
+  generalState: string = "";
+
+  generalMentalHealthState: string = "";
+
+  drugsUsage: string = "";
 
   constructor() {
     makeAutoObservable(this);

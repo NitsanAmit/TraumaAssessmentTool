@@ -13,14 +13,14 @@ export const App: React.FC = observer(() => {
   console.log("render app");
 
   return (
-    <div className="App">
+    <div className="flex-column align-center justify-center">
       {
         appStateStore.step === APPLICATION_STEP.WELCOME &&
         <WelcomeScreen appStateStore={appStateStore} />
       }
       {
         appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
-        <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore} />
+        <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore} onNextClicked={() => appStateStore.onPersonalDetailsFinished()} />
       }
       {
         appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&

@@ -15,7 +15,7 @@ export class ApplicationStateStore {
 
   questionnairesStore: QuestionnairesStore;
 
-  step: APPLICATION_STEP = APPLICATION_STEP.QUESTIONNAIRES;
+  step: APPLICATION_STEP = APPLICATION_STEP.WELCOME;
 
   constructor() {
     makeAutoObservable(this)
@@ -23,4 +23,10 @@ export class ApplicationStateStore {
     this.questionnairesStore = new QuestionnairesStore();
   }
 
+  onWelcomeFinished(): void {
+     this.step = APPLICATION_STEP.PERSONAL_DETAILS;
+  }
+  onPersonalDetailsFinished(): void {
+    this.step = APPLICATION_STEP.QUESTIONNAIRES;
+  } 
 }
