@@ -1,19 +1,17 @@
-import { observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export class PersonalDetailsStore {
 
-  @observable
-  firstName?: string;
+  firstName: string = "Noam ";
 
-  @observable
   lastName?: string;
 
-  @observable
   idNumber?: string;
 
-  @observable
   phoneNumber?: string;
 
-  constructor() {}
+  constructor() {
+    makeAutoObservable(this);
+  }
 
 }

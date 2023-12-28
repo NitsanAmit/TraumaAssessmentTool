@@ -4,16 +4,18 @@ import { WelcomeScreen } from './WelcomeScreen';
 import { PersonalDetails } from './PersonalDetails';
 import { QuestionnairesFlow } from './questionnaires/base/QuestionnairesFlow';
 import { Summary } from './Summary';
+import { observer } from "mobx-react-lite"
 
-export const App: React.FC = () => {
+export const App: React.FC = observer(() => {
 
   const [appStateStore, setAppStateStore] = useState(new ApplicationStateStore());
+  console.log("render app");
 
   return (
     <div className="App">
       {
         appStateStore.step === APPLICATION_STEP.WELCOME &&
-        <WelcomeScreen />
+        <WelcomeScreen appStateStore={appStateStore} />
       }
       {
         appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
@@ -29,4 +31,4 @@ export const App: React.FC = () => {
       }
     </div>
   );
-}
+});

@@ -1,7 +1,9 @@
-import { observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export class QuestionnairesStore {
 
-  constructor() {}
+  constructor() {
+    makeAutoObservable(this);
+  }
 
 }
