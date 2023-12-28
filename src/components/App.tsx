@@ -5,6 +5,7 @@ import { PersonalDetails } from './PersonalDetails';
 import { QuestionnairesFlow } from './questionnaires/base/QuestionnairesFlow';
 import { Summary } from './Summary';
 import { observer } from "mobx-react-lite"
+import "monday-ui-react-core/tokens";
 
 export const App: React.FC = observer(() => {
 
