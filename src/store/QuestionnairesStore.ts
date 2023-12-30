@@ -7,7 +7,7 @@ const CUT_OFF_STEP = 'cut-off';
 
 export class QuestionnairesStore {
 
-  questionnaireIndex: number = 3;
+  questionnaireIndex: number = 12;
   questionnaireScores = {};
   questionnairesStates = Array<unknown>(questions.length);
 

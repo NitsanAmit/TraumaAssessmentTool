@@ -1,5 +1,5 @@
 import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { Button, Dropdown, Field, Input, Option, Textarea } from '@fluentui/react-components';

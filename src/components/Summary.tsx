@@ -46,11 +46,11 @@ export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
           </TableBody>
         </StyledTable>
       </div>
-      <Button appearance="primary" size="large" className="full-width" onClick={() => appStateStore.exportToPdf()}>
+      <Button appearance="primary" size="large" className="full-width" onClick={() => appStateStore.exportToPdf(true)}>
         שמור תוצאות כ-PDF
       </Button>
       <Button appearance="primary" size="large" className={styles.noIdButton}
-              onClick={() => appStateStore.exportToPdf()}>
+              onClick={() => appStateStore.exportToPdf(false)}>
         שמור ללא פרטים מזהים
       </Button>
     </div>
