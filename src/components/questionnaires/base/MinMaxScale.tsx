@@ -1,10 +1,10 @@
-import { Question } from '../QuestionnairesFlow';
-import styled from 'styled-components';
-import { Button, RadioButton } from 'monday-ui-react-core';
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { Radio, RadioGroup, RadioGroupOnChangeData } from '@fluentui/react-components';
+import { QuestionnaireBaseProps } from './types';
+import { QuestionnaireBase } from './QuestionnaireBase';
 
-export type MinMaxScaleProps = Question & {
+export type MinMaxScaleProps = QuestionnaireBaseProps & {
   scoreBar: number;
   min: number;
   max: number;
@@ -14,6 +14,7 @@ export type MinMaxScaleProps = Question & {
 }
 
 export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
+                                                                   initialState,
                                                                    scoreBar,
                                                                    min,
                                                                    max,
@@ -24,37 +25,22 @@ export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
                                                                  }) => {
 
   const rangeValues = Array.from(Array(max - min - 1).keys()).map(i => i + min + 1);
-  const [selection, setSelection] = useState<number>();
-  const onSelectionChanged = (value: number) => {
-    setSelection(value);
+  const [selection, setSelection] = useState<number>(initialState as number);
+  const onSelectionChanged = (_, { value }: RadioGroupOnChangeData) => {
+    setSelection(parseInt(value));
   };
   const didPassScoreBar = !!(selection && selection >= scoreBar);
   return (
-    <>
-      <QuestionTitle>{questionTitle}</QuestionTitle>
-      <div className="flex-row full-width">
-        <StyledRadioButton text={minLabel} value={min.toString()} checked={selection === min} onSelect={() => onSelectionChanged(min)}/>
+    <QuestionnaireBase questionTitle={questionTitle} nextEnabled={selection !== undefined}
+                       onNextClicked={() => onNextClicked(selection, didPassScoreBar, selection!)}>
+      <RadioGroup onChange={onSelectionChanged}>
+        <Radio value={min.toString()} label={`${min} (${minLabel})`} checked={selection === min}/>
         {
-          rangeValues.map(value => <StyledRadioButton key={value}
-                                                      text={value.toString()}
-                                                      value={value.toString()}
-                                                      checked={selection === value}
-                                                      onSelect={() => onSelectionChanged(value)}/>)
+          rangeValues.map(value => <Radio key={value} label={value.toString()} value={value.toString()}
+                                          checked={selection === value}/>)
         }
-        <StyledRadioButton text={maxLabel} value={max.toString()} checked={selection === max} onSelect={() => onSelectionChanged(max)}/>
-      </div>
-      <Button className="margin-top-ml" onClick={() => onNextClicked(didPassScoreBar, selection!)} disabled={!selection}>המשך</Button>
-    </>
+        <Radio value={max.toString()} label={`${max} (${maxLabel})`} checked={selection === max}/>
+      </RadioGroup>
+    </QuestionnaireBase>
   );
 });
-
-const QuestionTitle = styled.h2`
-          color: salmon;
-          text-align: center;
-  `,
-  StyledRadioButton = styled(RadioButton)`
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    align-items: center;
-  `;

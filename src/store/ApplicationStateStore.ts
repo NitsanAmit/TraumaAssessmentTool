@@ -1,4 +1,4 @@
-import { makeAutoObservable, observable } from 'mobx';
+import { computed, makeAutoObservable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
 
@@ -8,6 +8,13 @@ export enum APPLICATION_STEP {
   QUESTIONNAIRES = 'QUESTIONNAIRES',
   SUMMARY = 'SUMMARY',
 }
+
+const APPLICATION_STEPS = [
+  APPLICATION_STEP.WELCOME,
+  APPLICATION_STEP.PERSONAL_DETAILS,
+  APPLICATION_STEP.QUESTIONNAIRES,
+  APPLICATION_STEP.SUMMARY,
+];
 
 export class ApplicationStateStore {
 
@@ -20,14 +27,40 @@ export class ApplicationStateStore {
   constructor() {
     makeAutoObservable(this)
     this.personalDetailsStore = new PersonalDetailsStore();
-    this.questionnairesStore = new QuestionnairesStore();
+    this.questionnairesStore = new QuestionnairesStore(this.next.bind(this));
   }
 
-  onWelcomeFinished(): void {
-     this.step = APPLICATION_STEP.PERSONAL_DETAILS;
+  @computed
+  get stepDisplayName() {
+    switch (this.step) {
+      case APPLICATION_STEP.WELCOME:
+        return 'התחלה';
+      case APPLICATION_STEP.PERSONAL_DETAILS:
+        return 'פרטים אישיים';
+      case APPLICATION_STEP.QUESTIONNAIRES:
+        return this.questionnairesStore.stepDisplayName;
+      case APPLICATION_STEP.SUMMARY:
+        return 'סיכום';
+      default:
+        return '';
+    }
   }
-  onPersonalDetailsFinished(): void {
-    this.step = APPLICATION_STEP.QUESTIONNAIRES;
-    console.log(this.personalDetailsStore);
+
+  back() {
+    if (this.step === APPLICATION_STEP.QUESTIONNAIRES && this.questionnairesStore.questionnaireIndex !== 0) {
+      this.questionnairesStore.previousQuestion();
+    } else {
+      const currentIndex = APPLICATION_STEPS.indexOf(this.step);
+      this.step = APPLICATION_STEPS[currentIndex - 1];
+    }
+  }
+
+  next() {
+    const currentIndex = APPLICATION_STEPS.indexOf(this.step);
+    this.step = APPLICATION_STEPS[currentIndex + 1];
+  }
+
+  exportToPdf() {
+    // TODO - implement
   }
 }

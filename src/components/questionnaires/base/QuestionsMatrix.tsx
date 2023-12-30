@@ -1,63 +1,96 @@
 import { observer } from 'mobx-react-lite';
+import _ from 'lodash';
 import { useState } from 'react';
-import { RadioButton } from 'monday-ui-react-core';
 import styled from 'styled-components';
+import {
+  Radio,
+  Table,
+  TableBody,
+  TableCell,
+  TableCellLayout,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components';
+import { tableRowClassName } from '@fluentui/react-table';
 
 
-export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({ questions, answers, onChange }) => {
+export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({
+                                                                           initialState,
+                                                                           questions,
+                                                                           answers,
+                                                                           onChange
+                                                                         }) => {
 
-  const [answersValues, setAnswersValues] = useState<number[]>([]);
-  const onSelect = (question, answer) => {
+  const [answersValues, setAnswersValues] = useState<number[]>(initialState ?? []);
+  const onSelect = (question, value) => {
     const newAnswersValues = [...answersValues];
-    newAnswersValues[questions.indexOf(question)] = answer.value;
+    newAnswersValues[questions.indexOf(question)] = value;
     setAnswersValues(newAnswersValues);
     onChange(newAnswersValues);
   };
+  const maxAnswersValue = _.maxBy(answers, 'value')?.value;
 
   return (
     <StyledTable>
-      <thead>
-      <tr>
-        <StyledTableHeader/>
+      <TableHeader>
+        <TableRow>
+          <StyledTableHeader key="empty-corner-cell" columnsCount={answers.length}/>
+          {
+            answers.map(answer => <TableHeaderCell key={answer.label}>{answer.label}</TableHeaderCell>)
+          }
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {
-          answers.map(answer => <th key={answer.label}>{answer.label}</th>)
+          questions.map((question, qi) => {
+            const isObject = typeof question !== 'string';
+            const questionText = isObject ? question.text : question;
+            return (
+              <TableRow key={questionText}>
+                <TableCell><TableCellLayout appearance="primary">{questionText}</TableCellLayout></TableCell>
+                {
+                  answers.map(answer => {
+                    const value = isObject && question.reverseScore ? (maxAnswersValue - answer.value + 1) : answer.value;
+                    return <TableCell key={value}>
+                      <Radio
+                        value={value.toString()}
+                        checked={answersValues[qi] === value}
+                        onChange={() => onSelect(question, value)}/>
+                    </TableCell>;
+                  })
+                }
+              </TableRow>
+            );
+          })
         }
-      </tr>
-      </thead>
-      <tbody>
-      {
-        questions.map((question, qi) => (
-          <tr key={question}>
-            <td>{question}</td>
-            {
-              answers.map(answer =>
-                <td key={answer.value}>
-                  <RadioButton
-                    value={answer.value.toString()} text=""
-                    checked={answersValues[qi] === answer.value} onSelect={() => onSelect(question, answer)}/>
-                </td>)
-            }
-          </tr>
-        ))
-      }
-      </tbody>
+      </TableBody>
     </StyledTable>
   );
 });
 
 export type QuestionsMatrixProps = {
+  initialState?: number[];
   onChange: (answersValues: number[]) => void;
-  questions: string[];
+  questions: (string | { text: string; reverseScore: boolean })[];
   answers: {
     label: string;
     value: number;
   }[];
 }
 
-const StyledTable = styled.table`
+const StyledTable = styled(Table)`
           table-layout: fixed;
-          width: 100%;
+          .${tableRowClassName} {
+            background: white;
+          }
+          @media (max-width: 480px) {
+            font-size: 12px;
+          }
   `,
-  StyledTableHeader = styled.th`
-    width: 40%;
+  StyledTableHeader = styled(TableHeaderCell)<{ columnsCount: number }>`
+    width: ${props => (100 / props.columnsCount) * 1.5}%;
+    @media (max-width: 480px) {
+      width: ${props => (100 / props.columnsCount) * 1.1}%;
+    }
   `;

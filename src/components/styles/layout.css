@@ -20,3 +20,14 @@
     width: 100%;
 }
 
+.full-height {
+    height: 100%;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+.scrollable {
+    overflow-y: auto;
+}

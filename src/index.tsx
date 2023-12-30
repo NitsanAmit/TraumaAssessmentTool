@@ -4,12 +4,13 @@ import './index.scss';
 import './components/styles/spacings.css';
 import './components/styles/layout.css';
 import { App } from './components/App';
+import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-      <App />
-  </React.StrictMode>
+  <FluentProvider theme={teamsLightTheme} dir="rtl">
+    <App/>
+  </FluentProvider>,
 );

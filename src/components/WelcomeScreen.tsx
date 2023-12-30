@@ -1,27 +1,25 @@
-import { ApplicationStateStore } from '../store/ApplicationStateStore';
-import { Button } from 'monday-ui-react-core';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
+import { Button } from '@fluentui/react-components';
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ appStateStore }) => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextClicked }) => {
   return (
     <WelcomeScreenContainer>
-      <Header>כלי אבחון פוסט-טראומה ראשוני</Header>
-      <h2>הכלי פותח ע"י המועצה הישראלית לפוסט טראומה</h2>
-      <Button onClick={() => appStateStore.onWelcomeFinished()}>התחל</Button>
+      <h1>כלי אבחון פוסט-טראומה ראשוני</h1>
+      <div className="margin-bottom-xl">מקבץ שאלונים לאיבחון וסיווג הפרעות פוסט-טראומה, אשר בסופם יוצג סיכום אישי המיועד להתייעצות עם גורמי בריאות הנפש. </div>
+      <div className="margin-bottom-xl">הכלי פותח ע"י המועצה הישראלית לפוסט טראומה לטובת איבחון יעיל ומהיר יותר של אוכלוסיות הנמצאות בסיכון לפיתוח PTSD לאחר אירועי ה-7.10</div>
+      <Button appearance="primary" onClick={onNextClicked}>התחל</Button>
     </WelcomeScreenContainer>
   );
 });
 
 export type WelcomeScreenProps = {
-  appStateStore: ApplicationStateStore;
+  onNextClicked: () => void;
 }
 
 const WelcomeScreenContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`,
-  Header = styled.h1`
-  color: green;
+  text-align: center;
 `;

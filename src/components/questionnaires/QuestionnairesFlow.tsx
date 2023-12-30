@@ -1,44 +1,44 @@
 import { QuestionnairesStore } from '../../store/QuestionnairesStore';
-import { MinMaxScale } from './base/MinMaxScale';
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
-import { DiscreteScale } from './base/DiscreteScale';
-import { YesNo } from './base/YesNo';
-import { FreeNumeric } from './base/FreeNumeric';
+import { useCallback } from 'react';
+import { OnNextClickedFunction, QuestionBase, questionTypeToComponentMap } from './base/types';
+
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
+  const onNextClicked = useCallback((state: unknown, didPassScoreBar: boolean, score: number | string) => {
+      questionnairesStore.nextQuestion(state, didPassScoreBar, score);
+      scrollToTop();
+    }
+    , [questionnairesStore]);
 
-  const QuestionnaireComponent = questionTypeToComponentMap[questionnairesStore.currentQuestion.questionnaireType];
-  const onNextClicked = (didPassScoreBar: boolean, score: number) => questionnairesStore.nextQuestion(didPassScoreBar, score);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  return useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked);
+});
+
+export const useQuestionnaireComponent = (questionnaire: QuestionBase, initialState: unknown, onNextClicked: OnNextClickedFunction) => {
+  const QuestionnaireComponent = questionTypeToComponentMap[questionnaire.questionnaireType];
   return (
-    <QuestionnaireContainer className="flex-column align-center justify-center">
-      <QuestionnaireComponent key={questionnairesStore.currentQuestion.questionnaire}
-                              onNextClicked={onNextClicked} {...questionnairesStore.currentQuestion}/>
+    <QuestionnaireContainer>
+      <QuestionnaireComponent key={questionnaire.questionnaire}
+                              {...questionnaire}
+                              initialState={initialState}
+                              onNextClicked={onNextClicked}/>
     </QuestionnaireContainer>
   );
-});
+};
 
 export type QuestionnairesFlowProps = {
   questionnairesStore: QuestionnairesStore;
 }
-
-export type Question = {
-  questionnaire: string;
-  questionnaireType: string;
-  onNextClicked: (didPassScoreBar: boolean, score: number) => void;
-}
-
-const questionTypeToComponentMap: Record<string, React.FC<any>> = {
-  'min-max-scale': MinMaxScale,
-  'discrete-scale': DiscreteScale,
-  'yes-no': YesNo,
-  'free-numeric': FreeNumeric,
-};
 
 const QuestionnaireContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  height: 100%;
 `;

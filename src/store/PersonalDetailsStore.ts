@@ -1,5 +1,4 @@
-import { makeAutoObservable } from 'mobx';
-import { DropdownOption } from '../components/types';
+import { action, makeAutoObservable } from 'mobx';
 
 export class PersonalDetailsStore {
 
@@ -7,11 +6,11 @@ export class PersonalDetailsStore {
 
   lastName: string = "";
 
-  gender: DropdownOption | undefined;
+  gender: string | undefined;
 
   age: string = "";
 
-  familyStatus: DropdownOption | undefined;
+  familyStatus: string | undefined;
 
   childNumber: string = "";
 
@@ -25,6 +24,11 @@ export class PersonalDetailsStore {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  @action
+  setProperty(propertyName: string, value: string) {
+    this[propertyName] = value;
   }
 
 }

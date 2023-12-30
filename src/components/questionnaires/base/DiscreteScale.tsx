@@ -1,11 +1,10 @@
-import { Question } from '../QuestionnairesFlow';
-import styled from 'styled-components';
-import { Button } from 'monday-ui-react-core';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { QuestionsMatrix } from './QuestionsMatrix';
+import { QuestionnaireBaseProps } from './types';
+import { QuestionnaireBase } from './QuestionnaireBase';
 
-export type DiscreteScaleProps = Question & {
+export type DiscreteScaleProps = QuestionnaireBaseProps & {
   scoreBar: number;
   questionTitle: string;
   questions: string[];
@@ -16,36 +15,26 @@ export type DiscreteScaleProps = Question & {
 }
 
 export const DiscreteScale: React.FC<DiscreteScaleProps> = observer(({
+                                                                       initialState,
                                                                        scoreBar,
                                                                        questions,
                                                                        answers,
                                                                        questionTitle,
                                                                        onNextClicked,
                                                                      }) => {
-  const [didPassScoreBar, setDidPassScoreBar] = useState<boolean>(false);
-  const [score, setScore] = useState<number>(0);
-  const [completedAllQuestions, setCompletedAllQuestions] = useState<boolean>(false);
+  const [answersValues, setAnswerValues] = useState<number[]>(initialState as number[] ?? []);
+  const completedAllQuestions = useMemo(() => answersValues.filter(a => a !== undefined).length === questions.length,
+    [answersValues, questions]);
 
-  const onChange = (answersValues: number[]) => {
-    const actualValues = answersValues.filter(v => v !== undefined);
-    const newScore = actualValues.reduce((acc, curr) => acc + curr, 0);
-    setScore(newScore);
-    setDidPassScoreBar(newScore >= scoreBar);
-    setCompletedAllQuestions(actualValues.length === questions.length);
-  };
+  const onNext = () => {
+    const score = answersValues.reduce((acc, curr) => acc + curr, 0);
+    const didPassScoreBar = score >= scoreBar;
+    onNextClicked(answersValues, didPassScoreBar, score)
+  }
   return (
-    <>
-      <QuestionTitle>{questionTitle}</QuestionTitle>
-      <div className="flex-row full-width">
-        <QuestionsMatrix key={questionTitle} questions={questions} answers={answers} onChange={onChange}/>
-      </div>
-      <Button className="margin-top-ml" onClick={() => onNextClicked(didPassScoreBar, score)}
-              disabled={!completedAllQuestions}>המשך</Button>
-    </>
+    <QuestionnaireBase questionTitle={questionTitle} nextEnabled={completedAllQuestions} onNextClicked={onNext}>
+      <QuestionsMatrix key={questionTitle} questions={questions} answers={answers}
+                       onChange={setAnswerValues} initialState={initialState as number[]}/>
+    </QuestionnaireBase>
   );
 });
-
-const QuestionTitle = styled.h2`
-          color: salmon;
-          text-align: center;
-  `;
