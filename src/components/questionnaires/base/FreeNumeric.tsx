@@ -46,6 +46,9 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
               placeholder={` ערך בין ${question.minValue} ל-${question.maxValue}`}
               value={answersValues[qi]?.toString() || ''}
               onChange={(_, { value }) => {
+                if (parseInt(value) < 0) {
+                  return;
+                }
                 const newAnswersValues = [...answersValues];
                 if (value !== '') {
                   newAnswersValues[qi] = parseInt(value);

@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx';
+import { action, computed, makeAutoObservable } from 'mobx';
 
 export class PersonalDetailsStore {
 
@@ -29,6 +29,22 @@ export class PersonalDetailsStore {
   @action
   setProperty(propertyName: string, value: string) {
     this[propertyName] = value;
+  }
+
+  @computed
+  get summary() {
+    return {
+      "שם פרטי": this.firstName,
+      "שם משפחה": this.lastName,
+      "מגדר": this.gender,
+      "גיל": this.age,
+      "מצב משפחתי": this.familyStatus,
+      "מספר ילדים": this.childNumber,
+      "מצב בריאות כללי": this.generalHealthStatus,
+      "מצב כללי": this.generalState,
+      "מצב נפשי": this.generalMentalHealthState,
+      "שימוש בסמים": this.drugsUsage,
+    }
   }
 
 }

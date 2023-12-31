@@ -1,8 +1,8 @@
 import { computed, makeAutoObservable } from 'mobx';
-import { PDFDocument, ReadingDirection, rgb } from 'pdf-lib';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
-import * as fontkit from 'fontkit';
+import { exportToPdf } from './pdf-utils';
+
 
 export enum APPLICATION_STEP {
   WELCOME = 'WELCOME',
@@ -62,81 +62,15 @@ export class ApplicationStateStore {
     this.step = APPLICATION_STEPS[currentIndex + 1];
   }
 
-  async exportToPdf(includePersonalDetails: boolean) {
-    const fontBinary = await fetch('Arial.ttf').then(res => res.arrayBuffer())
-    const pdfDoc = await PDFDocument.create()
-    pdfDoc.registerFontkit(fontkit);
-    const hebrewFont = await pdfDoc.embedFont(fontBinary);
-    const viewerPrefs = pdfDoc.catalog.getOrCreateViewerPreferences();
-    viewerPrefs.setReadingDirection(ReadingDirection.R2L)
-
-    const page = pdfDoc.addPage()
-    const { height, width } = page.getSize()
-    const fontSize = 10;
-    // table of this.questionnairesStore.summary
-    const title = 'סיכום הערכת פוסט טראומה';
-    const titleFontSize = fontSize + 10;
-    page.drawText(title, {
-      x: width / 2 - hebrewFont.widthOfTextAtSize(title, titleFontSize) / 2,
-      y: height - 4 * fontSize,
-      size: titleFontSize,
-      font: hebrewFont,
-      color: rgb(0.357, 0.373, 0.78),
-    })
-
-    page.drawText('שם השאלון', {
-      x: 30,
-      y: height - 8 * fontSize,
-      size: fontSize + 4,
-      font: hebrewFont,
-      color: undefined,
-    });
-    page.drawText('ציון', {
-      x: 300,
-      y: height - 8 * fontSize,
-      size: fontSize + 4,
-      font: hebrewFont,
-      color: undefined,
-    });
-    page.drawLine({
-      start: { x: 30, y: height - 9 * fontSize },
-      end: { x: width - 30, y: height - 9 * fontSize },
-      thickness: 2,
-      color: rgb(0.357, 0.373, 0.78),
-    });
-    this.questionnairesStore.summary.forEach((summary, index) => {
-      page.drawText(summary.questionnaireName, {
-        x: 30,
-        y: height - (11 + index*2) * fontSize,
-        size: fontSize,
-        font: hebrewFont,
-        color: undefined,
-      });
-      page.drawText(summary.score.toString(), {
-        x: 300,
-        y: height - (11 + index*2) * fontSize,
-        size: fontSize,
-        font: hebrewFont,
-        color: undefined,
-      });
-    });
-
-    if (includePersonalDetails) {
-      page.drawText('פרטים אישיים:', {
-        x: 30,
-        y: height - (16 + this.questionnairesStore.summary.length * 2) * fontSize,
-        size: fontSize + 4,
-        font: hebrewFont,
-        color: undefined,
-      });
+  skip() {
+    if (this.step === APPLICATION_STEP.QUESTIONNAIRES) {
+      this.questionnairesStore.nextQuestion(undefined, Math.random() > 0.5, Math.round(Math.random() * 10));
+    } else {
+      this.next();
     }
+  }
 
-    const pdfBytes = await pdfDoc.save();
-    // prompt to download
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'summary.pdf';
-    link.click();
+  async exportToPdf(includePersonalDetails: boolean) {
+    return exportToPdf(includePersonalDetails, this.questionnairesStore.summary, this.personalDetailsStore.summary);
   }
 }

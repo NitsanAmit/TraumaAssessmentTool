@@ -6,9 +6,14 @@ import { Button, Dropdown, Field, Input, Option, Textarea } from '@fluentui/reac
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
-  const setProperty = useCallback((property: string, option = false) => {
-    return ((_, data) => personalDetailsStore.setProperty(property, option ? data.optionValue : data.value));
-  }, [personalDetailsStore]);
+  const setProperty = useCallback((property: string, option = false) =>
+    (_, data) => {
+      const value = option ? data.optionValue : data.value;
+      if (value.length > 500) {
+        return;
+      }
+      personalDetailsStore.setProperty(property, option ? data.optionValue : data.value);
+    }, [personalDetailsStore]);
   return (
     <>
       <h1>שאלון היכרות</h1>
