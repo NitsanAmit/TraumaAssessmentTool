@@ -6,8 +6,7 @@ import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
 import { Summary } from './Summary';
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components';
-import { ChevronLeft24Regular } from '@fluentui/react-icons';
-import { Button } from '@fluentui/react-components';
+import { AppCommandBar } from './AppCommandBar';
 
 export const App: React.FC = observer(() => {
 
@@ -18,11 +17,7 @@ export const App: React.FC = observer(() => {
       <ResponsiveLayout>
         {
           appStateStore.step !== APPLICATION_STEP.WELCOME &&
-          <CommandBar>
-            <StepDisplayName>{appStateStore.stepDisplayName}</StepDisplayName>
-            <Button appearance="subtle" iconPosition="after" size="small" icon={<ChevronLeft24Regular/>}
-                    onClick={() => appStateStore.back()}>חזרה</Button>
-          </CommandBar>
+          <AppCommandBar appStateStore={appStateStore}/>
         }
         {
           appStateStore.step === APPLICATION_STEP.WELCOME &&
@@ -50,6 +45,7 @@ const AppContainer = styled.div`
           display: flex;
           justify-content: center;
           width: 100%;
+          padding-bottom: 24px;
   `,
   ResponsiveLayout = styled.div`
     display: flex;
@@ -61,15 +57,4 @@ const AppContainer = styled.div`
     @media (max-width: 400px) {
       padding: 16px 8px;
     }
-  `,
-  CommandBar = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    width: 100%;
-  `,
-  StepDisplayName = styled.div`
-    font-weight: 300;
-    margin-right: 8px;
   `;
