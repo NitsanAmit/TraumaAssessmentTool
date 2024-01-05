@@ -1,17 +1,9 @@
 import {
   Button,
   makeStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableCellLayout,
-  TableHeader,
-  TableHeaderCell,
-  TableRow
 } from '@fluentui/react-components';
 import { ApplicationStateStore } from '../store/ApplicationStateStore';
-import styled from 'styled-components';
-import { tableRowClassName } from '@fluentui/react-table';
+import { SummaryTable } from './SummaryTable';
 
 export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
   const styles = useStyles();
@@ -19,38 +11,12 @@ export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
     <div className="full-height flex-column space-between full-width">
       <div className="flex-column full-width margin-bottom-xl">
         <h2 className="flex-column align-center">סיכום תוצאות השאלונים</h2>
-        <StyledTable>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell><TableCellLayout appearance="primary">שאלון</TableCellLayout></TableHeaderCell>
-              <TableHeaderCell><TableCellLayout appearance="primary">תוצאה</TableCellLayout></TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              appStateStore.questionnairesStore.summary.map(s => (
-                <TableRow>
-                  <TableCell>
-                    {s.questionnaireName}
-                  </TableCell>
-                  <TableCell>
-                    {
-                      s.questionnaireName === 'צורך/רצון בעזרה מקצועית' ?
-                        (s.score > 0 ? 'כן' : 'לא')
-                        : s.score
-                    }
-                  </TableCell>
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </StyledTable>
+        <SummaryTable questionnairesSummary={appStateStore.questionnairesStore.summary}/>
       </div>
       <Button appearance="primary" size="large" className="full-width" onClick={() => appStateStore.exportToPdf(true)}>
         שמור תוצאות כ-PDF
       </Button>
-      <Button appearance="primary" size="large" className={styles.noIdButton}
-              onClick={() => appStateStore.exportToPdf(false)}>
+      <Button appearance="primary" size="large" className={styles.noIdButton} onClick={() => appStateStore.exportToPdf(false)}>
         שמור ללא פרטים מזהים
       </Button>
     </div>
@@ -71,15 +37,3 @@ const useStyles = makeStyles({
     },
   }
 });
-
-const StyledTable = styled(Table)`
-  table-layout: fixed;
-  width: 100%;
-  .${tableRowClassName} {
-    background: white;
-  }
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-`;
-
