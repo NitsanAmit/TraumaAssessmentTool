@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import firebase from 'firebase/app';
+import { initializeApp, getApps, FirebaseApp} from "firebase/app";
 import { getFirestore, Firestore } from 'firebase/firestore';
 
-const useFirestore = () => {
+export const useFirestore = () => {
   const [firestore, setFirestore] = useState<Firestore | null>(null);
 
   useEffect(() => {
     const initializeFirestore = async () => {
       try {
-        if (!firebase.getApps().length) {
-          await firebase.initializeApp({
+        if (!getApps().length) {
+          const firebaseApp = await initializeApp({
             apiKey: process.env.FIREBASE_API_KEY,
             authDomain: process.env.FIREBASE_AUTH_DOMAIN,
             projectId: process.env.FIREBASE_PROJECT_ID,
@@ -17,10 +17,9 @@ const useFirestore = () => {
             messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
             appId: process.env.FIREBASE_APP_ID,
           });
+          const firestoreInstance = getFirestore(firebaseApp);
+          setFirestore(firestoreInstance);
         }
-
-        const firestoreInstance = getFirestore();
-        setFirestore(firestoreInstance!);
       } catch (error) {
         console.error('Error initializing Firebase:', error);
       }
@@ -29,7 +28,5 @@ const useFirestore = () => {
     initializeFirestore();
   }, []);
 
-  return firestore!;
+  return firestore;
 };
-
-export default useFirestore;

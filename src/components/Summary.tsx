@@ -4,9 +4,15 @@ import {
 } from '@fluentui/react-components';
 import { ApplicationStateStore } from '../store/ApplicationStateStore';
 import { SummaryTable } from './SummaryTable';
+import { useEffect } from 'react';
+import { useAnonymousResults } from './hooks/useAnonymousResults';
 
 export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
   const styles = useStyles();
+  const { sendAnonymousResults } = useAnonymousResults();
+  useEffect(() => {
+    sendAnonymousResults && sendAnonymousResults(appStateStore.questionnairesStore.summary);
+  }, [sendAnonymousResults]);
   return (
     <div className="full-height flex-column space-between full-width">
       <div className="flex-column full-width margin-bottom-xl">

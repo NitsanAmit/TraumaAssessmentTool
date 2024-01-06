@@ -9,6 +9,7 @@ import {
 } from '@fluentui/react-components';
 import styled from 'styled-components';
 import { tableRowClassName } from '@fluentui/react-table';
+import { QuestionnairesSummary } from '../store/types';
 
 export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummary }) => {
   return (
@@ -42,7 +43,7 @@ export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummar
 }
 
 export type SummaryTableProps = {
-  questionnairesSummary: { questionnaireName: string; questionnaireType: string; score: number; }[];
+  questionnairesSummary: QuestionnairesSummary;
 }
 
 const StyledTable = styled(Table)`

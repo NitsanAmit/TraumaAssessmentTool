@@ -2,6 +2,7 @@ import { action, computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
 import questions from '../data/questions.json';
 import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionnairesSummary } from './types';
 
 export class QuestionnairesStore {
 
@@ -24,7 +25,7 @@ export class QuestionnairesStore {
   }
 
   @computed
-  get summary(): { questionnaireName: string; questionnaireType:string; score: number; }[] {
+  get summary(): QuestionnairesSummary {
     return _.reduce(questions, (acc, question, index) => {
         const { questionnaire, questionnaireType } = question;
         const score = this.questionnaireScores[index]?.score;
