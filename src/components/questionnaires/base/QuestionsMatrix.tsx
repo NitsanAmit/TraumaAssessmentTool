@@ -34,7 +34,7 @@ export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({
   return (
     <StyledTable>
       <TableHeader>
-        <TableRow>
+        <TableRow key="header-row">
           <StyledTableHeader key="empty-corner-cell" columnsCount={answers.length}/>
           {
             answers.map(answer => <TableHeaderCell key={answer.label}>{answer.label}</TableHeaderCell>)

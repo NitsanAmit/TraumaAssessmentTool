@@ -4,6 +4,7 @@ import './index.scss';
 import './components/styles/spacings.css';
 import './components/styles/layout.css';
 import { App } from './components/App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { FluentProvider, teamsLightTheme } from '@fluentui/react-components';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -14,7 +15,7 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <ErrorBoundary><App /></ErrorBoundary>,
   },
 ]);
 

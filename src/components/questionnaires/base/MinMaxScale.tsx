@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Radio, RadioGroup, RadioGroupOnChangeData } from '@fluentui/react-components';
 import { QuestionnaireBaseProps } from './types';
@@ -30,9 +30,10 @@ export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
     setSelection(parseInt(value));
   };
   const didPassScoreBar = !!(selection && selection >= scoreBar);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(selection, didPassScoreBar, selection!) : undefined, [onNextClicked, selection, didPassScoreBar]);
+
   return (
-    <QuestionnaireBase questionTitle={questionTitle} nextEnabled={selection !== undefined}
-                       onNextClicked={() => onNextClicked(selection, didPassScoreBar, selection!)}>
+    <QuestionnaireBase questionTitle={questionTitle} nextEnabled={selection !== undefined} onNextClicked={onNext}>
       <RadioGroup onChange={onSelectionChanged}>
         <Radio value={min.toString()} label={`${min} (${minLabel})`} checked={selection === min}/>
         {

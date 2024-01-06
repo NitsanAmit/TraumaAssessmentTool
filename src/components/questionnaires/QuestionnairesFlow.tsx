@@ -19,7 +19,7 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
   return useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked);
 });
 
-export const useQuestionnaireComponent = (questionnaire: QuestionBase, initialState: unknown, onNextClicked: OnNextClickedFunction) => {
+export const useQuestionnaireComponent = (questionnaire: QuestionBase, initialState: unknown, onNextClicked?: OnNextClickedFunction) => {
   const QuestionnaireComponent = questionTypeToComponentMap[questionnaire.questionnaireType];
   return (
     <QuestionnaireContainer>

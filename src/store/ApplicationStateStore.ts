@@ -2,6 +2,7 @@ import { computed, makeAutoObservable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
 import { exportToPdf } from './pdf-utils';
+import { QuestionnaireTypes } from '../components/questionnaires/base/types';
 
 
 export enum APPLICATION_STEP {
@@ -64,7 +65,14 @@ export class ApplicationStateStore {
 
   skip() {
     if (this.step === APPLICATION_STEP.QUESTIONNAIRES) {
-      this.questionnairesStore.nextQuestion(undefined, Math.random() > 0.5, Math.round(Math.random() * 10));
+      let randomScore;
+      if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
+        // @ts-expect-error
+        randomScore = this.questionnairesStore.currentQuestion.questionnaires.map(() => Math.round(Math.random() * 10));
+      } else {
+        randomScore = Math.round(Math.random() * 10);
+      }
+      this.questionnairesStore.nextQuestion(undefined, Math.random() > 0.5, randomScore);
     } else {
       this.next();
     }

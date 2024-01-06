@@ -26,11 +26,17 @@ export const YesNo: React.FC<YesNoProps> = observer(({
   const completedAllQuestions = useMemo(() => answersValues.filter(a => a !== undefined).length === questions.length,
     [answersValues, questions]);
 
-  const onNext = () => {
-    const score = answersValues.reduce((acc, curr) => acc + curr, 0);
-    const didPassScoreBar = score >= scoreBar;
-    onNextClicked(answersValues, didPassScoreBar, score)
-  }
+  const onNext = useMemo(() => {
+    if (!onNextClicked) {
+      return undefined;
+    }
+    return () => {
+      const score = answersValues.reduce((acc, curr) => acc + curr, 0);
+      const didPassScoreBar = score >= scoreBar;
+      onNextClicked(answersValues, didPassScoreBar, score);
+    }
+  }, [onNextClicked, answersValues, scoreBar]);
+
   return (
     <QuestionnaireBase questionTitle={questionTitle} nextEnabled={completedAllQuestions} onNextClicked={onNext}>
       <QuestionsMatrix key={questionTitle} questions={questions} answers={answers}

@@ -31,10 +31,11 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
   const completedAllQuestions = useMemo(() => {
     return _.reject(answersValues, a => a === undefined).length === questions.length;
   }, [answersValues, questions]);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(answersValues, didPassScoreBar, score) : undefined,
+    [onNextClicked, answersValues, didPassScoreBar, score]);
 
   return (
-    <QuestionnaireBase nextEnabled={completedAllQuestions}
-                       onNextClicked={() => onNextClicked(answersValues, didPassScoreBar, score)}>
+    <QuestionnaireBase nextEnabled={completedAllQuestions} onNextClicked={onNext}>
       <QuestionsContainer>
       {
         questions.map((question, qi) => (

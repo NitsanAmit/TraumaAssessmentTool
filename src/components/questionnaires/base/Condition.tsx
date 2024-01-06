@@ -2,7 +2,7 @@ import { useQuestionnaireComponent } from '../QuestionnairesFlow';
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { Button } from '@fluentui/react-components';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { QuestionnaireBaseProps } from './types';
 import { QuestionnaireBase } from './QuestionnaireBase';
 
@@ -22,6 +22,8 @@ export const Condition: React.FC<ConditionProps> = observer(({
 
   const [passedCondition, setPassedCondition] = useState<boolean>(false);
   const QuestionnaireComponent = useQuestionnaireComponent(conditionQuestionnaire, initialState, onNextClicked);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(initialState, false, 0) : undefined, [onNextClicked, initialState]);
+
   return (
     <>
       {
@@ -31,7 +33,7 @@ export const Condition: React.FC<ConditionProps> = observer(({
             <Button appearance="primary" size="large" onClick={() => setPassedCondition(true)}>
               כן
             </Button>
-            <Button appearance="primary" size="large" onClick={() => onNextClicked(initialState, false, 0)}>
+            <Button appearance="primary" size="large" onClick={onNext}>
               לא
             </Button>
           </StyledContainer>
