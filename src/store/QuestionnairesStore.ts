@@ -25,6 +25,11 @@ export class QuestionnairesStore {
   }
 
   @computed
+  get progress(): number {
+    return this.questionnaireIndex / (questions.length - 1);
+  }
+
+  @computed
   get summary(): QuestionnairesSummary {
     return _.reduce(questions, (acc, question, index) => {
         const { questionnaire, questionnaireType } = question;

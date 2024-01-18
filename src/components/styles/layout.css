@@ -8,6 +8,10 @@
     flex-direction: row;
 }
 
+.flex-1 {
+    flex: 1;
+}
+
 .align-center {
     align-items: center;
 }
@@ -26,6 +30,10 @@
 
 .space-between{
     justify-content: space-between;
+}
+
+.align-text-center {
+    text-align: center;
 }
 
 .scrollable {
