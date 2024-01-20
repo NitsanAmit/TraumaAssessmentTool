@@ -45,7 +45,10 @@ export class QuestionnairesStore {
         if (questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
           return [...acc, ...(this._getMultiDiscreteScaleQuestionnaireSummary(score, question))];
         }
-        return [...acc, { questionnaireName: questionnaire, questionnaireType, score }];
+      if (questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
+        return [...acc, { questionnaireName: questionnaire, questionnaireType, score: score ? 'כן' : 'לא' }];
+      }
+      return [...acc, { questionnaireName: questionnaire, questionnaireType, score }];
       }, []);
   }
 

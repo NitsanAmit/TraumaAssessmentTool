@@ -444,12 +444,8 @@
   },
   {
     "questionnaire": "צורך/רצון בעזרה מקצועית",
-    "questionnaireType": "yes-no",
-    "scoreBar": 1,
-    "questionTitle": "",
-    "questions": [
-      "האם מרגיש.ה צורך/רצון בעזרה מקצועית?"
-    ]
+    "questionnaireType": "true-false",
+    "questionTitle": "האם מרגיש.ה צורך/רצון בעזרה מקצועית?"
   },
   {
     "questionnaire": "מידע נוסף",

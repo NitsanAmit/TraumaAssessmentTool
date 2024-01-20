@@ -6,6 +6,7 @@ import { Cutoff } from './Cutoff';
 import { Condition } from './Condition';
 import { FreeText } from './FreeText';
 import { MultiDiscreteScale } from './MultiDiscreteScale';
+import { TrueFalse } from './TrueFalse';
 
 export type OnNextClickedFunction = (state: unknown, didPassScoreBar: boolean, score: number | string) => void;
 export type QuestionBase = {
@@ -27,6 +28,7 @@ export const QuestionnaireTypes = {
   CONDITION_QUESTIONNAIRE: 'condition-questionnaire',
   FREE_TEXT: 'free-text',
   MULTI_DISCRETE_SCALE: 'multi-discrete-scale',
+  TRUE_FALSE: 'true-false',
 };
 
 export const questionTypeToComponentMap: Record<string, React.FC<any>> = {
@@ -38,4 +40,5 @@ export const questionTypeToComponentMap: Record<string, React.FC<any>> = {
   [QuestionnaireTypes.CONDITION_QUESTIONNAIRE]: Condition,
   [QuestionnaireTypes.FREE_TEXT]: FreeText,
   [QuestionnaireTypes.MULTI_DISCRETE_SCALE]: MultiDiscreteScale,
+  [QuestionnaireTypes.TRUE_FALSE]: TrueFalse,
 };
