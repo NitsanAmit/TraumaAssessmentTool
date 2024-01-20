@@ -30,6 +30,11 @@ export class QuestionnairesStore {
   }
 
   @computed
+  get verbalProgress(): string {
+    return `שאלון ${this.questionnaireIndex + 1} מתוך ${questions.length}`;
+  }
+
+  @computed
   get summary(): QuestionnairesSummary {
     return _.reduce(questions, (acc, question, index) => {
         const { questionnaire, questionnaireType } = question;

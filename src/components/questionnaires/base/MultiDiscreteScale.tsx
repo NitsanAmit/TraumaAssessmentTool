@@ -1,11 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import _ from 'lodash';
 import { QuestionnaireBaseProps } from './types';
-import { QuestionsMatrix } from './QuestionsMatrix';
 import { DiscreteScaleProps } from './DiscreteScale';
-import { useCallback, useMemo, useState } from 'react';
-import { QuestionnaireBase } from './QuestionnaireBase';
-import styled from 'styled-components';
+import { useCallback, useState } from 'react';
+import { PagedQuestionsMatrix } from './PagedQuestionsMatrix';
 
 export type MultiDiscreteScaleProps = QuestionnaireBaseProps & {
   scoreBar: number;
@@ -13,70 +11,31 @@ export type MultiDiscreteScaleProps = QuestionnaireBaseProps & {
 }
 
 export const MultiDiscreteScale: React.FC<MultiDiscreteScaleProps> = observer(({
-                                                                                     onNextClicked,
-                                                                                     initialState,
-                                                                                     scoreBar,
-                                                                                     questionnaires,
-                                                                                   }) => {
+                                                                                 onNextClicked,
+                                                                                 initialState,
+                                                                                 scoreBar,
+                                                                                 questionnaires,
+                                                                               }) => {
 
-  const [answersValues, setAnswerValues] = useState<(number[])[]>(initialState as number[][] ?? []);
+  const [allQuestionnaireAnswers, setAllQuestionnaireAnswers] = useState<(number[])[]>(initialState as number[][] ?? []);
+  const [currentQuestionnaireIndex, setCurrentQuestionnaireIndex] = useState<number>(0);
 
-  const onChange = useCallback((index: number, values: number[]) => {
-    const newAnswersValues = [...answersValues];
+  const onQuestionnaireNext = useCallback((index: number, values: number[]) => {
+    const newAnswersValues = [...allQuestionnaireAnswers];
     newAnswersValues[index] = values;
-    setAnswerValues(newAnswersValues);
-  }, [answersValues]);
-
-  const completedAllQuestions = useMemo(() => {
-      return answersValues.length === questionnaires.length
-        && answersValues.every((questionnaireAnswers, index) => questionnaireAnswers.filter(v => v !== undefined).length === questionnaires[index].questions.length);
-    },
-    [answersValues, questionnaires]);
-
-  const onNext = useMemo(() => {
-    if (!onNextClicked) {
-      return undefined;
-    }
-    return () => {
-      const scores = _.map(answersValues, (a, i) => _.sum(a));
+    setAllQuestionnaireAnswers(newAnswersValues);
+    if (index === questionnaires.length - 1) {
+      const scores = _.map(allQuestionnaireAnswers, a => _.sum(a));
       const questionnairesThatPassedScoreBar = _.filter(questionnaires, (q, i) => scores[i] >= q.scoreBar).length;
-      onNextClicked?.(answersValues, questionnairesThatPassedScoreBar >= scoreBar, scores);
+      onNextClicked?.(allQuestionnaireAnswers, questionnairesThatPassedScoreBar >= scoreBar, scores);
+    } else {
+      setCurrentQuestionnaireIndex(index + 1);
     }
-  }, [onNextClicked, answersValues, questionnaires, scoreBar]);
+  }, [allQuestionnaireAnswers, onNextClicked, questionnaires, scoreBar]);
 
   return (
-    <QuestionnaireBase nextEnabled={completedAllQuestions} onNextClicked={onNext}>
-      <QuestionnairesContainer>
-      {
-        questionnaires.map((questionnaire, index) => {
-            return (
-              <>
-                {
-                  questionnaire.questionTitle &&
-                  <QuestionTitle>{questionnaire.questionTitle}</QuestionTitle>
-                }
-                <QuestionsMatrix
-                  key={index}
-                  questions={questionnaire.questions}
-                  answers={questionnaire.answers}
-                  onChange={(values) => onChange(index, values)}
-                  initialState={(initialState as number [][])?.[index]}/>
-              </>
-            );
-          }
-        )
-      }
-      </QuestionnairesContainer>
-    </QuestionnaireBase>
+    <PagedQuestionsMatrix key={currentQuestionnaireIndex} {...questionnaires[currentQuestionnaireIndex]}
+                          onNext={(answers) => onQuestionnaireNext(currentQuestionnaireIndex, answers)}
+                          initialState={(initialState as number[][])?.[currentQuestionnaireIndex]}/>
   );
 });
-
-const QuestionnairesContainer = styled.div`
-          display: flex;
-          flex-direction: column;
-          row-gap: 24px;
-  `,
-  QuestionTitle = styled.h2`
-    text-align: center;
-    white-space: pre-line;
-  `;

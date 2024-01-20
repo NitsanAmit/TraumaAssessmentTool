@@ -43,6 +43,7 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
             <h2>{question.questionLabel}</h2>
             <div className="margin-vertical-ml">{question.description}</div>
             <Input
+              size="large"
               type="number"
               placeholder={` ערך בין ${question.minValue} ל-${question.maxValue}`}
               value={answersValues[qi]?.toString() || ''}

@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 import { OnNextClickedFunction, QuestionBase, questionTypeToComponentMap } from './base/types';
-import { ProgressBar } from '@fluentui/react-components';
-
+import { ProgressBar, tokens } from '@fluentui/react-components';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
   const onNextClicked = useCallback((state: unknown, didPassScoreBar: boolean, score: number | string) => {
@@ -18,12 +17,15 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
   }
 
   return <div className="full-width flex-column">
-    <ProgressBar
-      className="margin-top-ml margin-bottom-sm"
-      thickness="large"
-      shape="rounded"
-      value={questionnairesStore.progress}
-    />
+    <div className="full-width flex-column">
+      <ProgressBar
+        className="margin-top-sm margin-bottom-xxs"
+        thickness="large"
+        shape="rounded"
+        value={questionnairesStore.progress}
+      />
+      <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
+    </div>
     {
       useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked)
     }
@@ -52,4 +54,9 @@ const QuestionnaireContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+`, StyledProgressText = styled.div`
+  font-size: 12px;
+  width: 100%;
+  text-align: left;
+  color: ${tokens.colorBrandBackground};
 `;

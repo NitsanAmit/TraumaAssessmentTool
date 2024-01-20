@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
-import { QuestionsMatrix } from './QuestionsMatrix';
 import { QuestionnaireBaseProps } from './types';
-import { QuestionnaireBase } from './QuestionnaireBase';
+import { PagedQuestionsMatrix } from './PagedQuestionsMatrix';
 
 export type DiscreteScaleProps = QuestionnaireBaseProps & {
   scoreBar: number;
@@ -22,25 +21,19 @@ export const DiscreteScale: React.FC<DiscreteScaleProps> = observer(({
                                                                        questionTitle,
                                                                        onNextClicked,
                                                                      }) => {
-  const [answersValues, setAnswerValues] = useState<number[]>(initialState as number[] ?? []);
-  const completedAllQuestions = useMemo(() => answersValues.filter(a => a !== undefined).length === questions.length,
-    [answersValues, questions]);
-
   const onNext = useMemo(() => {
     if (!onNextClicked) {
       return undefined;
     }
-    return () => {
+    return (answersValues: number[]) => {
       const score = answersValues.reduce((acc, curr) => acc + curr, 0);
       const didPassScoreBar = score >= scoreBar;
       onNextClicked?.(answersValues, didPassScoreBar, score)
     }
-  }, [onNextClicked, answersValues, scoreBar]);
+  }, [onNextClicked, scoreBar]);
 
   return (
-    <QuestionnaireBase questionTitle={questionTitle} nextEnabled={completedAllQuestions} onNextClicked={onNext}>
-      <QuestionsMatrix key={questionTitle} questions={questions} answers={answers}
-                       onChange={setAnswerValues} initialState={initialState as number[]}/>
-    </QuestionnaireBase>
+    <PagedQuestionsMatrix key={questionTitle} questionTitle={questionTitle} questions={questions} answers={answers} onNext={onNext}
+                          initialState={initialState as number[]} />
   );
 });
