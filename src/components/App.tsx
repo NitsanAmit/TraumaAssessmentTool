@@ -45,7 +45,7 @@ export const App: React.FC = observer(() => {
 });
 
 const AppContainer = styled.div`
-          background-color: #e8e8e8;
+          background-color: #efefef;
           display: flex;
           justify-content: center;
           width: calc(100% - 32px);
@@ -66,6 +66,9 @@ const AppContainer = styled.div`
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    display: flex;
+    align-items: center;
+    max-width: 800px;
     @media (max-width: 390px) {
       border-radius: 0;
     }
@@ -75,5 +78,4 @@ const AppContainer = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 800px;
   `;
