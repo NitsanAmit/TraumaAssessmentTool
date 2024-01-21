@@ -89,8 +89,10 @@ export class QuestionnairesStore {
 
   @action
   nextQuestion(currentState: unknown, didPassScoreBar: boolean, score: number | string) {
-    this.questionnairesStates[this.questionnaireIndex] = currentState;
-    this.questionnaireScores[this.questionnaireIndex] = { score, didPassScoreBar };
+    if (this.currentQuestion?.questionnaireType !== QuestionnaireTypes.CUT_OFF) {
+      this.questionnairesStates[this.questionnaireIndex] = currentState;
+      this.questionnaireScores[this.questionnaireIndex] = { score, didPassScoreBar };
+    }
     const finishedAllQuestionnaires = this.questionnaireIndex === this.questions.length - 1;
     const didntPassScoreBar = this.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF && !didPassScoreBar;
     if (didntPassScoreBar || finishedAllQuestionnaires) {

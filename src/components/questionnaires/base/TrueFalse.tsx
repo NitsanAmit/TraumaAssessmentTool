@@ -7,19 +7,22 @@ import styled from 'styled-components';
 
 export type TrueFalseProps = QuestionnaireBaseProps & {
   questionTitle: string;
+  scoreBar: 'true' | 'false';
 }
 
 export const TrueFalse: React.FC<TrueFalseProps> = observer(({
-                                                       questionTitle,
-                                                       onNextClicked,
-                                                     }) => {
+                                                               scoreBar,
+                                                               questionTitle,
+                                                               onNextClicked,
+                                                             }) => {
 
   const onNext = useCallback((answer: boolean) => {
     if (!onNextClicked) {
       return;
     }
-    onNextClicked(answer, answer, answer ? 1 : 0);
-  }, [onNextClicked]);
+    const didPassScoreBar = scoreBar === 'true' ? answer : !answer;
+    onNextClicked(answer, didPassScoreBar, didPassScoreBar ? 1 : 0);
+  }, [onNextClicked, scoreBar]);
 
   return (
     <QuestionnaireBase questionTitle={questionTitle}>
