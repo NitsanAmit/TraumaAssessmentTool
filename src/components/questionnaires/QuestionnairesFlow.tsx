@@ -2,7 +2,7 @@ import { QuestionnairesStore } from '../../store/QuestionnairesStore';
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
-import { OnNextClickedFunction, QuestionBase, questionTypeToComponentMap } from './base/types';
+import { OnNextClickedFunction, QuestionBase, QuestionnaireTypes, questionTypeToComponentMap } from './base/types';
 import { ProgressBar, tokens } from '@fluentui/react-components';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
@@ -17,15 +17,19 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
   }
 
   return <div className="full-width flex-column">
-    <div className="full-width flex-column">
-      <ProgressBar
-        className="margin-top-sm margin-bottom-xxs"
-        thickness="large"
-        shape="rounded"
-        value={questionnairesStore.progress}
-      />
-      <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
-    </div>
+    {
+      questionnairesStore.currentQuestion.questionnaireType !== QuestionnaireTypes.CUT_OFF &&
+      <div className="full-width flex-column">
+        <ProgressBar
+          className="margin-top-sm margin-bottom-xxs"
+          thickness="large"
+          shape="rounded"
+          value={questionnairesStore.progress}
+          max={questionnairesStore.maxProgress}
+        />
+        <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
+      </div>
+    }
     {
       useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked)
     }

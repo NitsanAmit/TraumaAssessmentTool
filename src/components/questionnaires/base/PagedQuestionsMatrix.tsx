@@ -23,10 +23,11 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
     setAnswersValues(newAnswersValues);
   };
 
+  const isFirstQuestion = currentQuestionIndex === 0;
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
-    <QuestionnaireBase questionTitle={questionTitle} >
+    <QuestionnaireBase questionTitle={isFirstQuestion ? questionTitle : undefined} >
       <div className="flex-column full-width align-center">
         <PagedQuestion key={currentQuestionIndex}
                        initialState={answersValues?.[currentQuestionIndex]}
@@ -45,7 +46,7 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
             {isLastQuestion ? 'לשאלון הבא' : 'לשאלה הבאה'}
           </Button>
           {
-            currentQuestionIndex > 0 &&
+            !isFirstQuestion &&
             <Button
               appearance="secondary"
               className="flex-1 margin-ml"

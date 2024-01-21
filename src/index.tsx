@@ -21,7 +21,7 @@ const router = createBrowserRouter([
 ]);
 
 root.render(
-  <FluentProvider theme={AppTheme} dir="rtl">
+  <FluentProvider theme={AppTheme} dir="rtl" className="full-height">
     <RouterProvider router={router} />
   </FluentProvider>,
 );

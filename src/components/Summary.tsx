@@ -15,7 +15,7 @@ export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
   }, [sendAnonymousResults]);
   return (
     <div className="full-height flex-column space-between full-width">
-      <div className="flex-column full-width margin-bottom-xl">
+      <div className="flex-column full-width margin-bottom-xl flex-1">
         <h2 className="flex-column align-center">סיכום תוצאות השאלונים</h2>
         <SummaryTable questionnairesSummary={appStateStore.questionnairesStore.summary}/>
       </div>

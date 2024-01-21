@@ -15,7 +15,7 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
         questionTitle &&
         <QuestionTitle>{questionTitle}</QuestionTitle>
       }
-      <div className="full-height flex-column space-between full-width margin-top-ml">
+      <div className="full-height flex-column space-between full-width">
         <ChildrenContainer>
           {children}
         </ChildrenContainer>

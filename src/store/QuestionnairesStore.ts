@@ -25,13 +25,36 @@ export class QuestionnairesStore {
   }
 
   @computed
+  get cutoffQuestionIndex(): number {
+    return _.findIndex(questions, { questionnaireType: QuestionnaireTypes.CUT_OFF });
+  }
+
+  @computed
+  get beforeCutoff(): boolean {
+    return this.questionnaireIndex < this.cutoffQuestionIndex;
+  }
+
+  @computed
   get progress(): number {
-    return this.questionnaireIndex / (questions.length - 1);
+    if (this.beforeCutoff) {
+      return this.questionnaireIndex + 1;
+    } else {
+      return this.questionnaireIndex - this.cutoffQuestionIndex;
+    }
+  }
+
+  @computed
+  get maxProgress(): number {
+    if (this.beforeCutoff) {
+      return this.cutoffQuestionIndex;
+    } else {
+      return (questions.length - this.cutoffQuestionIndex - 1);
+    }
   }
 
   @computed
   get verbalProgress(): string {
-    return `שאלון ${this.questionnaireIndex + 1} מתוך ${questions.length}`;
+    return `שאלון ${this.progress} מתוך ${this.maxProgress}`;
   }
 
   @computed
