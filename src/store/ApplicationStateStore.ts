@@ -8,6 +8,7 @@ import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/b
 export enum APPLICATION_STEP {
   WELCOME = 'WELCOME',
   PERSONAL_DETAILS = 'PERSONAL_DETAILS',
+  FIRST_SECTION_INTRO = 'FIRST_SECTION_INTRO',
   QUESTIONNAIRES = 'QUESTIONNAIRES',
   SUMMARY = 'SUMMARY',
 }
@@ -15,6 +16,7 @@ export enum APPLICATION_STEP {
 const APPLICATION_STEPS = [
   APPLICATION_STEP.WELCOME,
   APPLICATION_STEP.PERSONAL_DETAILS,
+  APPLICATION_STEP.FIRST_SECTION_INTRO,
   APPLICATION_STEP.QUESTIONNAIRES,
   APPLICATION_STEP.SUMMARY,
 ];
@@ -40,6 +42,8 @@ export class ApplicationStateStore {
         return 'התחלה';
       case APPLICATION_STEP.PERSONAL_DETAILS:
         return 'פרטים אישיים';
+      case APPLICATION_STEP.FIRST_SECTION_INTRO:
+        return 'מבוא';
       case APPLICATION_STEP.QUESTIONNAIRES:
         return this.questionnairesStore.stepDisplayName;
       case APPLICATION_STEP.SUMMARY:

@@ -7,7 +7,7 @@ import { QuestionnaireBase } from './QuestionnaireBase';
 import styled from 'styled-components';
 
 export type FreeNumericProps = QuestionnaireBaseProps & {
-  scoreBar: number;
+  threshold: number;
   questionTitle: string;
   questions: {
     description: string;
@@ -19,7 +19,7 @@ export type FreeNumericProps = QuestionnaireBaseProps & {
 
 export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
                                                                    initialState,
-                                                                   scoreBar,
+                                                                   threshold,
                                                                    questions,
                                                                    questionTitle,
                                                                    onNextClicked,
@@ -27,12 +27,12 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
 
   const [answersValues, setAnswersValues] = useState<number[]>(initialState as number[] ?? []);
   const score = useMemo(() => answersValues.reduce((acc, curr) => acc + curr, 0), [answersValues]);
-  const didPassScoreBar = useMemo(() => score >= scoreBar, [score, scoreBar]);
+  const didPassthreshold = useMemo(() => score >= threshold, [score, threshold]);
   const completedAllQuestions = useMemo(() => {
     return _.reject(answersValues, a => a === undefined).length === questions.length;
   }, [answersValues, questions]);
-  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(answersValues, didPassScoreBar, score) : undefined,
-    [onNextClicked, answersValues, didPassScoreBar, score]);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(answersValues, didPassthreshold, score) : undefined,
+    [onNextClicked, answersValues, didPassthreshold, score]);
 
   return (
     <QuestionnaireBase nextEnabled={completedAllQuestions} onNextClicked={onNext}>

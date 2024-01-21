@@ -40,7 +40,7 @@ export const PagedQuestion: React.FC<PagedQuestionProps> = observer(({
 export type PagedQuestionProps = {
   initialState?: number;
   onChange: (answersValues: number) => void;
-  question: string | { text: string; reverseScore: boolean };
+  question: string | { text: string; reverseScore?: boolean, forcePassthreshold?: number };
   answers: {
     label: string;
     value: number;

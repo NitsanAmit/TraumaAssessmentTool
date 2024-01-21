@@ -5,7 +5,7 @@ import { QuestionnaireBaseProps } from './types';
 import { QuestionnaireBase } from './QuestionnaireBase';
 
 export type MinMaxScaleProps = QuestionnaireBaseProps & {
-  scoreBar: number;
+  threshold: number;
   min: number;
   max: number;
   minLabel: string;
@@ -15,7 +15,7 @@ export type MinMaxScaleProps = QuestionnaireBaseProps & {
 
 export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
                                                                    initialState,
-                                                                   scoreBar,
+                                                                   threshold,
                                                                    min,
                                                                    max,
                                                                    minLabel,
@@ -29,8 +29,8 @@ export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
   const onSelectionChanged = (_, { value }: RadioGroupOnChangeData) => {
     setSelection(parseInt(value));
   };
-  const didPassScoreBar = !!(selection && selection >= scoreBar);
-  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(selection, didPassScoreBar, selection!) : undefined, [onNextClicked, selection, didPassScoreBar]);
+  const didPassthreshold = !!(selection && selection >= threshold);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(selection, didPassthreshold, selection!) : undefined, [onNextClicked, selection, didPassthreshold]);
 
   return (
     <QuestionnaireBase questionTitle={questionTitle} nextEnabled={selection !== undefined} onNextClicked={onNext}>

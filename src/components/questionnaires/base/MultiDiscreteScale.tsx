@@ -3,17 +3,17 @@ import _ from 'lodash';
 import { QuestionnaireBaseProps } from './types';
 import { DiscreteScaleProps } from './DiscreteScale';
 import { useCallback, useState } from 'react';
-import { PagedQuestionsMatrix } from './PagedQuestionsMatrix';
+import { PagedQuestions } from './PagedQuestions';
 
 export type MultiDiscreteScaleProps = QuestionnaireBaseProps & {
-  scoreBar: number;
+  threshold: number;
   questionnaires: DiscreteScaleProps[];
 }
 
 export const MultiDiscreteScale: React.FC<MultiDiscreteScaleProps> = observer(({
                                                                                  onNextClicked,
                                                                                  initialState,
-                                                                                 scoreBar,
+                                                                                 threshold,
                                                                                  questionnaires,
                                                                                }) => {
 
@@ -26,16 +26,16 @@ export const MultiDiscreteScale: React.FC<MultiDiscreteScaleProps> = observer(({
     setAllQuestionnaireAnswers(newAnswersValues);
     if (index === questionnaires.length - 1) {
       const scores = _.map(allQuestionnaireAnswers, a => _.sum(a));
-      const questionnairesThatPassedScoreBar = _.filter(questionnaires, (q, i) => scores[i] >= q.scoreBar).length;
-      onNextClicked?.(allQuestionnaireAnswers, questionnairesThatPassedScoreBar >= scoreBar, scores);
+      const questionnairesThatPassedthreshold = _.filter(questionnaires, (q, i) => scores[i] >= q.threshold).length;
+      onNextClicked?.(allQuestionnaireAnswers, questionnairesThatPassedthreshold >= threshold, scores);
     } else {
       setCurrentQuestionnaireIndex(index + 1);
     }
-  }, [allQuestionnaireAnswers, onNextClicked, questionnaires, scoreBar]);
+  }, [allQuestionnaireAnswers, onNextClicked, questionnaires, threshold]);
 
   return (
-    <PagedQuestionsMatrix key={currentQuestionnaireIndex} {...questionnaires[currentQuestionnaireIndex]}
-                          onNext={(answers) => onQuestionnaireNext(currentQuestionnaireIndex, answers)}
-                          initialState={(initialState as number[][])?.[currentQuestionnaireIndex]}/>
+    <PagedQuestions key={currentQuestionnaireIndex} {...questionnaires[currentQuestionnaireIndex]}
+                    onNext={(answers) => onQuestionnaireNext(currentQuestionnaireIndex, answers)}
+                    initialState={(initialState as number[][])?.[currentQuestionnaireIndex]}/>
   );
 });

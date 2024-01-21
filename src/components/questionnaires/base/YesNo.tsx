@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { QuestionnaireBaseProps } from './types';
-import { PagedQuestionsMatrix } from './PagedQuestionsMatrix';
+import { PagedQuestions } from './PagedQuestions';
 
 export type YesNoProps = QuestionnaireBaseProps & {
-  scoreBar: number;
+  threshold: number;
   questionTitle: string;
   questions: string[];
 }
@@ -16,7 +16,7 @@ const answers = [
 
 export const YesNo: React.FC<YesNoProps> = observer(({
                                                        initialState,
-                                                       scoreBar,
+                                                       threshold,
                                                        questions,
                                                        questionTitle,
                                                        onNextClicked,
@@ -28,13 +28,13 @@ export const YesNo: React.FC<YesNoProps> = observer(({
     }
     return (answersValues: number[]) => {
       const score = answersValues.reduce((acc, curr) => acc + curr, 0);
-      const didPassScoreBar = score >= scoreBar;
-      onNextClicked(answersValues, didPassScoreBar, score);
+      const didPassthreshold = score >= threshold;
+      onNextClicked(answersValues, didPassthreshold, score);
     }
-  }, [onNextClicked, scoreBar]);
+  }, [onNextClicked, threshold]);
 
   return (
-    <PagedQuestionsMatrix questionTitle={questionTitle} questions={questions} answers={answers} onNext={onNext}
-                          initialState={initialState as number[]} />
+    <PagedQuestions questionTitle={questionTitle} questions={questions} answers={answers} onNext={onNext}
+                    initialState={initialState as number[]} />
   );
 });

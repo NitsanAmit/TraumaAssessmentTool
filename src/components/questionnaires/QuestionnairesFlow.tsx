@@ -4,10 +4,11 @@ import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 import { OnNextClickedFunction, QuestionBase, QuestionnaireTypes, questionTypeToComponentMap } from './base/types';
 import { ProgressBar, tokens } from '@fluentui/react-components';
+import { SecondSectionIntro } from '../SecondSectionIntro';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
-  const onNextClicked = useCallback((state: unknown, didPassScoreBar: boolean, score: number | string) => {
-      questionnairesStore.nextQuestion(state, didPassScoreBar, score);
+  const onNextClicked = useCallback((state: unknown, didPassthreshold: boolean, score: number | string) => {
+      questionnairesStore.nextQuestion(state, didPassthreshold, score);
       scrollToTop();
     }
     , [questionnairesStore]);
@@ -19,19 +20,25 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
   return <div className="full-width flex-column">
     {
       questionnairesStore.currentQuestion.questionnaireType !== QuestionnaireTypes.CUT_OFF &&
-      <div className="full-width flex-column">
-        <ProgressBar
-          className="margin-top-sm margin-bottom-xxs"
-          thickness="large"
-          shape="rounded"
-          value={questionnairesStore.progress}
-          max={questionnairesStore.maxProgress}
-        />
-        <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
-      </div>
+      <>
+        <div className="full-width flex-column">
+          <ProgressBar
+            className="margin-top-sm margin-bottom-xxs"
+            thickness="large"
+            shape="rounded"
+            value={questionnairesStore.progress}
+            max={questionnairesStore.maxProgress}
+          />
+          <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
+        </div>
+        {
+          useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked)
+        }
+      </>
     }
     {
-      useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked)
+      questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF &&
+      <SecondSectionIntro questionnairesStore={questionnairesStore} />
     }
   </div>;
 });

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { QuestionnaireBaseProps } from './types';
-import { PagedQuestionsMatrix } from './PagedQuestionsMatrix';
+import { PagedQuestions } from './PagedQuestions';
 
 export type DiscreteScaleProps = QuestionnaireBaseProps & {
-  scoreBar: number;
+  threshold: number;
   questionTitle: string;
   questions: string[];
   answers: {
@@ -15,7 +15,7 @@ export type DiscreteScaleProps = QuestionnaireBaseProps & {
 
 export const DiscreteScale: React.FC<DiscreteScaleProps> = observer(({
                                                                        initialState,
-                                                                       scoreBar,
+                                                                       threshold,
                                                                        questions,
                                                                        answers,
                                                                        questionTitle,
@@ -25,15 +25,15 @@ export const DiscreteScale: React.FC<DiscreteScaleProps> = observer(({
     if (!onNextClicked) {
       return undefined;
     }
-    return (answersValues: number[]) => {
+    return (answersValues: number[], forcePassthreshold: boolean = false) => {
       const score = answersValues.reduce((acc, curr) => acc + curr, 0);
-      const didPassScoreBar = score >= scoreBar;
-      onNextClicked?.(answersValues, didPassScoreBar, score)
+      const didPassthreshold = score >= threshold || forcePassthreshold;
+      onNextClicked?.(answersValues, didPassthreshold, score)
     }
-  }, [onNextClicked, scoreBar]);
+  }, [onNextClicked, threshold]);
 
   return (
-    <PagedQuestionsMatrix key={questionTitle} questionTitle={questionTitle} questions={questions} answers={answers} onNext={onNext}
-                          initialState={initialState as number[]} />
+    <PagedQuestions key={questionTitle} questionTitle={questionTitle} questions={questions} answers={answers} onNext={onNext}
+                    initialState={initialState as number[]} />
   );
 });

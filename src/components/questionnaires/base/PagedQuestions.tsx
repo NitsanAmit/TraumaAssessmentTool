@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { PagedQuestion } from './PagedQuestion';
 import { Button, ProgressBar } from '@fluentui/react-components';
 import { ChevronLeft16Regular, ChevronRight16Regular } from '@fluentui/react-icons/lib/fonts';
@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { QuestionnaireBase } from './QuestionnaireBase';
 
 
-export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
+export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
                                                                                initialState,
                                                                                questionTitle,
                                                                                questions,
@@ -17,6 +17,14 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
                                                                              }) => {
   const [answersValues, setAnswersValues] = useState<number[]>(initialState ?? []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
+  const currentQuestion = useMemo(() => questions[currentQuestionIndex], [currentQuestionIndex, questions]);
+  const forcePassthreshold = useMemo(() => {
+    return _.some(questions, question => {
+      return typeof question !== 'string'
+        && question.forcePassthreshold !== undefined
+        && answersValues[questions.indexOf(question)] >= question.forcePassthreshold;
+    });
+  },[answersValues, questions]);
   const onSelect = (question, value) => {
     const newAnswersValues = [...answersValues];
     newAnswersValues[questions.indexOf(question)] = value;
@@ -31,9 +39,9 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
       <div className="flex-column full-width align-center">
         <PagedQuestion key={currentQuestionIndex}
                        initialState={answersValues?.[currentQuestionIndex]}
-                       question={questions[currentQuestionIndex]}
+                       question={currentQuestion}
                        answers={answers}
-                       onChange={value => onSelect(questions[currentQuestionIndex], value)}/>
+                       onChange={value => onSelect(currentQuestion, value)}/>
         <StyledButtonsContainer>
           <Button
             size="large"
@@ -41,8 +49,8 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
             className="flex-1 margin-ml"
             icon={<ChevronLeft16Regular/>}
             iconPosition="after"
-            onClick={() => isLastQuestion ? onNext?.(answersValues) : setCurrentQuestionIndex(currentQuestionIndex + 1)}
-            disabled={_.isNil(answersValues[currentQuestionIndex])}>
+            onClick={() => isLastQuestion ? onNext?.(answersValues, forcePassthreshold) : setCurrentQuestionIndex(currentQuestionIndex + 1)}
+            disabled={_.isNil(answersValues?.[currentQuestionIndex])}>
             {isLastQuestion ? 'לשאלון הבא' : 'לשאלה הבאה'}
           </Button>
           {
@@ -60,7 +68,8 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
           className="margin-top-sm w-90"
           thickness="medium"
           shape="rounded"
-          value={currentQuestionIndex / questions.length}
+          value={currentQuestionIndex}
+          max={questions.length - 1}
         />
       </div>
     </QuestionnaireBase>
@@ -70,8 +79,8 @@ export const PagedQuestionsMatrix: React.FC<PagedQuestionsProps> = observer(({
 export type PagedQuestionsProps = {
   questionTitle: string;
   initialState?: number[];
-  onNext?: (answersValues: number[]) => void;
-  questions: (string | { text: string; reverseScore: boolean })[];
+  onNext?: (answersValues: number[], forcePassthreshold?: boolean) => void;
+  questions: (string | { text: string; reverseScore?: boolean, forcePassthreshold?: number })[];
   answers: {
     label: string;
     value: number;
