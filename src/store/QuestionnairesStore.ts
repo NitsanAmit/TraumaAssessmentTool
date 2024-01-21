@@ -1,6 +1,5 @@
 import { action, computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
-import questions from '../data/questions.json';
 import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
 import { QuestionnairesSummary } from './types';
 
@@ -8,15 +7,15 @@ export class QuestionnairesStore {
 
   questionnaireIndex: number = 0;
   questionnaireScores = {};
-  questionnairesStates = Array<unknown>(questions.length);
+  questionnairesStates = Array<unknown>(this.questions.length);
 
-  constructor(private proceedToSummary: () => void) {
+  constructor(private proceedToSummary: () => void, private questions: QuestionBase[]) {
     makeAutoObservable(this);
   }
 
   @computed
   get currentQuestion(): QuestionBase {
-    return questions[this.questionnaireIndex];
+    return this.questions[this.questionnaireIndex];
   }
 
   @computed
@@ -26,7 +25,7 @@ export class QuestionnairesStore {
 
   @computed
   get cutoffQuestionIndex(): number {
-    return _.findIndex(questions, { questionnaireType: QuestionnaireTypes.CUT_OFF });
+    return _.findIndex(this.questions, { questionnaireType: QuestionnaireTypes.CUT_OFF });
   }
 
   @computed
@@ -48,7 +47,7 @@ export class QuestionnairesStore {
     if (this.beforeCutoff) {
       return this.cutoffQuestionIndex;
     } else {
-      return (questions.length - this.cutoffQuestionIndex - 1);
+      return (this.questions.length - this.cutoffQuestionIndex - 1);
     }
   }
 
@@ -59,7 +58,7 @@ export class QuestionnairesStore {
 
   @computed
   get summary(): QuestionnairesSummary {
-    return _.reduce(questions, (acc, question, index) => {
+    return _.reduce(this.questions, (acc, question, index) => {
         const { questionnaire, questionnaireType } = question;
         const score = this.questionnaireScores[index]?.score;
         if (score === undefined || questionnaireType === QuestionnaireTypes.CUT_OFF) {
@@ -92,7 +91,7 @@ export class QuestionnairesStore {
   nextQuestion(currentState: unknown, didPassScoreBar: boolean, score: number | string) {
     this.questionnairesStates[this.questionnaireIndex] = currentState;
     this.questionnaireScores[this.questionnaireIndex] = { score, didPassScoreBar };
-    const finishedAllQuestionnaires = this.questionnaireIndex === questions.length - 1;
+    const finishedAllQuestionnaires = this.questionnaireIndex === this.questions.length - 1;
     const didntPassScoreBar = this.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF && !didPassScoreBar;
     if (didntPassScoreBar || finishedAllQuestionnaires) {
       this.proceedToSummary();

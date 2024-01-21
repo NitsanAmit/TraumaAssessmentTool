@@ -1,4 +1,4 @@
-import { useFirestore } from './useFirebase';
+import { useFirebase } from './useFirebase';
 import { QuestionnairesSummary } from '../../store/types';
 import { collection, addDoc } from "firebase/firestore";
 
@@ -6,7 +6,7 @@ const PII_QUESTIONNAIRES = ['free-text'];
 
 export const useAnonymousResults = () => {
 
-  const firestore = useFirestore();
+  const { firestore } = useFirebase();
   if (!firestore) {
     return {};
   }

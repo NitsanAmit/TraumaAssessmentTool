@@ -2,7 +2,7 @@ import { computed, makeAutoObservable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
 import { exportToPdf } from './pdf-utils';
-import { QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
 
 
 export enum APPLICATION_STEP {
@@ -27,10 +27,10 @@ export class ApplicationStateStore {
 
   step: APPLICATION_STEP = APPLICATION_STEP.WELCOME;
 
-  constructor() {
+  constructor(questionnaires: QuestionBase[]) {
     makeAutoObservable(this)
     this.personalDetailsStore = new PersonalDetailsStore();
-    this.questionnairesStore = new QuestionnairesStore(this.next.bind(this));
+    this.questionnairesStore = new QuestionnairesStore(this.next.bind(this), questionnaires);
   }
 
   @computed

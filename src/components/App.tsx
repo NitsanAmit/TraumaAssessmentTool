@@ -1,5 +1,5 @@
 import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationStateStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { WelcomeScreen } from './WelcomeScreen';
 import { PersonalDetails } from './PersonalDetails';
 import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
@@ -7,38 +7,53 @@ import { Summary } from './Summary';
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components';
 import { AppCommandBar } from './AppCommandBar';
-import { Card } from '@fluentui/react-components';
+import { Card, Spinner } from '@fluentui/react-components';
+import { useQuestions } from './hooks/useQuestions';
 
 export const App: React.FC = observer(() => {
 
-  const [appStateStore] = useState(new ApplicationStateStore());
+  const questions = useQuestions();
+  const [appStateStore, setAppStateStore] = useState<ApplicationStateStore>();
+
+  useEffect(() => {
+    if (questions) {
+      setAppStateStore(new ApplicationStateStore(questions));
+    }
+  }, [questions]);
 
   return (
     <AppContainer>
       <StyledCard size="large">
-        <ResponsiveLayout>
-          {
-            appStateStore.step !== APPLICATION_STEP.WELCOME &&
-            <AppCommandBar appStateStore={appStateStore}/>
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.WELCOME &&
-            <WelcomeScreen onNextClicked={() => appStateStore.next()}/>
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
-            <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore}
-                             onNextClicked={() => appStateStore.next()}/>
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
-            <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore}/>
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.SUMMARY &&
-            <Summary appStateStore={appStateStore}/>
-          }
-        </ResponsiveLayout>
+        {
+          !appStateStore &&
+          <Spinner/>
+        }
+        {
+          appStateStore &&
+          <ResponsiveLayout>
+            {
+              appStateStore.step !== APPLICATION_STEP.WELCOME &&
+              <AppCommandBar appStateStore={appStateStore}/>
+            }
+            {
+              appStateStore.step === APPLICATION_STEP.WELCOME &&
+              <WelcomeScreen onNextClicked={() => appStateStore.next()}/>
+            }
+            {
+              appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
+              <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore}
+                               onNextClicked={() => appStateStore.next()}/>
+            }
+            {
+              appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
+              <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore}/>
+            }
+            {
+              appStateStore.step === APPLICATION_STEP.SUMMARY &&
+              <Summary appStateStore={appStateStore}/>
+            }
+          </ResponsiveLayout>
+        }
       </StyledCard>
     </AppContainer>
   );
@@ -72,7 +87,7 @@ const AppContainer = styled.div`
     @media (max-width: 390px) {
       border-radius: 0;
     }
-    `,
+  `,
   ResponsiveLayout = styled.div`
     display: flex;
     flex-direction: column;

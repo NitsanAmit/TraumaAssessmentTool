@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { initializeApp, getApps, FirebaseApp} from "firebase/app";
+import { initializeApp, getApps} from "firebase/app";
+import { getRemoteConfig, RemoteConfig, fetchAndActivate } from "firebase/remote-config";
 import { getFirestore, Firestore } from 'firebase/firestore';
+import fallbackQuestions from '../../data/questions.json';
 
-export const useFirestore = () => {
+export const useFirebase = () => {
   const [firestore, setFirestore] = useState<Firestore | null>(null);
+  const [remoteConfig, setRemoteConfig] = useState<RemoteConfig | null>(null);
 
   useEffect(() => {
     const initializeFirestore = async () => {
@@ -19,6 +22,11 @@ export const useFirestore = () => {
           });
           const firestoreInstance = getFirestore(firebaseApp);
           setFirestore(firestoreInstance);
+          const remoteConfigInstance = getRemoteConfig(firebaseApp);
+          remoteConfigInstance.settings.minimumFetchIntervalMillis = /* 10 minutes */ 1000 * 60 * 10;
+          remoteConfigInstance.defaultConfig = { questions: JSON.stringify(fallbackQuestions.questions) };
+          await fetchAndActivate(remoteConfigInstance);
+          setRemoteConfig(remoteConfigInstance);
         }
       } catch (error) {
         console.error('Error initializing Firebase:', error);
@@ -28,5 +36,5 @@ export const useFirestore = () => {
     initializeFirestore();
   }, []);
 
-  return firestore;
+  return { firestore, remoteConfig };
 };
