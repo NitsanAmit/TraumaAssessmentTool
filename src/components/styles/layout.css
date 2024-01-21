@@ -43,3 +43,8 @@
 .scrollable {
     overflow-y: auto;
 }
+
+.rtl {
+    direction: rtl;
+    text-align: right;
+}

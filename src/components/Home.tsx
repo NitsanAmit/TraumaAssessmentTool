@@ -6,7 +6,7 @@ import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
 import { Summary } from './Summary';
 import { observer } from 'mobx-react-lite'
 import { AppCommandBar } from './AppCommandBar';
-import { Spinner } from '@fluentui/react-components';
+import { Card, Spinner } from '@fluentui/react-components';
 import { useQuestions } from './hooks/useQuestions';
 import { FirstSectionIntro } from './FirstSectionIntro';
 import styled from 'styled-components';
@@ -23,7 +23,7 @@ export const Home: React.FC = observer(() => {
   }, [questions]);
 
   return (
-    <>
+    <StyledCard size="large">
       {
         !appStateStore &&
         <Spinner/>
@@ -58,13 +58,24 @@ export const Home: React.FC = observer(() => {
           }
         </ResponsiveLayout>
       }
-    </>
+    </StyledCard>
   );
 })
 
-const ResponsiveLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
+const StyledCard = styled(Card)`
+          width: 100%;
+          height: 100%;
+          overflow-y: auto;
+          display: flex;
+          align-items: center;
+          max-width: 800px;
+          @media (max-width: 390px) {
+            border-radius: 0;
+          }
+  `,
+  ResponsiveLayout = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  `;

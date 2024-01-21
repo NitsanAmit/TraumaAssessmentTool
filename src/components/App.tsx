@@ -7,9 +7,7 @@ export const App: React.FC = observer(() => {
 
   return (
     <AppContainer>
-      <StyledCard size="large">
         <Outlet />
-      </StyledCard>
     </AppContainer>
   );
 });
@@ -31,15 +29,4 @@ const AppContainer = styled.div`
             width: 100%;
             height: 100%;
           }
-  `,
-  StyledCard = styled(Card)`
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    display: flex;
-    align-items: center;
-    max-width: 800px;
-    @media (max-width: 390px) {
-      border-radius: 0;
-    }
   `;
