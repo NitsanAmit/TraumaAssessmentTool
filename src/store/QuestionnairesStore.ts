@@ -57,11 +57,28 @@ export class QuestionnairesStore {
   }
 
   @computed
+  get questionnaireContext() {
+    return  {
+      progress: this.progress,
+      maxProgress: this.maxProgress,
+      verbalProgress: this.verbalProgress,
+    }
+  }
+
+  @computed
   get requiresSecondSection(): boolean {
     if (this.questionnaireIndex < this.cutoffQuestionIndex) {
       return false;
     }
     return _.chain(this.questionnaireScores).slice(this.cutoffQuestionIndex).some(({ didPassthreshold }) => didPassthreshold).value();
+  }
+
+  @computed
+  get stepDisplayName() {
+    if (this.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF) {
+      return 'סוף שאלון א';
+    }
+    return this.currentQuestion?.questionnaire;
   }
 
   @computed
@@ -112,11 +129,5 @@ export class QuestionnairesStore {
     }
   }
 
-  @computed
-  get stepDisplayName() {
-    if (this.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF) {
-      return 'סוף שאלון א';
-    }
-    return this.currentQuestion?.questionnaire;
-  }
+
 }

@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 import { OnNextClickedFunction, QuestionBase, QuestionnaireTypes, questionTypeToComponentMap } from './base/types';
-import { ProgressBar, tokens } from '@fluentui/react-components';
 import { SecondSectionIntro } from '../SecondSectionIntro';
+import { QuestionnaireContext } from '../../store/QuestionnaireContext';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
   const onNextClicked = useCallback((state: unknown, didPassthreshold: boolean, score: number | string) => {
@@ -20,21 +20,11 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
   return <div className="full-width flex-column">
     {
       questionnairesStore.currentQuestion.questionnaireType !== QuestionnaireTypes.CUT_OFF &&
-      <>
-        <div className="full-width flex-column">
-          <ProgressBar
-            className="margin-top-sm margin-bottom-xxs"
-            thickness="large"
-            shape="rounded"
-            value={questionnairesStore.progress}
-            max={questionnairesStore.maxProgress}
-          />
-          <StyledProgressText>{questionnairesStore.verbalProgress}</StyledProgressText>
-        </div>
+      <QuestionnaireContext.Provider value={questionnairesStore.questionnaireContext}>
         {
           useQuestionnaireComponent(questionnairesStore.currentQuestion, questionnairesStore.currentQuestionState, onNextClicked)
         }
-      </>
+      </QuestionnaireContext.Provider>
     }
     {
       questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF &&
@@ -65,9 +55,4 @@ const QuestionnaireContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-`, StyledProgressText = styled.div`
-  font-size: 12px;
-  width: 100%;
-  text-align: left;
-  color: ${tokens.colorBrandBackground};
 `;

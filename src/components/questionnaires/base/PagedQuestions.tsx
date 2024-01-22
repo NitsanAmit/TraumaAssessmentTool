@@ -35,7 +35,8 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   return (
-    <QuestionnaireBase questionTitle={isFirstQuestion ? questionTitle : undefined} >
+    <QuestionnaireBase questionTitle={isFirstQuestion ? questionTitle : undefined}
+    subQuestionIndex={currentQuestionIndex} maxSubQuestions={questions.length - 1}>
       <div className="flex-column full-width align-center">
         <PagedQuestion key={currentQuestionIndex}
                        initialState={answersValues?.[currentQuestionIndex]}

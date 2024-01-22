@@ -2,7 +2,7 @@ import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
 import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button, Dropdown, Field, Input, Option, Textarea } from '@fluentui/react-components';
+import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup, Textarea } from '@fluentui/react-components';
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
@@ -10,6 +10,9 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
     (_, data) => {
       const value = option ? data.optionValue : data.value;
       if (value.length > 500) {
+        return;
+      }
+      if (value < 0) {
         return;
       }
       personalDetailsStore.setProperty(property, option ? data.optionValue : data.value);
@@ -22,35 +25,45 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
                         onChange={setProperty('firstName')}/>
         <LargeTextField type="text" placeholder="שם משפחה" value={personalDetailsStore.lastName}
                         onChange={setProperty('lastName')}/>
-        <LargeDropdown placeholder="מגדר" value={personalDetailsStore.gender}
-                       onOptionSelect={setProperty('gender', true)}>
-          <Option key="זכר">זכר</Option>
-          <Option key="נקבה">נקבה</Option>
-          <Option key="מעדיפ/ה לא לציין">מעדיפ/ה לא לציין</Option>
-        </LargeDropdown>
+        <PersonalDetailsDropdown placeholder="מגדר" value={personalDetailsStore.gender}
+                                 onOptionSelect={setProperty('gender', true)}
+                                 options={['זכר', 'נקבה', 'מעדיפ/ה לא לציין']}/>
         <LargeTextField type="number" placeholder="גיל" value={personalDetailsStore.age} onChange={setProperty('age')}/>
-        <LargeDropdown placeholder="מצב משפחתי" value={personalDetailsStore.familyStatus} onOptionSelect={setProperty('familyStatus', true)}>
-          <Option key="רווק/ה">רווק/ה</Option>
-          <Option key="נשוי / נשואה">נשוי / נשואה</Option>
-          <Option key="גרוש/ה">גרוש/ה</Option>
-          <Option key="אלמנ/ה">אלמנ/ה</Option>
-          <Option key="מעדיפ/ה לא לציין">מעדיפ/ה לא לציין</Option>
-          <Option key="אחר">אחר</Option>
-        </LargeDropdown>
+        <PersonalDetailsDropdown placeholder="מצב משפחתי" value={personalDetailsStore.familyStatus}
+                                 onOptionSelect={setProperty('familyStatus', true)}
+                                 options={['רווק/ה', 'נשוי / נשואה', 'גרוש/ה', 'אלמנ/ה', 'מעדיפ/ה לא לציין', 'אחר']}/>
         <LargeTextField type="number" placeholder="מספר ילדים" value={personalDetailsStore.childNumber}
                         onChange={setProperty('childNumber')}/>
-        <Max500TextArea title="בריאות כללית נוכחית" placeholder={generalHealthStatusExplainStr}
-                        value={personalDetailsStore.generalHealthStatus}
-                        onChange={setProperty('generalHealthStatus')}/>
-        <Max500TextArea title="מצב כללי" placeholder={generalStateExplainStr}
-                        value={personalDetailsStore.generalState}
-                        onChange={setProperty('generalState')}/>
-        <Max500TextArea title="בריאות נפשית" placeholder={generalMentalHealthStateExplainStr}
-                        value={personalDetailsStore.generalMentalHealthState}
-                        onChange={setProperty('generalMentalHealthState')}/>
-        <Max500TextArea title="שימוש בתרופות" placeholder={drugsUsageExplainStr}
-                        value={personalDetailsStore.drugsUsage}
-                        onChange={setProperty('drugsUsage')}/>
+        <PersonalDetailsDropdown placeholder="מה מצבך בריאותך הגופנית היום?"
+                                 value={personalDetailsStore.generalHealthStatus}
+                                 onOptionSelect={setProperty('generalHealthStatus', true)}
+                                 options={['לגמרי תקין', 'בסך הכל בסדר', 'יש בעיות קלות', 'יש בעיות קשות']}/>
+        <PersonalDetailsDropdown placeholder="האם יש עליך לחצים היום (כמו מעבר דירה, אבטלה, קרובי משפחה חטופים)?"
+                                 value={personalDetailsStore.generalState}
+                                 onOptionSelect={setProperty('generalState', true)}
+                                 options={['אין בכלל', 'קצת לחץ', 'מאוד לחוץ', 'לחצים בלתי נסבלים']}/>
+        <PersonalDetailsDropdown placeholder="האם אנשים אחרים (חברים, מכרים, קרובי משפחה) תומכים בך היום?"
+                                 value={personalDetailsStore.supportCircle}
+                                 onOptionSelect={setProperty('supportCircle', true)}
+                                 options={['תמיכה מלאה', 'קצת תומכים', 'תמיכה בסדר', 'לא תומכים מספיק']}/>
+        <Field label="האם קיבלת בעבר טיפול נפשי?" className="full-width">
+          <RadioGroup onChange={setProperty('mentalTreatmentPast')} value={personalDetailsStore.mentalTreatmentPast}>
+            <Radio value="כן" label="כן"/>
+            <Radio value="לא" label="לא"/>
+          </RadioGroup>
+        </Field>
+        <Field label="האם קיבלת עכשיו טיפול נפשי?" className="full-width">
+          <RadioGroup onChange={setProperty('mentalTreatmentNow')} value={personalDetailsStore.mentalTreatmentNow}>
+            <Radio value="כן" label="כן"/>
+            <Radio value="לא" label="לא"/>
+          </RadioGroup>
+        </Field>
+        <Field label="האם את/ה משתמש/ת היום בתרופות לחרדה, שינה או מצב רוח?" className="full-width">
+          <RadioGroup onChange={setProperty('drugsUsage')} value={personalDetailsStore.drugsUsage}>
+            <Radio value="כן" label="כן"/>
+            <Radio value="לא" label="לא"/>
+          </RadioGroup>
+        </Field>
         <Button onClick={onNextClicked} appearance="primary" size="large" className="full-width">הבא</Button>
       </PersonalDetailsScreenContainer>
     </>
@@ -70,6 +83,14 @@ const Max500TextArea = ({ placeholder, value, onChange, title }) => {
     <StyledTextArea placeholder={placeholder} value={value} onChange={onChange} resize="none" size="large"/>
   </StyledField>;
 }
+
+const PersonalDetailsDropdown = ({ placeholder, value, onOptionSelect, options }) =>
+  <LargeDropdown
+    placeholder={placeholder} value={value} onOptionSelect={onOptionSelect}>
+    {
+      options.map(option => <Option key={option}>{option}</Option>)
+    }
+  </LargeDropdown>;
 
 export type PersonalDetailsProps = {
   personalDetailsStore: PersonalDetailsStore;

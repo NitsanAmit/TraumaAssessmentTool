@@ -5,9 +5,17 @@ import { Button } from '@fluentui/react-components';
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextClicked }) => {
   return (
     <WelcomeScreenContainer>
-      <h1>כלי אבחון פוסט-טראומה ראשוני</h1>
-      <div className="margin-bottom-xl">מקבץ שאלונים לאיבחון וסיווג הפרעות פוסט-טראומה, אשר בסופם יוצג סיכום אישי המיועד להתייעצות עם גורמי בריאות הנפש. </div>
-      <div className="margin-bottom-xl">הכלי פותח ע"י המועצה הישראלית לפוסט טראומה לטובת איבחון יעיל ומהיר יותר של אוכלוסיות הנמצאות בסיכון לפיתוח PTSD לאחר אירועי ה-7.10</div>
+      <div className="margin-ml">
+        <h1>כלי התייעצות אישית בעקבות מצבי דחק בישראל - 2024</h1>
+        <div className="margin-bottom-ml">הכלי פותח ע"י המועצה הישראלית לפוסט טראומה לצורך אבחון יעיל ומהיר יותר של
+          מצוקה פוסט טראומטית לאחר אירועי השבעה באוקטובר 2023
+        </div>
+        <div className="margin-bottom-xxl">כמעט כל מי שחיים בארץ מאז השבעה לאוקטובר התנסו בחוויות קשות, חרדות דאגה ואירועים
+          חריגים. אנו מציגים לך מקבץ שאלונים שיעריך את תגובותיך לאירועים ויציג לך סיכום אישי לצרוך הערכה-עצמית, זיהוי
+          בעיות בוערות, והערכת הצורך בהתייעצות עם גורמי טיפול. השאלונים הם אישיים וחסויים. הנתונים נמחקים עם תום
+          ההתייעצות.
+        </div>
+      </div>
       <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large">התחלה</Button>
     </WelcomeScreenContainer>
   );
@@ -19,6 +27,7 @@ export type WelcomeScreenProps = {
 
 const WelcomeScreenContainer = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
   text-align: center;

@@ -18,9 +18,13 @@ export class PersonalDetailsStore {
 
   generalState: string = "";
 
-  generalMentalHealthState: string = "";
+  supportCircle: string = "";
 
-  drugsUsage: string = "";
+  mentalTreatmentPast: string | undefined;
+
+  mentalTreatmentNow: string | undefined;
+
+  drugsUsage: string | undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -42,8 +46,10 @@ export class PersonalDetailsStore {
       "מספר ילדים": this.childNumber,
       "מצב בריאות כללי": this.generalHealthStatus,
       "מצב כללי": this.generalState,
-      "מצב נפשי": this.generalMentalHealthState,
-      "שימוש בסמים": this.drugsUsage,
+      "מעגלי תמיכה": this.supportCircle,
+      "טיפול נפשי בעבר": this.mentalTreatmentPast,
+      "טיפול נפשי כיום": this.mentalTreatmentNow,
+      "טיפול נפשי תרופתי": this.drugsUsage,
     }
   }
 
