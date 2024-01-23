@@ -2,6 +2,7 @@ import { useFirebase } from './useFirebase';
 import { useEffect, useState } from 'react';
 import { QuestionBase } from '../questionnaires/base/types';
 import { doc, getDoc } from 'firebase/firestore';
+import fallbackQuestionnaires from '../../data/questions.json';
 
 export const useQuestions = () => {
 
@@ -20,5 +21,5 @@ export const useQuestions = () => {
     getQuestions();
   }, [questions, firestore]);
 
-  return questions;
+  return questions ?? fallbackQuestionnaires;
 };
