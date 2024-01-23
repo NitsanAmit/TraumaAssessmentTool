@@ -1,22 +1,24 @@
 import { useFirebase } from './useFirebase';
-import { getValue } from "firebase/remote-config";
 import { useEffect, useState } from 'react';
 import { QuestionBase } from '../questionnaires/base/types';
+import { doc, getDoc } from 'firebase/firestore';
 
 export const useQuestions = () => {
 
-  const [questions, setQuestions] = useState<QuestionBase[]>();
-  const { remoteConfig } = useFirebase();
+  const [questions, setQuestions] = useState<(QuestionBase & unknown)[]>();
+  const { firestore } = useFirebase();
   useEffect(() => {
-    if (!remoteConfig) {
+    if (!firestore || questions) {
       return;
     }
     const getQuestions = async () => {
-      const questions = await getValue(remoteConfig, 'questions');
-      setQuestions(JSON.parse(questions.asString()) as QuestionBase[]);
+      const questions = await getDoc(doc(firestore, 'static', 'questionnaires'));
+      if (questions.exists()) {
+        setQuestions(questions.data()["questionnaires"] as QuestionBase[]);
+      }
     };
     getQuestions();
-  }, [remoteConfig]);
+  }, [questions, firestore]);
 
   return questions;
 };
