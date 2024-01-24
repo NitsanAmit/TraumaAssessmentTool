@@ -27,8 +27,8 @@ export const DiscreteScale: React.FC<DiscreteScaleProps> = observer(({
     }
     return (answersValues: number[], forcePassthreshold: boolean = false) => {
       const score = answersValues.reduce((acc, curr) => acc + curr, 0);
-      const didPassthreshold = score >= threshold || forcePassthreshold;
-      onNextClicked?.(answersValues, didPassthreshold, score)
+      const didPassThreshold = score >= threshold || forcePassthreshold;
+      onNextClicked?.(answersValues, didPassThreshold, score)
     }
   }, [onNextClicked, threshold]);
 

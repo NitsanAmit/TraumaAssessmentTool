@@ -19,10 +19,10 @@ export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
         <h2 className="flex-column align-center">סיכום תוצאות השאלונים</h2>
         <SummaryTable questionnairesSummary={appStateStore.questionnairesStore.summary}/>
       </div>
-      <Button appearance="primary" size="large" className="full-width" onClick={() => appStateStore.exportToPdf(true)}>
+      <Button appearance="primary" size="large" shape="circular" className="full-width" onClick={() => appStateStore.exportToPdf(true)}>
         שמור תוצאות כ-PDF
       </Button>
-      <Button appearance="primary" size="large" className={styles.noIdButton} onClick={() => appStateStore.exportToPdf(false)}>
+      <Button appearance="primary" size="large" shape="circular" className={styles.noIdButton} onClick={() => appStateStore.exportToPdf(false)}>
         שמור ללא פרטים מזהים
       </Button>
     </div>
@@ -37,9 +37,9 @@ const useStyles = makeStyles({
   noIdButton: {
     marginTop: '16px',
     width: '100%',
-    backgroundColor: '#77a8ff',
+    backgroundColor: '#9196e3',
     '&:hover': {
-      backgroundColor: '#679fff',
+      backgroundColor: '#8085cb',
     },
   }
 });

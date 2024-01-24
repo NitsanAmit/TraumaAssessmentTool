@@ -6,7 +6,7 @@ import { QuestionnairesSummary } from './types';
 export class QuestionnairesStore {
 
   questionnaireIndex: number = 0;
-  questionnaireScores = {};
+  questionnaireScores = Array<{ score: number | string; didPassThreshold: boolean; }>(this.questions.length);
   questionnairesStates = Array<unknown>(this.questions.length);
 
   constructor(public proceedToSummary: () => void, public questions: QuestionBase[]) {
@@ -70,13 +70,13 @@ export class QuestionnairesStore {
     if (this.questionnaireIndex < this.cutoffQuestionIndex) {
       return false;
     }
-    return _.chain(this.questionnaireScores).slice(this.cutoffQuestionIndex).some(({ didPassthreshold }) => didPassthreshold).value();
+    return this.questionnaireScores.slice(0, this.cutoffQuestionIndex).some(({ didPassThreshold }) => didPassThreshold);
   }
 
   @computed
   get stepDisplayName() {
     if (this.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF) {
-      return 'סוף שאלון א';
+      return 'סוף חלק א';
     }
     return this.currentQuestion?.questionnaire;
   }
@@ -113,10 +113,10 @@ export class QuestionnairesStore {
   }
 
   @action
-  nextQuestion(currentState: unknown, didPassthreshold: boolean, score: number | string) {
+  nextQuestion(currentState: unknown, didPassThreshold: boolean, score: number | string) {
     if (this.currentQuestion?.questionnaireType !== QuestionnaireTypes.CUT_OFF) {
       this.questionnairesStates[this.questionnaireIndex] = currentState;
-      this.questionnaireScores[this.questionnaireIndex] = { score, didPassthreshold };
+      this.questionnaireScores[this.questionnaireIndex] = { score, didPassThreshold };
     }
     const finishedAllQuestionnaires = this.questionnaireIndex === this.questions.length - 1;
     if (finishedAllQuestionnaires) {
@@ -125,7 +125,7 @@ export class QuestionnairesStore {
     }
     this.questionnaireIndex++;
     if (this.currentQuestion?.questionnaireType === QuestionnaireTypes.CUT_OFF) {
-      this.questionnairesStates[this.questionnaireIndex] = _.some(this.questionnaireScores, ({ didPassthreshold }) => didPassthreshold);
+      this.questionnairesStates[this.questionnaireIndex] = _.some(this.questionnaireScores, ({ didPassThreshold }) => didPassThreshold);
     }
   }
 

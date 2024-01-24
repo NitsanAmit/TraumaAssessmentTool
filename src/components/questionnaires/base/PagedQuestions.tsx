@@ -50,6 +50,7 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
             className="flex-1 margin-ml"
             icon={<ChevronLeft16Regular/>}
             iconPosition="after"
+            shape="circular"
             onClick={() => isLastQuestion ? onNext?.(answersValues, forcePassthreshold) : setCurrentQuestionIndex(currentQuestionIndex + 1)}
             disabled={_.isNil(answersValues?.[currentQuestionIndex])}>
             {isLastQuestion ? 'לשאלון הבא' : 'לשאלה הבאה'}
@@ -60,6 +61,7 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
               appearance="secondary"
               className="flex-1 margin-ml"
               icon={<ChevronRight16Regular/>}
+              shape="circular"
               onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>
               לשאלה הקודמת
             </Button>

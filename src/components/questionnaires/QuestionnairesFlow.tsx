@@ -7,8 +7,8 @@ import { SecondSectionIntro } from '../SecondSectionIntro';
 import { QuestionnaireContext } from '../../store/QuestionnaireContext';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
-  const onNextClicked = useCallback((state: unknown, didPassthreshold: boolean, score: number | string) => {
-      questionnairesStore.nextQuestion(state, didPassthreshold, score);
+  const onNextClicked = useCallback((state: unknown, didPassThreshold: boolean, score: number | string) => {
+      questionnairesStore.nextQuestion(state, didPassThreshold, score);
       scrollToTop();
     }
     , [questionnairesStore]);
@@ -17,7 +17,7 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  return <div className="full-width flex-column">
+  return <div className="full-width flex-column full-height">
     {
       questionnairesStore.currentQuestion.questionnaireType !== QuestionnaireTypes.CUT_OFF &&
       <QuestionnaireContext.Provider value={questionnairesStore.questionnaireContext}>
@@ -55,4 +55,5 @@ const QuestionnaireContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
 `;

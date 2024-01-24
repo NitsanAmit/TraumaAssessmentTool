@@ -5,7 +5,8 @@ import { Button } from '@fluentui/react-components';
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextClicked }) => {
   return (
     <WelcomeScreenContainer>
-      <div className="margin-ml">
+      <div className="margin-sm">
+        <StyledImage src="/blue-male.png"/>
         <h1>כלי התייעצות אישית בעקבות מצבי דחק בישראל - 2024</h1>
         <div className="margin-bottom-ml">הכלי פותח ע"י המועצה הישראלית לפוסט טראומה לצורך אבחון יעיל ומהיר יותר של
           מצוקה פוסט טראומטית לאחר אירועי השבעה באוקטובר 2023
@@ -16,7 +17,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
           ההתייעצות.
         </div>
       </div>
-      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large">התחלה</Button>
+      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large" shape="circular">התחלה</Button>
     </WelcomeScreenContainer>
   );
 });
@@ -31,4 +32,10 @@ const WelcomeScreenContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
+  justify-content: space-between;
+`,
+  StyledImage = styled.img`
+    width: 80%;
+    max-width: 350px;
+    margin-bottom: 54px;
+  `;

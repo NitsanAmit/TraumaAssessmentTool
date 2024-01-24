@@ -2,6 +2,7 @@ import { webLightTheme } from '@fluentui/react-components';
 
 export const AppTheme = {
   ...webLightTheme,
+  "fontFamilyBase": 'Rubik, sans-serif',
   "borderRadiusNone": "0",
   "borderRadiusSmall": "4px",
   "borderRadiusMedium": "6px",

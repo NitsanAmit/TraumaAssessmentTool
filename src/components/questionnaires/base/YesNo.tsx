@@ -28,8 +28,8 @@ export const YesNo: React.FC<YesNoProps> = observer(({
     }
     return (answersValues: number[]) => {
       const score = answersValues.reduce((acc, curr) => acc + curr, 0);
-      const didPassthreshold = score >= threshold;
-      onNextClicked(answersValues, didPassthreshold, score);
+      const didPassThreshold = score >= threshold;
+      onNextClicked(answersValues, didPassThreshold, score);
     }
   }, [onNextClicked, threshold]);
 

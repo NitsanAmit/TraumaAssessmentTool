@@ -36,14 +36,14 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
         questionTitle &&
         <QuestionTitle>{questionTitle}</QuestionTitle>
       }
-      <div className="full-height flex-column space-between full-width">
+      <div className="full-height flex-column full-width">
         <ChildrenContainer>
           {children}
         </ChildrenContainer>
         {
           onNextClicked &&
           <Button appearance="primary" size="large" className="full-width" onClick={onNextClicked}
-                  disabled={!nextEnabled}>
+                  shape="circular" disabled={!nextEnabled}>
             {nextButtonText || 'המשך'}
           </Button>
         }

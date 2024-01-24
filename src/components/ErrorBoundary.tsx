@@ -17,7 +17,7 @@ export class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
         <div className="full-height flex-column align-center justify-center">
           <h1>אופס!</h1>
           <div className="margin-bottom-xl" >קרתה תקלה לא צפויה, ודיווחנו על זה למי שצריכים לדעת. בינתיים אפשר לנסות להתחיל מחדש.</div>
-          <Button appearance="primary" size="large" onClick={() => window.location.reload()}>
+          <Button appearance="primary" size="large" onClick={() => window.location.reload()} shape="circular">
             להתחיל מחדש
           </Button>
         </div>

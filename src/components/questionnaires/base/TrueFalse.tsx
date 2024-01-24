@@ -20,17 +20,17 @@ export const TrueFalse: React.FC<TrueFalseProps> = observer(({
     if (!onNextClicked) {
       return;
     }
-    const didPassthreshold = threshold === 'true' ? answer : !answer;
-    onNextClicked(answer, didPassthreshold, didPassthreshold ? 1 : 0);
+    const didPassThreshold = threshold === 'true' ? answer : !answer;
+    onNextClicked(answer, didPassThreshold, didPassThreshold ? 1 : 0);
   }, [onNextClicked, threshold]);
 
   return (
     <QuestionnaireBase questionTitle={questionTitle}>
       <StyledContainer>
-        <Button appearance="primary" size="large" onClick={() => onNext(true)}>
+        <Button appearance="primary" size="large" shape="circular" onClick={() => onNext(true)}>
           כן
         </Button>
-        <Button appearance="primary" size="large" onClick={() => onNext(false)}>
+        <Button appearance="primary" size="large" shape="circular" onClick={() => onNext(false)}>
           לא
         </Button>
       </StyledContainer>

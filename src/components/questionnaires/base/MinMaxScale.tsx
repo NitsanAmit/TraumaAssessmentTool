@@ -29,8 +29,8 @@ export const MinMaxScale: React.FC<MinMaxScaleProps> = observer(({
   const onSelectionChanged = (_, { value }: RadioGroupOnChangeData) => {
     setSelection(parseInt(value));
   };
-  const didPassthreshold = !!(selection && selection >= threshold);
-  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(selection, didPassthreshold, selection!) : undefined, [onNextClicked, selection, didPassthreshold]);
+  const didPassThreshold = !!(selection && selection >= threshold);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(selection, didPassThreshold, selection!) : undefined, [onNextClicked, selection, didPassThreshold]);
 
   return (
     <QuestionnaireBase questionTitle={questionTitle} nextEnabled={selection !== undefined} onNextClicked={onNext}>

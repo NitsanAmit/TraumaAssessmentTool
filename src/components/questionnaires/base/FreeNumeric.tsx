@@ -27,12 +27,12 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
 
   const [answersValues, setAnswersValues] = useState<number[]>(initialState as number[] ?? []);
   const score = useMemo(() => answersValues.reduce((acc, curr) => acc + curr, 0), [answersValues]);
-  const didPassthreshold = useMemo(() => score >= threshold, [score, threshold]);
+  const didPassThreshold = useMemo(() => score >= threshold, [score, threshold]);
   const completedAllQuestions = useMemo(() => {
     return _.reject(answersValues, a => a === undefined).length === questions.length;
   }, [answersValues, questions]);
-  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(answersValues, didPassthreshold, score) : undefined,
-    [onNextClicked, answersValues, didPassthreshold, score]);
+  const onNext = useMemo(() => onNextClicked ? () => onNextClicked(answersValues, didPassThreshold, score) : undefined,
+    [onNextClicked, answersValues, didPassThreshold, score]);
 
   return (
     <QuestionnaireBase nextEnabled={completedAllQuestions} onNextClicked={onNext}>

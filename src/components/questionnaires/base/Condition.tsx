@@ -30,10 +30,10 @@ export const Condition: React.FC<ConditionProps> = observer(({
         !passedCondition &&
         <QuestionnaireBase questionTitle={questionTitle}>
           <StyledContainer>
-            <Button appearance="primary" size="large" onClick={() => setPassedCondition(true)}>
+            <Button appearance="primary" size="large" shape="circular" onClick={() => setPassedCondition(true)}>
               כן
             </Button>
-            <Button appearance="primary" size="large" onClick={onNext}>
+            <Button appearance="primary" size="large" shape="circular" onClick={onNext}>
               לא
             </Button>
           </StyledContainer>

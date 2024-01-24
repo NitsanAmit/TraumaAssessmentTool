@@ -2,7 +2,7 @@ import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationSta
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components';
-import { ChevronLeft24Regular, ArrowHookUpLeft24Regular, ArrowBounce24Regular } from '@fluentui/react-icons';
+import { ChevronRight24Regular, ArrowHookUpLeft24Regular, ArrowBounce24Regular } from '@fluentui/react-icons';
 import { Button } from '@fluentui/react-components';
 import { useSearchParams } from 'react-router-dom';
 
@@ -13,24 +13,24 @@ export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateS
 
   return (
     <CommandBar>
-      <StepDisplayName>{appStateStore.stepDisplayName}</StepDisplayName>
       <div>
         {
           appStateStore.step !== APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ChevronLeft24Regular/>}
+          <Button appearance="subtle" size="small" icon={<ChevronRight24Regular/>} shape="circular"
                   onClick={() => appStateStore.back()}>חזרה</Button>
         }
         {
           appStateStore.step === APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>}
+          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>} shape="circular"
                   onClick={() => window.location.reload()}>התחלה מחדש</Button>
         }
         {
           debugMode && appStateStore.step !== APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowBounce24Regular/>}
+          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowBounce24Regular/>} shape="circular"
                   onClick={() => appStateStore.skip()}>דלג</Button>
         }
       </div>
+      <StepDisplayName>{appStateStore.stepDisplayName}</StepDisplayName>
     </CommandBar>
   );
 });

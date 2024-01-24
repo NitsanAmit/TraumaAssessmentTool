@@ -25,9 +25,9 @@ export const MultiDiscreteScale: React.FC<MultiDiscreteScaleProps> = observer(({
     newAnswersValues[index] = values;
     setAllQuestionnaireAnswers(newAnswersValues);
     if (index === questionnaires.length - 1) {
-      const scores = _.map(allQuestionnaireAnswers, a => _.sum(a));
-      const questionnairesThatPassedthreshold = _.filter(questionnaires, (q, i) => scores[i] >= q.threshold).length;
-      onNextClicked?.(allQuestionnaireAnswers, questionnairesThatPassedthreshold >= threshold, scores);
+      const scores = _.map(newAnswersValues, a => _.sum(a));
+      const questionnairesThatPassedThreshold = _.filter(questionnaires, (q, i) => scores[i] >= q.threshold).length;
+      onNextClicked?.(newAnswersValues, questionnairesThatPassedThreshold >= threshold, scores);
     } else {
       setCurrentQuestionnaireIndex(index + 1);
     }

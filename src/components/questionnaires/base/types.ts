@@ -8,7 +8,7 @@ import { FreeText } from './FreeText';
 import { MultiDiscreteScale } from './MultiDiscreteScale';
 import { TrueFalse } from './TrueFalse';
 
-export type OnNextClickedFunction = (state: unknown, didPassthreshold: boolean, score: number | string) => void;
+export type OnNextClickedFunction = (state: unknown, didPassThreshold: boolean, score: number | string) => void;
 export type QuestionBase = {
   questionnaire: string;
   questionnaireType: string;

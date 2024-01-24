@@ -19,6 +19,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
     }, [personalDetailsStore]);
   return (
     <>
+      <StyledImage src="/personal-details.png" />
       <h1>שאלון היכרות</h1>
       <PersonalDetailsScreenContainer>
         <LargeTextField type="text" placeholder="שם פרטי" value={personalDetailsStore.firstName}
@@ -64,7 +65,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
-        <Button onClick={onNextClicked} appearance="primary" size="large" className="full-width">הבא</Button>
+        <Button onClick={onNextClicked} appearance="primary" size="large" className="full-width" shape="circular">הבא</Button>
       </PersonalDetailsScreenContainer>
     </>
   );
@@ -77,13 +78,6 @@ const LargeDropdown = ({ placeholder, value, onOptionSelect, children }) => {
   return <StyledDropdown placeholder={placeholder} value={value} onOptionSelect={onOptionSelect}
                          size="large">{children}</StyledDropdown>;
 }
-
-const Max500TextArea = ({ placeholder, value, onChange, title }) => {
-  return <StyledField label={title} hint="עד 500 תווים">
-    <StyledTextArea placeholder={placeholder} value={value} onChange={onChange} resize="none" size="large"/>
-  </StyledField>;
-}
-
 const PersonalDetailsDropdown = ({ placeholder, value, onOptionSelect, options }) =>
   <LargeDropdown
     placeholder={placeholder} value={value} onOptionSelect={onOptionSelect}>
@@ -110,15 +104,8 @@ const PersonalDetailsScreenContainer = styled.div`
   StyledTextField = styled(Input)`
     width: 100%;
   `,
-  StyledField = styled(Field)`
-    width: 100%;
-  `,
-  StyledTextArea = styled(Textarea)`
-    width: 100%;
-    height: 100px;
+  StyledImage = styled.img`
+    width: 70%;
+    max-width: 300px;
+    margin-bottom: 8px;
   `;
-
-const generalHealthStatusExplainStr = 'אנא פרט/י על מצבך הבריאותי. האם קיימת מחלה הדורשת טיפול תרופתי או התערבות רפואית אחרת ועוד';
-const generalStateExplainStr = 'אנא פרט/י לפי הנושאים הבאים: לחצים נוכחיים (מעבר דירה, אבטלה, קרובי משפחה חטופים), האם קיימת תמיכה חברתית / בדידות?';
-const generalMentalHealthStateExplainStr = 'אנא פרט/י על בעיות בריאות נפש קודמות שהצדיקו התערבות (תרופתית, טיפול פסיכולוגי ועוד)'
-const drugsUsageExplainStr = 'אנא פרט/י האם את/ה משתמש/ת בתרופות לחרדה, מצב רוח, שינה ועוד';
