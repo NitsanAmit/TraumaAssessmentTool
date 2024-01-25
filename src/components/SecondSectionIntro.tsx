@@ -7,15 +7,16 @@ import { QuestionnairesStore } from '../store/QuestionnairesStore';
 export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({ questionnairesStore }) => {
 
   const onPrimaryClicked = () => {
-    questionnairesStore.requiresSecondSection
-      ? questionnairesStore.nextQuestion(true, false, 0)
-      : questionnairesStore.proceedToSummary();
+    if (questionnairesStore.requiresSecondSection) {
+      questionnairesStore.nextQuestion(true, false, 0);
+    } else {
+      questionnairesStore.skippedSecondSection = true;
+      questionnairesStore.skipToSummary();
+    }
   }
 
   const onSecondaryClicked = () => {
-    questionnairesStore.requiresSecondSection
-      ? questionnairesStore.proceedToSummary()
-      : questionnairesStore.nextQuestion(false, false, 0);
+    questionnairesStore.nextQuestion(false, false, 0);
   }
 
   return (
@@ -28,6 +29,8 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
             {
               'תודה רבה על שהשלמת את החלק הראשון של השאלון.\n'
             }
+          </p>
+          <p>
             {
               questionnairesStore.requiresSecondSection &&
               `כעת נעבור לשלב הבא שבו יוצגו בפניך שאלות מפורטות ומעמיקות יותר. השאלות הללו נחוצות לצורך קבלת תמונה מלאה ומדויקת של תגובותיך וחוויותיך. יכול להיות שחלק מהשאלות יעסקו בנושאים שכבר נגענו בהם במהלך החלק הראשון. תהליך  ההרחבה והחזרה על נושאים מסוימים הוא חלק מאוד חשוב בתהליך ההערכה הכולל, ואנחנו מעריכים את שיתוף הפעולה וההסבלנות שלך!`
@@ -59,9 +62,7 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
             className="flex-1 margin-ml"
             shape="circular"
             onClick={onSecondaryClicked}>
-            {
-              questionnairesStore.requiresSecondSection ? 'סיום האבחון' : 'המשך בכל זאת לחלק ב\''
-            }
+             המשך בכל זאת לחלק ב'
           </Button>
         }
       </StyledButtonsContainer>

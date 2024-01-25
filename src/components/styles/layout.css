@@ -48,3 +48,11 @@
     direction: rtl;
     text-align: right;
 }
+
+.semi-bold {
+    font-weight: 600;
+}
+
+.overflow-x {
+    overflow-x: auto;
+}

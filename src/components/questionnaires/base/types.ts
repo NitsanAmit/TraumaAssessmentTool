@@ -8,7 +8,7 @@ import { FreeText } from './FreeText';
 import { MultiDiscreteScale } from './MultiDiscreteScale';
 import { TrueFalse } from './TrueFalse';
 
-export type OnNextClickedFunction = (state: unknown, didPassThreshold: boolean, score: number | string) => void;
+export type OnNextClickedFunction = (state: unknown, didPassThreshold: boolean, score?: number | string) => void;
 export type QuestionBase = {
   questionnaire: string;
   questionnaireType: string;
@@ -29,6 +29,25 @@ export const QuestionnaireTypes = {
   FREE_TEXT: 'free-text',
   MULTI_DISCRETE_SCALE: 'multi-discrete-scale',
   TRUE_FALSE: 'true-false',
+};
+
+export const QuestionnaireNames = {
+  CGI: 'CGI',
+  GAD_2: 'GAD-2',
+  PHQ_2: 'PHQ-2',
+  K5: 'K5',
+  PC_PTSD_5: 'PC-PTSD-5',
+  CSE_T: 'CSE-T',
+  Dissociation: 'Dissociation',
+  Derealization: 'Derealization',
+  SAST: 'SAST',
+  PCL_5: 'PCL-5',
+  STO: 'STO',
+  GAD_7: 'GAD-7',
+  PHQ_9: 'PHQ-9',
+  ICG: 'ICG',
+  WANT_HELP: 'צורך/רצון בעזרה מקצועית',
+  EXTRA_INFO: 'מידע נוסף',
 };
 
 export const questionTypeToComponentMap: Record<string, React.FC<any>> = {

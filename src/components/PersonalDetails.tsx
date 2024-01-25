@@ -2,7 +2,7 @@ import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
 import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup, Textarea } from '@fluentui/react-components';
+import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup } from '@fluentui/react-components';
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
@@ -19,7 +19,6 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
     }, [personalDetailsStore]);
   return (
     <>
-      <StyledImage src="/personal-details.png" />
       <h1>שאלון היכרות</h1>
       <PersonalDetailsScreenContainer>
         <LargeTextField type="text" placeholder="שם פרטי" value={personalDetailsStore.firstName}
@@ -65,6 +64,8 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
+        <StyledImage src="/personal-details.png" />
+
         <Button onClick={onNextClicked} appearance="primary" size="large" className="full-width" shape="circular">הבא</Button>
       </PersonalDetailsScreenContainer>
     </>

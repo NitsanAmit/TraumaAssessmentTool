@@ -10,6 +10,7 @@ import { Card, Spinner } from '@fluentui/react-components';
 import { useQuestions } from './hooks/useQuestions';
 import { FirstSectionIntro } from './FirstSectionIntro';
 import styled from 'styled-components';
+import { CompletedSecondSection } from './CompletedSecondSection';
 
 export const Home: React.FC = observer(() => {
 
@@ -53,8 +54,12 @@ export const Home: React.FC = observer(() => {
             <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore}/>
           }
           {
+            appStateStore.step === APPLICATION_STEP.COMPLETED_QUESTIONNAIRES &&
+            <CompletedSecondSection resultsStore={appStateStore.resultsStore} onNextClicked={() => appStateStore.next()} />
+          }
+          {
             appStateStore.step === APPLICATION_STEP.SUMMARY &&
-            <Summary appStateStore={appStateStore}/>
+            <Summary resultsStore={appStateStore.resultsStore} personalDetailsSummary={appStateStore.personalDetailsStore.summary}/>
           }
         </ResponsiveLayout>
       }

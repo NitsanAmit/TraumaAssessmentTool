@@ -8,9 +8,8 @@ const TITLE_FONT_SIZE = 20;
 type QuestionnairesSummary = { questionnaireName: string; questionnaireType: string; score: number; }[];
 type PersonalDetailsSummary = { [key: string]: string | undefined };
 
-export const exportToPdf = async (includePersonalDetails: boolean,
-                                  questionnairesSummary: QuestionnairesSummary,
-                                  personalDetailsSummary: PersonalDetailsSummary) => {
+export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
+                                  personalDetailsSummary?: PersonalDetailsSummary) => {
   const { pdfDoc, font, getAdjustedXPosition, page } = await _createPdf();
   const { height, width } = page.getSize()
 
@@ -62,7 +61,7 @@ export const exportToPdf = async (includePersonalDetails: boolean,
     extraYSpace += lines.length * BODY_FONT_SIZE * 2
   });
 
-  if (includePersonalDetails) {
+  if (personalDetailsSummary) {
     // table of this.personalDetailsStore.summary
     const personalDetailsTitle = 'פרטים אישיים:';
     const personalDetailsTitleFontSize = BODY_FONT_SIZE + 5;

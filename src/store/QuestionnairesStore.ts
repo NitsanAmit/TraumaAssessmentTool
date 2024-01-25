@@ -1,15 +1,16 @@
 import { action, computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
 import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
-import { QuestionnairesSummary } from './types';
+import { QuestionnaireRange } from './types';
 
 export class QuestionnairesStore {
 
   questionnaireIndex: number = 0;
   questionnaireScores = Array<{ score: number | string; didPassThreshold: boolean; }>(this.questions.length);
   questionnairesStates = Array<unknown>(this.questions.length);
+  skippedSecondSection: boolean = false;
 
-  constructor(public proceedToSummary: () => void, public questions: QuestionBase[]) {
+  constructor(public skipToSummary: () => void, private completedQuestionnaires: () => void, public questions: QuestionBase[]) {
     makeAutoObservable(this);
   }
 
@@ -81,30 +82,38 @@ export class QuestionnairesStore {
     return this.currentQuestion?.questionnaire;
   }
 
-  @computed
-  get summary(): QuestionnairesSummary {
-    return _.reduce(this.questions, (acc, question, index) => {
-        const { questionnaire, questionnaireType } = question;
-        const score = this.questionnaireScores[index]?.score;
-        if (score === undefined || questionnaireType === QuestionnaireTypes.CUT_OFF) {
-          return acc;
-        }
-        if (questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
-          return [...acc, ...(this._getMultiDiscreteScaleQuestionnaireSummary(score, question))];
-        }
-      if (questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
-        return [...acc, { questionnaireName: questionnaire, questionnaireType, score: score ? 'כן' : 'לא' }];
-      }
-      return [...acc, { questionnaireName: questionnaire, questionnaireType, score }];
-      }, []);
-  }
-
-  private _getMultiDiscreteScaleQuestionnaireSummary(scores, question) {
-    return scores.map((qScore, qIndex) => ({
-      questionnaireName: question.questionnaires[qIndex].questionnaire,
-      questionnaireType: QuestionnaireTypes.DISCRETE_SCALE,
-      score: qScore,
-    }));
+  public getQuestionnaireRange(question): QuestionnaireRange | {} {
+    switch (question.questionnaireType) {
+      case QuestionnaireTypes.MIN_MAX_SCALE:
+        return {
+          threshold: question.threshold,
+          maxScore: question.max,
+          minScore: question.min,
+        };
+      case QuestionnaireTypes.DISCRETE_SCALE:
+        const subQuestionsCount = question.questions.length;
+        return {
+          threshold: question.threshold,
+          maxScore: _.maxBy(question.answers, 'value').value * subQuestionsCount,
+          minScore: _.minBy(question.answers, 'value').value * subQuestionsCount,
+        };
+      case QuestionnaireTypes.YES_NO:
+        return {
+          threshold: question.threshold,
+          maxScore: question.questions.length,
+          minScore: 0,
+        };
+      case QuestionnaireTypes.CONDITION_QUESTIONNAIRE:
+        return this.getQuestionnaireRange(question.conditionQuestionnaire);
+      case QuestionnaireTypes.TRUE_FALSE:
+        return {
+          threshold: 1,
+          maxScore: 1,
+          minScore: 0,
+        };
+      default:
+        return {};
+    }
   }
 
   @action
@@ -113,21 +122,26 @@ export class QuestionnairesStore {
   }
 
   @action
-  nextQuestion(currentState: unknown, didPassThreshold: boolean, score: number | string) {
-    if (this.currentQuestion?.questionnaireType !== QuestionnaireTypes.CUT_OFF) {
+  nextQuestion(currentState: unknown, didPassThreshold: boolean, score?: number | string) {
+    const conditionQuestionFalseAnswer = this._isConditionQuestionWithFalseAnswer(score);
+    if (this.currentQuestion?.questionnaireType !== QuestionnaireTypes.CUT_OFF && !conditionQuestionFalseAnswer) {
       this.questionnairesStates[this.questionnaireIndex] = currentState;
-      this.questionnaireScores[this.questionnaireIndex] = { score, didPassThreshold };
+      this.questionnaireScores[this.questionnaireIndex] = { score: score ?? 0, didPassThreshold };
     }
     const finishedAllQuestionnaires = this.questionnaireIndex === this.questions.length - 1;
     if (finishedAllQuestionnaires) {
-      this.proceedToSummary();
+      this.completedQuestionnaires();
       return;
     }
     this.questionnaireIndex++;
     if (this.currentQuestion?.questionnaireType === QuestionnaireTypes.CUT_OFF) {
-      this.questionnairesStates[this.questionnaireIndex] = _.some(this.questionnaireScores, ({ didPassThreshold }) => didPassThreshold);
+      this.questionnairesStates[this.questionnaireIndex] =
+        _.some(this.questionnaireScores.slice(0, this.cutoffQuestionIndex), ({ didPassThreshold }) => didPassThreshold);
     }
   }
 
 
+  private _isConditionQuestionWithFalseAnswer(score?: number | string) {
+    return this.currentQuestion?.questionnaireType === QuestionnaireTypes.CONDITION_QUESTIONNAIRE && score === undefined;
+  }
 }

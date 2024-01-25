@@ -7,7 +7,7 @@ import { SecondSectionIntro } from '../SecondSectionIntro';
 import { QuestionnaireContext } from '../../store/QuestionnaireContext';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
-  const onNextClicked = useCallback((state: unknown, didPassThreshold: boolean, score: number | string) => {
+  const onNextClicked = useCallback((state: unknown, didPassThreshold: boolean, score?: number | string) => {
       questionnairesStore.nextQuestion(state, didPassThreshold, score);
       scrollToTop();
     }

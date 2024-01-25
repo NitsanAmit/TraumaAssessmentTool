@@ -1,45 +1,91 @@
-import {
-  Button,
-  makeStyles,
-} from '@fluentui/react-components';
-import { ApplicationStateStore } from '../store/ApplicationStateStore';
+import { Button } from '@fluentui/react-components';
 import { SummaryTable } from './SummaryTable';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAnonymousResults } from './hooks/useAnonymousResults';
+import styled from 'styled-components';
+import { ResultsStore } from '../store/ResultsStore';
 
-export const Summary: React.FC<SummaryProps> = ({ appStateStore }) => {
-  const styles = useStyles();
+export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary }) => {
   const { sendAnonymousResults } = useAnonymousResults();
   useEffect(() => {
-    sendAnonymousResults && sendAnonymousResults(appStateStore.questionnairesStore.summary);
+    sendAnonymousResults && sendAnonymousResults(resultsStore.summary);
   }, [sendAnonymousResults]);
+
+  const elementsString = useMemo(() => {
+    if (resultsStore.resultsElements?.length === 0) {
+      return null;
+    }
+    if (resultsStore.resultsElements.length === 1) {
+      return resultsStore.resultsElements[0];
+    }
+    return resultsStore.resultsElements.slice(0, resultsStore.resultsElements.length - 1)
+      .join(', ') + ' ו' + resultsStore.resultsElements.slice(-1).pop();
+  }, [resultsStore.resultsElements]);
+
   return (
-    <div className="full-height flex-column space-between full-width">
-      <div className="flex-column full-width margin-bottom-xl flex-1">
-        <h2 className="flex-column align-center">סיכום תוצאות השאלונים</h2>
-        <SummaryTable questionnairesSummary={appStateStore.questionnairesStore.summary}/>
+    <StyledSummaryContainer className="full-height flex-column space-between full-width">
+      {
+        elementsString &&
+        <h3 className="margin-vertical-sm">
+          בדקנו איתך רמות של {elementsString}, והתוצאות הן:
+        </h3>
+      }
+      <div className="margin-bottom-ml overflow-x">
+        <SummaryTable questionnairesSummary={resultsStore.rangedSummary}/>
       </div>
-      <Button appearance="primary" size="large" shape="circular" className="full-width" onClick={() => appStateStore.exportToPdf(true)}>
+      <StyledVerbalSummaryContainer>
+        {
+          resultsStore.resultsSymptoms?.length &&
+          <>
+            <span className="semi-bold">
+            כפי שניתן לראות בטבלה דיווחת על רמות מצוקה גבוהות בכמה אזורים, ובהם:
+            </span>
+            <StyledUl>
+              {
+                resultsStore.resultsSymptoms.map((s, index) => (
+                  <li key={index}>{s}</li>
+                ))
+              }
+            </StyledUl>
+          </>
+        }
+        <div className="margin-bottom-xl margin-top-ml">
+          {resultsStore.resultsVerbalSummary}
+        </div>
+      </StyledVerbalSummaryContainer>
+      <Button appearance="primary" size="large" shape="circular" className="full-width"
+              onClick={() => resultsStore.exportToPdf(personalDetailsSummary)}>
         שמור תוצאות כ-PDF
       </Button>
-      <Button appearance="primary" size="large" shape="circular" className={styles.noIdButton} onClick={() => appStateStore.exportToPdf(false)}>
+      <StyledButton appearance="primary" size="large" shape="circular" onClick={() => resultsStore.exportToPdf()}>
         שמור ללא פרטים מזהים
-      </Button>
-    </div>
+      </StyledButton>
+    </StyledSummaryContainer>
   );
 }
 
 export type SummaryProps = {
-  appStateStore: ApplicationStateStore;
+  resultsStore: ResultsStore;
+  personalDetailsSummary: Record<string, string | undefined>;
 }
 
-const useStyles = makeStyles({
-  noIdButton: {
-    marginTop: '16px',
-    width: '100%',
-    backgroundColor: '#9196e3',
-    '&:hover': {
-      backgroundColor: '#8085cb',
-    },
-  }
-});
+const StyledSummaryContainer = styled.div`
+  font-size: 16px;
+  line-height: 24px;
+  `,
+  StyledButton = styled(Button)`
+          margin-top: 16px;
+          width: 100%;
+          background-color: #9196e3;
+          &:hover {
+            background-color: #8085cb;
+          }
+  `,
+  StyledUl = styled.ul`
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-inline-start: 16px;
+  `,
+  StyledVerbalSummaryContainer = styled.div`
+    white-space: pre-wrap;
+  `;

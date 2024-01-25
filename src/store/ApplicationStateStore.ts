@@ -1,8 +1,8 @@
 import { computed, makeAutoObservable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
-import { exportToPdf } from './pdf-utils';
 import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { ResultsStore } from './ResultsStore';
 
 
 export enum APPLICATION_STEP {
@@ -10,6 +10,7 @@ export enum APPLICATION_STEP {
   PERSONAL_DETAILS = 'PERSONAL_DETAILS',
   FIRST_SECTION_INTRO = 'FIRST_SECTION_INTRO',
   QUESTIONNAIRES = 'QUESTIONNAIRES',
+  COMPLETED_QUESTIONNAIRES = 'COMPLETED_QUESTIONNAIRES',
   SUMMARY = 'SUMMARY',
 }
 
@@ -18,6 +19,7 @@ const APPLICATION_STEPS = [
   APPLICATION_STEP.PERSONAL_DETAILS,
   APPLICATION_STEP.FIRST_SECTION_INTRO,
   APPLICATION_STEP.QUESTIONNAIRES,
+  APPLICATION_STEP.COMPLETED_QUESTIONNAIRES,
   APPLICATION_STEP.SUMMARY,
 ];
 
@@ -27,12 +29,15 @@ export class ApplicationStateStore {
 
   questionnairesStore: QuestionnairesStore;
 
+  resultsStore: ResultsStore;
+
   step: APPLICATION_STEP = APPLICATION_STEP.WELCOME;
 
   constructor(questionnaires: QuestionBase[]) {
     makeAutoObservable(this)
     this.personalDetailsStore = new PersonalDetailsStore();
-    this.questionnairesStore = new QuestionnairesStore(this.next.bind(this), questionnaires);
+    this.questionnairesStore = new QuestionnairesStore(this.goToSummary.bind(this), this.next.bind(this), questionnaires);
+    this.resultsStore = new ResultsStore(this.questionnairesStore);
   }
 
   @computed
@@ -67,14 +72,18 @@ export class ApplicationStateStore {
     this.step = APPLICATION_STEPS[currentIndex + 1];
   }
 
+  goToSummary() {
+    this.step = APPLICATION_STEP.SUMMARY;
+  }
+
   skip() {
     if (this.step === APPLICATION_STEP.QUESTIONNAIRES) {
       let randomScore;
       if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
         // @ts-expect-error
-        randomScore = this.questionnairesStore.currentQuestion.questionnaires.map(() => Math.round(Math.random() * 10));
+        randomScore = this.questionnairesStore.currentQuestion.questionnaires.map((questionnaire) => this._getRandomQuestionScore(questionnaire));
       } else {
-        randomScore = Math.round(Math.random() * 10);
+        randomScore = this._getRandomQuestionScore(this.questionnairesStore.currentQuestion);
       }
       this.questionnairesStore.nextQuestion(undefined, Math.random() > 0.5, randomScore);
     } else {
@@ -82,7 +91,13 @@ export class ApplicationStateStore {
     }
   }
 
-  async exportToPdf(includePersonalDetails: boolean) {
-    return exportToPdf(includePersonalDetails, this.questionnairesStore.summary, this.personalDetailsStore.summary);
+  private _getRandomQuestionScore(question) {
+    const range = this.questionnairesStore.getQuestionnaireRange(question);
+    if ('minScore' in range && 'maxScore' in range) {
+      // return Math.floor(Math.random() * (range.maxScore - range.minScore + 1) + range.minScore);
+      return Math.floor(Math.random() * 20);
+    } else {
+      return Math.floor(Math.random() * 10);
+    }
   }
 }

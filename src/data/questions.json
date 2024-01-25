@@ -16,6 +16,7 @@
     "questionnaires": [
       {
         "questionnaire": "GAD-2",
+        "questionnaireType": "discrete-scale",
         "threshold": 4,
         "questionTitle": "בשבועיים האחרונים, כמה פעמים הפריעו לך הבעיות הבאות?",
         "questions": [
@@ -43,6 +44,7 @@
       },
       {
         "questionnaire": "CSE-T",
+        "questionnaireType": "discrete-scale",
         "threshold": 29,
         "questionTitle": "עד כמה את/ה מסוגל/ת להתמודד בהצלחה עם כל אחד מהמצבים המתוארים להלן?",
         "questions": [

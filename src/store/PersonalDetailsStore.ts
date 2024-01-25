@@ -36,7 +36,7 @@ export class PersonalDetailsStore {
   }
 
   @computed
-  get summary() {
+  get summary(): Record<string, string | undefined> {
     return {
       "שם פרטי": this.firstName,
       "שם משפחה": this.lastName,
