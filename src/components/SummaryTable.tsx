@@ -1,5 +1,4 @@
 import {
-  Label,
   Table,
   TableBody,
   TableCell,
@@ -26,7 +25,7 @@ export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummar
           <StyledTableHeaderCell colWidth={120}><TableCellLayout appearance="primary">מה
             נבדק</TableCellLayout></StyledTableHeaderCell>
           <StyledTableHeaderCell colWidth={80}><TableCellLayout
-            appearance="primary">טווח נורמה</TableCellLayout></StyledTableHeaderCell>
+            appearance="primary">טווח תקין</TableCellLayout></StyledTableHeaderCell>
           <StyledTableHeaderCell><TableCellLayout appearance="primary">התוצאה שלי</TableCellLayout></StyledTableHeaderCell>
         </TableRow>
       </TableHeader>
@@ -53,11 +52,11 @@ export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummar
                 }
                 {
                   s.questionnaireType === QuestionnaireTypes.TRUE_FALSE &&
-                  <Label size="small">{s.score === 0 ? 'לא' : 'כן'}</Label>
+                  <div>{s.score === 0 ? 'לא' : 'כן'}</div>
                 }
                 {
                   s.questionnaireType === QuestionnaireTypes.FREE_TEXT &&
-                  <Label size="small">{s.score}</Label>
+                  <div>{s.score}</div>
                 }
               </TableCell>
             </TableRow>

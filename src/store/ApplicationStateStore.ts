@@ -94,8 +94,7 @@ export class ApplicationStateStore {
   private _getRandomQuestionScore(question) {
     const range = this.questionnairesStore.getQuestionnaireRange(question);
     if ('minScore' in range && 'maxScore' in range) {
-      // return Math.floor(Math.random() * (range.maxScore - range.minScore + 1) + range.minScore);
-      return Math.floor(Math.random() * 20);
+      return Math.floor(Math.random() * (range.maxScore - range.minScore + 1) + range.minScore);
     } else {
       return Math.floor(Math.random() * 10);
     }

@@ -26,14 +26,15 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
     <StyledSummaryContainer className="full-height flex-column space-between full-width">
       {
         elementsString &&
-        <h3 className="margin-vertical-sm">
+        <h2 className="margin-vertical-sm">
           בדקנו איתך רמות של {elementsString}, והתוצאות הן:
-        </h3>
+        </h2>
       }
       <div className="margin-bottom-ml overflow-x">
         <SummaryTable questionnairesSummary={resultsStore.rangedSummary}/>
       </div>
       <StyledVerbalSummaryContainer>
+        <h2>סיכום והמלצות:</h2>
         {
           resultsStore.resultsSymptoms?.length &&
           <>
@@ -49,7 +50,7 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
             </StyledUl>
           </>
         }
-        <div className="margin-bottom-xl margin-top-ml">
+        <div className="margin-bottom-xl margin-top-m">
           {resultsStore.resultsVerbalSummary}
         </div>
       </StyledVerbalSummaryContainer>

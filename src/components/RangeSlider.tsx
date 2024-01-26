@@ -24,7 +24,8 @@ const StyledRangeSlider = styled.div`
           column-gap: 8px;
           width: 100%;
           color: #3b3b3b;
-          margin-bottom: 8px;
+          margin-top: 8px;
+          margin-bottom: 18px;
   `,
   StyledLabel = styled(Label)`
     color: #626262;

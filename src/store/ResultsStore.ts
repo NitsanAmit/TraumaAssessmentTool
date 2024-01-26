@@ -40,13 +40,6 @@ export class ResultsStore {
     }
   }
 
-
-  @computed
-  get wantHelp(): boolean {
-    const wantHelpQuestion = _.indexOf(this.questionnairesStore.questions, _.find(this.questionnairesStore.questions, { questionnaire: QuestionnaireNames.WANT_HELP }));
-    return this.questionnairesStore.questionnaireScores[wantHelpQuestion]?.didPassThreshold;
-  }
-
   @computed
   get questionnairesOverThreshold(): QuestionnairesSummary {
     return _.filter(this.rangedSummary, (summary) => summary.score >= summary.threshold);
@@ -61,11 +54,14 @@ export class ResultsStore {
       return SECOND_STAGE_RESULT_CATEGORY.NEGATIVE;
     }
     if (this.questionnairesOverThreshold.length < 3) {
-      const isSlightlyPositive = this.questionnairesOverThreshold.every(({ score, minScore, maxScore, threshold }) => {
+      const isSlightlyPositive = this.questionnairesOverThreshold.every(({ questionnaireType, score, maxScore, threshold }) => {
+        if (questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
+          return true;
+        }
         const percentage = this._percentOverThreshold(score, maxScore, threshold);
         return percentage <= 20;
       });
-      if (isSlightlyPositive && !this.wantHelp) {
+      if (isSlightlyPositive) {
         return SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE;
       }
     }
@@ -106,6 +102,8 @@ export class ResultsStore {
         }
         return 'דיווחת על רמות מצוקה, שלמרות שהן עשויות להיות כואבות עבורך, הן אופייניות לרוב האנשים במצבים דומים. ' +
           'אנשים המדווחים על רמות סבירות של מצוקה יכולים לעודד אחרים, ובמיוחד בני משפחה, ולנחם ולשתף תחושות חיוביות ולחזור לחיים בריאים. ' +
+          'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים. ' +
+          'אם את/ה בכל זאת מרגיש/ה צורך בכך, כדאי לפנות לייעוץ בהקדם.\n' +
           'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.\n' +
           'באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.';
       case SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE:
