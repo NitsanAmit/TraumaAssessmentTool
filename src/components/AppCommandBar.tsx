@@ -15,9 +15,8 @@ export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateS
     <CommandBar>
       <div>
         {
-          appStateStore.step !== APPLICATION_STEP.SUMMARY &&
           <Button appearance="subtle" size="small" icon={<ChevronRight24Regular/>} shape="circular"
-                  onClick={() => appStateStore.back()}>חזרה</Button>
+                  onClick={() => appStateStore.back()}>{appStateStore.backText}</Button>
         }
         {
           appStateStore.step === APPLICATION_STEP.SUMMARY &&

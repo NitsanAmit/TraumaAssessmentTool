@@ -58,6 +58,17 @@ export class ApplicationStateStore {
     }
   }
 
+  @computed
+  get backText() {
+    if (this.step === APPLICATION_STEP.QUESTIONNAIRES
+      && this.questionnairesStore.questionnaireIndex !== 0
+    && this.questionnairesStore.questionnaireIndex !== this.questionnairesStore.cutoffQuestionIndex + 1) {
+      return 'לשאלון הקודם';
+    } else {
+      return 'לשלב הקודם';
+    }
+  }
+
   back() {
     if (this.step === APPLICATION_STEP.QUESTIONNAIRES && this.questionnairesStore.questionnaireIndex !== 0) {
       this.questionnairesStore.previousQuestion();

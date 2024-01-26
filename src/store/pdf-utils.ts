@@ -10,30 +10,30 @@ type PersonalDetailsSummary = { [key: string]: string | undefined };
 
 export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
                                   personalDetailsSummary?: PersonalDetailsSummary) => {
-  const { pdfDoc, font, getAdjustedXPosition, page } = await _createPdf();
+  const { pdfDoc, font, getAdjustedXPosition, boldFont, getBoldAdjustedXPosition, page } = await _createPdf();
   const { height, width } = page.getSize()
 
-  const title = 'סיכום הערכת פוסט טראומה';
+  const title = 'סיכום שאלוני אבחון פוסט־טראומה';
   const indigo = rgb(0.357, 0.373, 0.78);
   page.drawText(title, {
-    x: width / 2 - font.widthOfTextAtSize(title, TITLE_FONT_SIZE) / 2,
+    x: width / 2 - boldFont.widthOfTextAtSize(title, TITLE_FONT_SIZE) / 2,
     y: height - 4 * BODY_FONT_SIZE,
     size: TITLE_FONT_SIZE,
-    font,
+    font: boldFont,
     color: indigo,
   })
 
   page.drawText('שם השאלון', {
-    x: getAdjustedXPosition(width - 30, 'שם השאלון', SUBTITLE_FONT_SIZE),
+    x: getBoldAdjustedXPosition(width - 30, 'שם השאלון', SUBTITLE_FONT_SIZE),
     y: height - 8 * BODY_FONT_SIZE,
     size: SUBTITLE_FONT_SIZE,
-    font,
+    font: boldFont,
   });
   page.drawText('ציון', {
-    x: getAdjustedXPosition(400, 'ציון', SUBTITLE_FONT_SIZE),
+    x: getBoldAdjustedXPosition(400, 'ציון', SUBTITLE_FONT_SIZE),
     y: height - 8 * BODY_FONT_SIZE,
     size: SUBTITLE_FONT_SIZE,
-    font,
+    font: boldFont,
   });
   page.drawLine({
     start: { x: 30, y: height - 9 * BODY_FONT_SIZE },
@@ -44,10 +44,10 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
   let extraYSpace = 0
   questionnairesSummary.forEach((summary, index) => {
     page.drawText(summary.questionnaireName, {
-      x: getAdjustedXPosition(width - 30, summary.questionnaireName, BODY_FONT_SIZE),
+      x: getBoldAdjustedXPosition(width - 30, summary.questionnaireName, BODY_FONT_SIZE),
       y: height - (11 + index * 2) * BODY_FONT_SIZE,
       size: BODY_FONT_SIZE,
-      font,
+      font: boldFont,
     });
     const lines = _breakLines(summary.score.toString());
     lines.forEach((line, lineIndex) => {
@@ -66,23 +66,29 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     const personalDetailsTitle = 'פרטים אישיים:';
     const personalDetailsTitleFontSize = BODY_FONT_SIZE + 5;
     page.drawText(personalDetailsTitle, {
-      x: getAdjustedXPosition(width - 30, personalDetailsTitle, personalDetailsTitleFontSize),
-      y: height - 12 * BODY_FONT_SIZE - extraYSpace,
+      x: getBoldAdjustedXPosition(width - 30, personalDetailsTitle, personalDetailsTitleFontSize),
+      y: height - 11 * BODY_FONT_SIZE - extraYSpace,
       size: personalDetailsTitleFontSize,
-      font,
+      font: boldFont,
+    });
+    page.drawLine({
+      start: { x: 30, y: height - 12 * BODY_FONT_SIZE - extraYSpace },
+      end: { x: width - 30, y: height - 12 * BODY_FONT_SIZE - extraYSpace },
+      thickness: 2,
+      color: indigo,
     });
     Object.entries(personalDetailsSummary).forEach(([key, value], index) => {
       page.drawText(key, {
-        x: getAdjustedXPosition(width - 30, key, BODY_FONT_SIZE),
-        y: height - (15 + index) * BODY_FONT_SIZE - extraYSpace,
+        x: getBoldAdjustedXPosition(width - 30, key, BODY_FONT_SIZE),
+        y: height - (14 + index) * BODY_FONT_SIZE - extraYSpace,
         size: BODY_FONT_SIZE,
-        font,
+        font: boldFont,
       });
       const lines = _breakLines(value ?? '');
       lines.forEach((line, lineIndex) => {
         page.drawText(line, {
           x: getAdjustedXPosition(400, line, BODY_FONT_SIZE),
-          y: height - (15 + index + lineIndex) * BODY_FONT_SIZE - extraYSpace,
+          y: height - (14 + index + lineIndex) * BODY_FONT_SIZE - extraYSpace,
           size: BODY_FONT_SIZE,
           font,
         });
@@ -105,7 +111,7 @@ const _getAdjustedXPosition = (x: number, text: string, size: number, font: PDFF
 const _breakLines = (text: string, maxLineLength = 80) => {
   const lines: string[] = [];
   let line = '';
-  text.split(' ').forEach(word => {
+  text.replaceAll('\n', ' ').split(' ').forEach(word => {
     if (line.length + word.length > maxLineLength) {
       lines.push(line);
       line = '';
@@ -127,12 +133,15 @@ const _download = (pdfBytes: Uint8Array) => {
 const _createPdf = async () => {
   const pdfDoc = await PDFDocument.create()
   pdfDoc.registerFontkit(fontkit);
-  const fontBinary = await fetch('Arial.ttf').then(res => res.arrayBuffer())
-  const font = await pdfDoc.embedFont(fontBinary);
+  const regularFontBinary = await fetch('Rubik-Regular.ttf').then(res => res.arrayBuffer())
+  const boldFontBinary = await fetch('Rubik-Bold.ttf').then(res => res.arrayBuffer())
+  const font = await pdfDoc.embedFont(regularFontBinary);
+  const boldFont = await pdfDoc.embedFont(boldFontBinary);
   const getAdjustedXPosition = _getFontPositionAdjuster(font);
+  const getBoldAdjustedXPosition = _getFontPositionAdjuster(boldFont);
   const viewerPrefs = pdfDoc.catalog.getOrCreateViewerPreferences();
   viewerPrefs.setReadingDirection(ReadingDirection.R2L)
   const page = pdfDoc.addPage()
 
-  return { pdfDoc, font, getAdjustedXPosition, page };
+  return { pdfDoc, font, getAdjustedXPosition, boldFont, getBoldAdjustedXPosition, page };
 };
