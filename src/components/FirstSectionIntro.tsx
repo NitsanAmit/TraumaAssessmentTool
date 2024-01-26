@@ -40,9 +40,13 @@ const IntroContainer = styled.div`
           justify-content: space-between;
   `,
   StyledImage = styled.img`
-    width: 80%;
+    width: 70%;
     max-width: 350px;
     margin-bottom: 32px;
+    @media (max-width: 390px) {
+      width: 80%;
+      margin-bottom: 8px;
+    }
   `,
   StyledText = styled.div`
     white-space: pre-wrap;

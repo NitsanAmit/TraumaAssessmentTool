@@ -76,6 +76,7 @@ const StyledCard = styled(Card)`
           max-width: 800px;
           @media (max-width: 390px) {
             border-radius: 0;
+            padding: 8px;
           }
   `,
   ResponsiveLayout = styled.div`

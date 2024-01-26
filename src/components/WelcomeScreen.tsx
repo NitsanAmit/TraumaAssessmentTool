@@ -11,7 +11,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
         <div className="margin-bottom-ml">הכלי פותח ע"י המועצה הישראלית לפוסט טראומה לצורך אבחון יעיל ומהיר יותר של
           מצוקה פוסט טראומטית לאחר אירועי השבעה באוקטובר 2023
         </div>
-        <div className="margin-bottom-xxl">כמעט כל מי שחיים בארץ מאז השבעה לאוקטובר התנסו בחוויות קשות, חרדות דאגה ואירועים
+        <div className="margin-bottom-xs">כמעט כל מי שחיים בארץ מאז השבעה לאוקטובר התנסו בחוויות קשות, חרדות דאגה ואירועים
           חריגים. אנו מציגים לך מקבץ שאלונים שיעריך את תגובותיך לאירועים ויציג לך סיכום אישי לצרוך הערכה-עצמית, זיהוי
           בעיות בוערות, והערכת הצורך בהתייעצות עם גורמי טיפול. השאלונים הם אישיים וחסויים. הנתונים נמחקים עם תום
           ההתייעצות.
@@ -35,7 +35,11 @@ const WelcomeScreenContainer = styled.div`
   justify-content: space-between;
 `,
   StyledImage = styled.img`
-    width: 80%;
+    width: 70%;
     max-width: 350px;
-    margin-bottom: 54px;
+    margin-bottom: 48px;
+    @media (max-width: 390px) {
+      width: 80%;
+      margin-bottom: 8px;
+    }
   `;

@@ -94,11 +94,16 @@ const StyledTable = styled(Table)`
           width: 100%;
           min-width: 500px;
           font-size: 14px;
+          background-color: #fafafa;
+          border-radius: 8px;
           .${tableRowClassName}:hover {
             background: inherit;
           }
           @media (max-width: 480px) {
             font-size: 12px;
+          }
+          tbody tr:last-child {
+            border-bottom: none;
           }
   `,
   StyledTableHeaderCell = styled(TableHeaderCell)<{ colWidth?: number }>`

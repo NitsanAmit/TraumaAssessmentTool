@@ -93,6 +93,10 @@ const StyledButtonsContainer = styled.div`
     width: 60%;
     max-width: 250px;
     margin-bottom: 32px;
+    @media (max-width: 390px) {
+      width: 70%;
+      margin-bottom: 8px;
+    }
   `,
   StyledText = styled.div`
     white-space: pre-wrap;

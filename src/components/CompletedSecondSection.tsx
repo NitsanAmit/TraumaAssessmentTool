@@ -74,9 +74,13 @@ const Container = styled.div`
           flex: 1;
   `,
   StyledImage = styled.img`
-    width: 60%;
-    max-width: 300px;
-    margin-bottom: 32px;
+    width: 70%;
+    max-width: 350px;
+    margin-bottom: 48px;
+    @media (max-width: 390px) {
+      width: 80%;
+      margin-bottom: 8px;
+    }
   `,
   StyledText = styled.div`
     white-space: pre-wrap;
