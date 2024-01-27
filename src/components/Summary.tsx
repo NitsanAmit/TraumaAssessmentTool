@@ -1,15 +1,15 @@
 import { Button } from '@fluentui/react-components';
 import { SummaryTable } from './SummaryTable';
 import { useEffect, useMemo } from 'react';
-import { useAnonymousResults } from './hooks/useAnonymousResults';
 import styled from 'styled-components';
 import { ResultsStore } from '../store/ResultsStore';
+import { QuestionnairesSummary } from '../store/types';
 
-export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary }) => {
-  const { sendAnonymousResults } = useAnonymousResults();
+export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary, sendAnonymousResults }) => {
+
   useEffect(() => {
-    sendAnonymousResults && sendAnonymousResults(resultsStore.summary);
-  }, [sendAnonymousResults]);
+    sendAnonymousResults && resultsStore.summary && sendAnonymousResults(resultsStore.summary);
+  }, [resultsStore.summary, sendAnonymousResults]);
 
   const elementsString = useMemo(() => {
     if (resultsStore.resultsElements?.length === 0) {
@@ -68,6 +68,7 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
 export type SummaryProps = {
   resultsStore: ResultsStore;
   personalDetailsSummary: Record<string, string | undefined>;
+  sendAnonymousResults?: (questionnaireResults: QuestionnairesSummary) => void;
 }
 
 const StyledSummaryContainer = styled.div`

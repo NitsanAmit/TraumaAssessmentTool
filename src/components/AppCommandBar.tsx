@@ -1,15 +1,13 @@
 import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationStateStore';
-import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components';
 import { ChevronRight24Regular, ArrowHookUpLeft24Regular, ArrowBounce24Regular } from '@fluentui/react-icons';
 import { Button } from '@fluentui/react-components';
-import { useSearchParams } from 'react-router-dom';
+import { useDebugMode } from './hooks/useDebugMode';
 
 export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateStore}) => {
 
-  const [searchParams] = useSearchParams();
-  const debugMode = useMemo(() => searchParams.get('mode') === 'debug', [searchParams]);
+  const debugMode = useDebugMode();
 
   return (
     <CommandBar>

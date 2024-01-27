@@ -11,10 +11,12 @@ import { useQuestions } from './hooks/useQuestions';
 import { FirstSectionIntro } from './FirstSectionIntro';
 import styled from 'styled-components';
 import { CompletedSecondSection } from './CompletedSecondSection';
+import { useAnonymousResults } from './hooks/useAnonymousResults';
 
 export const Home: React.FC = observer(() => {
 
   const questions = useQuestions();
+  const { optOutOfAnonymousDataCollection, sendAnonymousResults } = useAnonymousResults();
   const [appStateStore, setAppStateStore] = useState<ApplicationStateStore>();
 
   useEffect(() => {
@@ -38,7 +40,12 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.WELCOME &&
-            <WelcomeScreen onNextClicked={() => appStateStore.next()}/>
+            <WelcomeScreen onNextClicked={(optOut: boolean) => {
+              if (optOut) {
+                optOutOfAnonymousDataCollection();
+              }
+              appStateStore.next();
+            }} />
           }
           {
             appStateStore.step === APPLICATION_STEP.FIRST_SECTION_INTRO &&
@@ -59,7 +66,8 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.SUMMARY &&
-            <Summary resultsStore={appStateStore.resultsStore} personalDetailsSummary={appStateStore.personalDetailsStore.summary}/>
+            <Summary resultsStore={appStateStore.resultsStore} personalDetailsSummary={appStateStore.personalDetailsStore.summary}
+                     sendAnonymousResults={sendAnonymousResults} />
           }
         </ResponsiveLayout>
       }
