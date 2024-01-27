@@ -11,8 +11,8 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { tableRowClassName } from '@fluentui/react-table';
 import { QuestionnairesSummary } from '../store/types';
-import { QuestionnaireNames, QuestionnaireTypes } from './questionnaires/base/types';
 import { RangeSlider } from './RangeSlider';
+import { QUESTIONNAIRE_NAME_TO_PURPOSE, QuestionnaireTypes } from '../data/data.consts';
 
 export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummary }) => {
 
@@ -62,24 +62,6 @@ export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummar
       </TableBody>
     </StyledTable>
   );
-}
-
-const QUESTIONNAIRE_NAME_TO_PURPOSE: { [key: string]: string } = {
-  [QuestionnaireNames.CGI]: 'מצוקה כללית',
-  [QuestionnaireNames.GAD_2]: 'שאלון חרדה (קצר)',
-  [QuestionnaireNames.PHQ_2]: 'שאלון דיכאון (קצר)',
-  [QuestionnaireNames.K5]: 'מצוקה כללית',
-  [QuestionnaireNames.PC_PTSD_5]: 'סימני PTSD (קצר)',
-  [QuestionnaireNames.CSE_T]: 'התמודדות',
-  [QuestionnaireNames.Dissociation]: 'דיסוציאציה',
-  [QuestionnaireNames.Derealization]: 'דיסוציאציה',
-  [QuestionnaireNames.SAST]: 'מתח וחרדה',
-  [QuestionnaireNames.PCL_5]: 'סימני PTSD (מלא)',
-  [QuestionnaireNames.STO]: 'תפיסה אישית של טראומה',
-  [QuestionnaireNames.GAD_7]: 'שאלון חרדה (מלא)',
-  [QuestionnaireNames.PHQ_9]: 'שאלון דיכאון (מלא)',
-  [QuestionnaireNames.ICG]: 'אובדן ושכול',
-  [QuestionnaireNames.WANT_HELP]: 'מצוקה כללית',
 }
 
 export type SummaryTableProps = {

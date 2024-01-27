@@ -47,6 +47,7 @@ const IntroContainer = styled.div`
           text-align: center;
           flex: 1;
           justify-content: space-between;
+          width: 100%;
   `,
   StyledImage = styled.img`
     width: 70%;

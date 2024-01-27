@@ -1,9 +1,9 @@
 import { Button } from '@fluentui/react-components';
 import { SummaryTable } from './SummaryTable';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { ResultsStore } from '../store/ResultsStore';
-import { QuestionnairesSummary } from '../store/types';
+import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY } from '../store/types';
 
 export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary, sendAnonymousResults }) => {
 
@@ -11,23 +11,12 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
     sendAnonymousResults && resultsStore.summary && sendAnonymousResults(resultsStore.summary);
   }, [resultsStore.summary, sendAnonymousResults]);
 
-  const elementsString = useMemo(() => {
-    if (resultsStore.resultsElements?.length === 0) {
-      return null;
-    }
-    if (resultsStore.resultsElements.length === 1) {
-      return resultsStore.resultsElements[0];
-    }
-    return resultsStore.resultsElements.slice(0, resultsStore.resultsElements.length - 1)
-      .join(', ') + ' ו' + resultsStore.resultsElements.slice(-1).pop();
-  }, [resultsStore.resultsElements]);
-
   return (
     <StyledSummaryContainer className="full-height flex-column space-between full-width">
       {
-        elementsString &&
+        resultsStore.resultsElements &&
         <h2 className="margin-vertical-sm">
-          בדקנו איתך רמות של {elementsString}, והתוצאות הן:
+          בדקנו איתך רמות של {resultsStore.resultsElements}, והתוצאות הן:
         </h2>
       }
       <div className="margin-bottom-ml overflow-x">
@@ -52,6 +41,11 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
         }
         <div className="margin-bottom-xl margin-top-m">
           {resultsStore.resultsVerbalSummary}
+          {
+            resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.POSITIVE
+              ? ' כדאי לשמור את התוצאות בדף זה ולהשתמש בהן כדי לעזור בפנייתך.'
+              : ' באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.'
+          }
         </div>
       </StyledVerbalSummaryContainer>
       <Button appearance="primary" size="large" shape="circular" className="full-width"

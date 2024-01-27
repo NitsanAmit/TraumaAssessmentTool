@@ -1,8 +1,9 @@
 import { computed, makeAutoObservable } from 'mobx';
 import { PersonalDetailsStore } from './PersonalDetailsStore';
 import { QuestionnairesStore } from './QuestionnairesStore';
-import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionBase } from '../components/questionnaires/base/types';
 import { ResultsStore } from './ResultsStore';
+import { QuestionnaireTypes } from '../data/data.consts';
 
 
 export enum APPLICATION_STEP {
@@ -72,6 +73,8 @@ export class ApplicationStateStore {
   back() {
     if (this.step === APPLICATION_STEP.QUESTIONNAIRES && this.questionnairesStore.questionnaireIndex !== 0) {
       this.questionnairesStore.previousQuestion();
+    } else if (this.step === APPLICATION_STEP.SUMMARY && this.questionnairesStore.skippedSecondSection) {
+      this.step = APPLICATION_STEP.QUESTIONNAIRES;
     } else {
       const currentIndex = APPLICATION_STEPS.indexOf(this.step);
       this.step = APPLICATION_STEPS[currentIndex - 1];

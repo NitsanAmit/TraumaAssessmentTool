@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useQuestions } from '../hooks/useQuestions';
-import { QuestionnaireTypes } from './base/types';
+import { QuestionnaireTypes } from '../../data/data.consts';
 import {
   Card,
   Divider,

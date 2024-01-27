@@ -8,6 +8,7 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
 
   const onPrimaryClicked = () => {
     if (questionnairesStore.requiresSecondSection) {
+      questionnairesStore.skippedSecondSection = false;
       questionnairesStore.nextQuestion(true, false, 0);
     } else {
       questionnairesStore.skippedSecondSection = true;
@@ -16,6 +17,7 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
   }
 
   const onSecondaryClicked = () => {
+    questionnairesStore.skippedSecondSection = false;
     questionnairesStore.nextQuestion(false, false, 0);
   }
 
@@ -88,6 +90,7 @@ const StyledButtonsContainer = styled.div`
     text-align: center;
     justify-content: space-between;
     flex: 1;
+    width: 100%;
   `,
   StyledImage = styled.img`
     width: 60%;

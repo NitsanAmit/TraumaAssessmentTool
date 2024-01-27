@@ -1,9 +1,10 @@
 import { computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
 import { QuestionnairesStore } from './QuestionnairesStore';
-import { QuestionBase, QuestionnaireNames, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionBase } from '../components/questionnaires/base/types';
 import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY, SecondStageResultCategory } from './types';
 import { exportToPdf } from './pdf-utils';
+import { QUESTIONNAIRE_NAME_TO_ELEMENT, QUESTIONNAIRE_NAME_TO_SYMPTOMS, QuestionnaireTypes } from '../data/data.consts';
 
 export class ResultsStore {
 
@@ -77,14 +78,25 @@ export class ResultsStore {
     return SECOND_STAGE_RESULT_CATEGORY.POSITIVE;
   }
 
+  private _toDelimitedString(elements: string[] | null) {
+    if (!elements || elements?.length === 0) {
+      return null;
+    }
+    if (elements.length === 1) {
+      return elements[0];
+    }
+    return elements.slice(0, elements.length - 1).join(', ') + ' ו' + elements.slice(-1).pop();
+  }
+
   @computed
-  get resultsElements() {
-    return _.chain(this.summary)
+  get resultsElements(): string | null {
+    const elements = _.chain(this.summary)
       .filter(s => !_.isNil(s.score))
       .map(s => QUESTIONNAIRE_NAME_TO_ELEMENT[s.questionnaireName])
       .filter(Boolean)
       .uniq()
       .value();
+    return this._toDelimitedString(elements);
   }
 
   @computed
@@ -100,39 +112,40 @@ export class ResultsStore {
   }
 
   @computed
+  get resultsSymptomsString(): string | null {
+    return this._toDelimitedString(this.resultsSymptoms);
+  }
+
+  @computed
   get resultsVerbalSummary(): string {
     switch (this.secondStageResultCategory) {
       case SECOND_STAGE_RESULT_CATEGORY.NEGATIVE:
         if (this.questionnairesStore.skippedSecondSection) {
           return 'הסימנים עליהם דיווחת דומים לאלה שרוב האנשים מרגישים. הם אינם מדאיגים ויחלפו עם הזמן וכאשר האירועים יירגעו, ונראה שאינך זקוק לעזרה טיפולית כרגע. ' +
             'יש לך כוח היום לעזור לאחרים, לשמור על שיגרת החיים, לתת למי שצריך או צריכה, וגם לנהל לחיים בריאים. ' +
-            'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.\n' +
-            'באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.';
+            'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.';
         }
         return 'דיווחת על רמות מצוקה, שלמרות שהן עשויות להיות כואבות עבורך, הן אופייניות לרוב האנשים במצבים דומים. ' +
           'אנשים המדווחים על רמות סבירות של מצוקה יכולים לעודד אחרים, ובמיוחד בני משפחה, ולנחם ולשתף תחושות חיוביות ולחזור לחיים בריאים. ' +
           'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים. ' +
           'אם את/ה בכל זאת מרגיש/ה צורך בכך, כדאי לפנות לייעוץ בהקדם.\n' +
-          'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.\n' +
-          'באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.';
+          'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.';
       case SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE:
         return 'בתחומים אחרים הסימפטומים שלך אינם שונים ממה שאנשים מרגישים בדרך כלל במצבים דומים.\n' +
           'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים.\n' +
           'אם את/ה בכל זאת מרגיש/ה צורך בכך, או אם את/ה מאוד לבד או איבדת תקווה - כדאי לפנות לייעוץ. ' +
-          'בכל מקרה כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים.\n' +
-          'באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.';
+          'בכל מקרה כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים.';
       case SECOND_STAGE_RESULT_CATEGORY.POSITIVE:
         return 'הסימפטומים שלך לא קלים, וחשוב מאד לפנות להערכה מקצועית ולטיפול. ' +
           'חשוב לא להתעכב עם הפנייה, ולגשת בהקדם לגורם מקצועי. ' +
-          'כדאי לפנות ראשית לגורם הכי זמין – למשל רופא/ת המשפחה או עובד/ת סוציאלי/ת.\n' +
-          'כדאי לשמור את התוצאות בדף זה ולהשתמש בהן כדי לעזור בפנייתך.';
+          'כדאי לפנות ראשית לגורם הכי זמין – למשל רופא/ת המשפחה או עובד/ת סוציאלי/ת.';
       default:
         return '';
     }
   }
 
   public async exportToPdf(personalDetailsSummary?: Record<string, string | undefined>) {
-    return exportToPdf(this.rangedSummary, personalDetailsSummary);
+    return exportToPdf(this.rangedSummary, this.resultsVerbalSummary, this.resultsSymptomsString, personalDetailsSummary);
   }
 
   private _getMultiDiscreteScaleQuestionnaireSummary(scores, question, didPassThreshold) {
@@ -150,34 +163,4 @@ export class ResultsStore {
   private _percentOverThreshold(score: number, max: number, threshold: number): number {
     return Math.round((score - threshold) / (max - threshold) * 100);
   }
-}
-
-const QUESTIONNAIRE_NAME_TO_ELEMENT: { [key: string]: string } = {
-  [QuestionnaireNames.CGI]: 'מצוקה',
-  [QuestionnaireNames.GAD_2]: 'חרדה',
-  [QuestionnaireNames.PHQ_2]: 'דיכאון',
-  [QuestionnaireNames.K5]: 'מצוקה',
-  [QuestionnaireNames.PC_PTSD_5]: 'פוסט־טראומה',
-  [QuestionnaireNames.CSE_T]: 'התמודדות',
-  [QuestionnaireNames.Dissociation]: 'דיסוציאציה',
-  [QuestionnaireNames.Derealization]: 'דיסוציאציה',
-  [QuestionnaireNames.SAST]: 'מתח',
-  [QuestionnaireNames.PCL_5]: 'פוסט־טראומה',
-  [QuestionnaireNames.STO]: 'פוסט־טראומה',
-  [QuestionnaireNames.GAD_7]: 'חרדה',
-  [QuestionnaireNames.PHQ_9]: 'דיכאון',
-  [QuestionnaireNames.ICG]: 'תגובות לאבדן ושכול',
-  [QuestionnaireNames.WANT_HELP]: 'מצוקה',
-}
-
-const QUESTIONNAIRE_NAME_TO_SYMPTOMS: { [key: string]: string } = {
-  [QuestionnaireNames.Dissociation]: 'אובדן קשר עם מה שקורה לך או סביבך',
-  [QuestionnaireNames.Derealization]: 'אובדן קשר עם מה שקורה לך או סביבך',
-  [QuestionnaireNames.SAST]: 'אי-שקט ומצב רוח רע',
-  [QuestionnaireNames.PCL_5]: 'סימני פוסט־טראומה',
-  [QuestionnaireNames.STO]: 'שינוי לרעה בחייך',
-  [QuestionnaireNames.GAD_7]: 'חרדה',
-  [QuestionnaireNames.PHQ_9]: 'עצב או דיכאון',
-  [QuestionnaireNames.ICG]: 'אבל ואובדן מתמשך',
-  [QuestionnaireNames.WANT_HELP]: 'יש לך צורך בייעוץ או טיפול',
 }

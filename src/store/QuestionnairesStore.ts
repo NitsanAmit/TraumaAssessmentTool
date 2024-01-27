@@ -1,7 +1,8 @@
 import { action, computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
-import { QuestionBase, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionBase } from '../components/questionnaires/base/types';
 import { QuestionnaireRange } from './types';
+import { QuestionnaireTypes } from '../data/data.consts';
 
 export class QuestionnairesStore {
 

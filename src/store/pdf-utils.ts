@@ -9,6 +9,8 @@ const TITLE_FONT_SIZE = 20;
 type PersonalDetailsSummary = { [key: string]: string | undefined };
 
 export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
+                                  resultsVerbalSummary: string,
+                                  symptoms: string | null,
                                   personalDetailsSummary?: PersonalDetailsSummary) => {
   const { pdfDoc, font, getAdjustedXPosition, boldFont, getBoldAdjustedXPosition, page } = await _createPdf();
   const { height, width } = page.getSize()
@@ -18,10 +20,13 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
 
   //Columns:
   const horizontalMargin = 30;
+  const firstColumnWidth = 140;
+  const secondColumnWidth = 80;
+  const thirdColumnWidth = 80;
   const firstColumnX = width - horizontalMargin;
-  const secondColumnX = 420;
-  const thresholdColumnX = 340;
-  const rangeColumnX = 250;
+  const secondColumnX = firstColumnX - firstColumnWidth;
+  const thirdColumnX = secondColumnX - secondColumnWidth;
+  const rangeColumnX = thirdColumnX - thirdColumnWidth;
   const tableEndx = horizontalMargin;
 
   // Rows:
@@ -65,7 +70,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     font: boldFont,
   });
   page.drawText('טווח תקין', {
-    x: getBoldAdjustedXPosition(thresholdColumnX, 'טווח תקין', SUBTITLE_FONT_SIZE),
+    x: getBoldAdjustedXPosition(thirdColumnX, 'טווח תקין', SUBTITLE_FONT_SIZE),
     y: tableHeaderRowY,
     size: SUBTITLE_FONT_SIZE,
     font: boldFont,
@@ -82,7 +87,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     thickness: 2,
     color: indigo,
   });
-  let extraYSpace = 0
+  let lastLineY = tableRowsY - (questionnairesSummary.length * BODY_FONT_SIZE) + 3;
   const lineTotalWidth = rangeColumnX - 50 - tableEndx;
   questionnairesSummary.forEach((summary, index) => {
     page.drawText(summary.questionnaireName, {
@@ -94,7 +99,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     if (typeof summary.score === 'number') {
       const thresholdRange = `${summary.threshold} - ${summary.minScore}`;
       page.drawText(thresholdRange, {
-        x: getAdjustedXPosition(thresholdColumnX, thresholdRange, BODY_FONT_SIZE),
+        x: getAdjustedXPosition(thirdColumnX, thresholdRange, BODY_FONT_SIZE),
         y: tableRowsY - (index * 2 * BODY_FONT_SIZE),
         size: BODY_FONT_SIZE,
         font    });
@@ -145,7 +150,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
         color: gray,
       });
     }
-    const lines = _breakLines(summary.score.toString());
+    const lines = _breakLines(summary.score.toString(), font, BODY_FONT_SIZE, width - secondColumnX - horizontalMargin);
     lines.forEach((line, lineIndex) => {
       page.drawText(line, {
         x: getAdjustedXPosition(secondColumnX, line, BODY_FONT_SIZE),
@@ -154,7 +159,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
         font,
       });
     });
-    extraYSpace += lines.length * BODY_FONT_SIZE * 2
+    lastLineY -= lines.length * BODY_FONT_SIZE;
   });
 
   page.drawLine({
@@ -163,17 +168,53 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     thickness: 2,
     color: indigo,
   });
-  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח ע"י המועצה הישראלית לפוסט־טראומה';
-  page.drawText(footerText, {
-    x: width / 2 - font.widthOfTextAtSize(footerText, BODY_FONT_SIZE) / 2,
-    y: footerRowY,
-    size: BODY_FONT_SIZE,
-    font,
+
+  const recommendationsTitleY = lastLineY - 2 * BODY_FONT_SIZE;
+  const recommendationsLineY = recommendationsTitleY - BODY_FONT_SIZE
+  const recommendationsSubtitleY = recommendationsLineY - 2 * BODY_FONT_SIZE;
+
+  const recommendationsTitle = 'סיכום והמלצות:';
+  page.drawText(recommendationsTitle, {
+    x: getBoldAdjustedXPosition(firstColumnX, recommendationsTitle, SUBTITLE_FONT_SIZE),
+    y: recommendationsTitleY,
+    size: SUBTITLE_FONT_SIZE,
+    font: boldFont,
+  });
+  page.drawLine({
+    start: { x: horizontalMargin, y: recommendationsLineY },
+    end: { x: firstColumnX, y: recommendationsLineY },
+    thickness: 2,
+    color: indigo,
   });
 
-  if (personalDetailsSummary) {
+  let recommendationsRowY = recommendationsSubtitleY;
+  if (symptoms) {
+    const recommendationsSubtitle = 'כפי שניתן לראות בטבלה דיווחת על רמות מצוקה גבוהות בכמה אזורים, ובהם: ' + symptoms + '.';
+    const symptomsLines = _breakLines(recommendationsSubtitle, font, BODY_FONT_SIZE, width - 2 * horizontalMargin);
+    symptomsLines.forEach((line, lineIndex) => {
+      page.drawText(line, {
+        x: getAdjustedXPosition(firstColumnX, line, BODY_FONT_SIZE),
+        y: recommendationsSubtitleY - (lineIndex * 1.3 * BODY_FONT_SIZE),
+        size: BODY_FONT_SIZE,
+        font,
+      });
+    });
+    recommendationsRowY = recommendationsSubtitleY - symptomsLines.length * 1.3 * BODY_FONT_SIZE;
+  }
+  let lastRecommendationLineY = recommendationsRowY;
+  const recommendationsLines = _breakLines(resultsVerbalSummary, font, BODY_FONT_SIZE, width - 2 * horizontalMargin);
+  recommendationsLines.forEach((line, lineIndex) => {
+    page.drawText(line, {
+      x: getAdjustedXPosition(firstColumnX, line, BODY_FONT_SIZE),
+      y: recommendationsRowY - (lineIndex * 1.3 * BODY_FONT_SIZE),
+      size: BODY_FONT_SIZE,
+      font,
+    });
+  });
+  lastRecommendationLineY -= recommendationsLines.length * 1.3 * BODY_FONT_SIZE;
 
-    const personalDetailsHeaderY = tableRowsY - extraYSpace - 2 * BODY_FONT_SIZE;
+  if (personalDetailsSummary) {
+    const personalDetailsHeaderY = lastRecommendationLineY - 2 * BODY_FONT_SIZE;
     const personalDetailsLineY = personalDetailsHeaderY - BODY_FONT_SIZE
     const personalDetailsRowY = personalDetailsLineY - 2 * BODY_FONT_SIZE;
 
@@ -197,7 +238,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
         size: BODY_FONT_SIZE,
         font: boldFont,
       });
-      const lines = _breakLines(value ?? '');
+      const lines = _breakLines(value ?? '', font, BODY_FONT_SIZE, width - secondColumnX);
       lines.forEach((line, lineIndex) => {
         page.drawText(line, {
           x: getAdjustedXPosition(secondColumnX, line, BODY_FONT_SIZE),
@@ -206,9 +247,16 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
           font,
         });
       });
-      extraYSpace += lines.length * BODY_FONT_SIZE;
     });
   }
+
+  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח ע"י המועצה הישראלית לפוסט־טראומה';
+  page.drawText(footerText, {
+    x: width / 2 - font.widthOfTextAtSize(footerText, BODY_FONT_SIZE) / 2,
+    y: footerRowY,
+    size: BODY_FONT_SIZE,
+    font,
+  });
 
   const pdfBytes = await pdfDoc.save();
   _download(pdfBytes);
@@ -229,11 +277,21 @@ const getColors = () => {
   return { indigo, gray, lightRed, lightGreen };
 };
 
-const _breakLines = (text: string, maxLineLength = 80) => {
+const _breakLines = (text: string, font:PDFFont, fontSize: number, maxLineLength = 80) => {
+  const lines: string[] = [];
+  const paragraphs = text.split('\n');
+  paragraphs.forEach(paragraph => {
+    const paragraphLines = _breakParagraph(paragraph, font, fontSize, maxLineLength);
+    lines.push(...paragraphLines);
+  });
+  return lines;
+}
+
+const _breakParagraph = (text: string, font:PDFFont, fontSize: number, maxLineLength = 80) => {
   const lines: string[] = [];
   let line = '';
-  text.replaceAll('\n', ' ').split(' ').forEach(word => {
-    if (line.length + word.length > maxLineLength) {
+  text.split(' ').forEach(word => {
+    if (font.widthOfTextAtSize(line + word, fontSize) > maxLineLength) {
       lines.push(line);
       line = '';
     }

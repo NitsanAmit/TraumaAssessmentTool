@@ -2,9 +2,10 @@ import { QuestionnairesStore } from '../../store/QuestionnairesStore';
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
-import { OnNextClickedFunction, QuestionBase, QuestionnaireTypes, questionTypeToComponentMap } from './base/types';
+import { OnNextClickedFunction, QuestionBase, questionTypeToComponentMap } from './base/types';
 import { SecondSectionIntro } from '../SecondSectionIntro';
 import { QuestionnaireContext } from '../../store/QuestionnaireContext';
+import { QuestionnaireTypes } from '../../data/data.consts';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
   const onNextClicked = useCallback((state: unknown, didPassThreshold: boolean, score?: number | string) => {

@@ -72,6 +72,7 @@ const Container = styled.div`
           text-align: center;
           justify-content: space-between;
           flex: 1;
+          width: 100%;
   `,
   StyledImage = styled.img`
     width: 70%;
