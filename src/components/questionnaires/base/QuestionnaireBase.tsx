@@ -26,8 +26,8 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
           max={context?.maxProgress}
         />
         <div className="full-width flex-row space-between">
-          <StyledProgressText align="right">{context?.verbalProgress}</StyledProgressText>
-          <StyledProgressText align="left">
+          <StyledProgressText $align="right">{context?.verbalProgress}</StyledProgressText>
+          <StyledProgressText $align="left">
             {hasSubQuestions ? `שאלה ${subQuestionIndex + 1} מתוך ${maxSubQuestions + 1}` : ''}
           </StyledProgressText>
         </div>
@@ -73,9 +73,9 @@ const QuestionTitle = styled.h2`
     overflow-x: auto;
     overflow-y: hidden;
   `,
-  StyledProgressText = styled.div<{ align: string; }>`
+  StyledProgressText = styled.div<{ $align: string; }>`
     font-size: 12px;
     width: 100%;
-    text-align: ${props => props.align};
-    color: ${props => (props.align === 'left' ? tokens.colorBrandBackground : tokens.colorNeutralForeground4)};
+    text-align: ${props => props.$align};
+    color: ${props => (props.$align === 'left' ? tokens.colorBrandBackground : tokens.colorNeutralForeground4)};
   `;

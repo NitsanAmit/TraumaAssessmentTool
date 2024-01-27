@@ -1,7 +1,7 @@
 import { computed, makeAutoObservable } from 'mobx';
 import _ from 'lodash';
 import { QuestionnairesStore } from './QuestionnairesStore';
-import { QuestionnaireNames, QuestionnaireTypes } from '../components/questionnaires/base/types';
+import { QuestionBase, QuestionnaireNames, QuestionnaireTypes } from '../components/questionnaires/base/types';
 import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY, SecondStageResultCategory } from './types';
 import { exportToPdf } from './pdf-utils';
 
@@ -16,19 +16,28 @@ export class ResultsStore {
     return _.reduce(this.questionnairesStore.questions, (acc, question, index) => {
       const { questionnaire, questionnaireType } = question;
       const score = this.questionnairesStore.questionnaireScores[index]?.score;
+      const didPassThreshold = this.questionnairesStore.questionnaireScores[index]?.didPassThreshold;
       if (score === undefined || questionnaireType === QuestionnaireTypes.CUT_OFF) {
         return acc;
       }
       if (questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
-        return [...acc, ...(this._getMultiDiscreteScaleQuestionnaireSummary(score, question))];
+        return [...acc, ...(this._getMultiDiscreteScaleQuestionnaireSummary(score, question, didPassThreshold))];
       }
       return [...acc, {
         questionnaireName: questionnaire,
         questionnaireType,
-        score,
+        didPassThreshold,
+        score: this._getQuestionnaireSummaryScore(question, score),
         ...this.questionnairesStore.getQuestionnaireRange(question),
       }];
     }, []);
+  }
+
+  private _getQuestionnaireSummaryScore(questionnaire: QuestionBase, score: number | string): number | string {
+    if (questionnaire.questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
+      return score === 0 ? 'לא' : 'כן';
+    }
+    return score;
   }
 
   @computed
@@ -42,7 +51,7 @@ export class ResultsStore {
 
   @computed
   get questionnairesOverThreshold(): QuestionnairesSummary {
-    return _.filter(this.rangedSummary, (summary) => summary.score >= summary.threshold);
+    return _.filter(this.rangedSummary, ({ didPassThreshold }) => didPassThreshold);
   }
 
   @computed
@@ -55,7 +64,7 @@ export class ResultsStore {
     }
     if (this.questionnairesOverThreshold.length < 3) {
       const isSlightlyPositive = this.questionnairesOverThreshold.every(({ questionnaireType, score, maxScore, threshold }) => {
-        if (questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
+        if (typeof score !== 'number') {
           return true;
         }
         const percentage = this._percentOverThreshold(score, maxScore, threshold);
@@ -71,7 +80,7 @@ export class ResultsStore {
   @computed
   get resultsElements() {
     return _.chain(this.summary)
-      .filter(s => s.score)
+      .filter(s => !_.isNil(s.score))
       .map(s => QUESTIONNAIRE_NAME_TO_ELEMENT[s.questionnaireName])
       .filter(Boolean)
       .uniq()
@@ -123,15 +132,16 @@ export class ResultsStore {
   }
 
   public async exportToPdf(personalDetailsSummary?: Record<string, string | undefined>) {
-    return exportToPdf(this.summary, personalDetailsSummary);
+    return exportToPdf(this.rangedSummary, personalDetailsSummary);
   }
 
-  private _getMultiDiscreteScaleQuestionnaireSummary(scores, question) {
+  private _getMultiDiscreteScaleQuestionnaireSummary(scores, question, didPassThreshold) {
     return scores.map((qScore, qIndex) => {
       return ({
         questionnaireName: question.questionnaires[qIndex].questionnaire,
         questionnaireType: QuestionnaireTypes.DISCRETE_SCALE,
         score: qScore,
+        didPassThreshold,
         ...this.questionnairesStore.getQuestionnaireRange(question.questionnaires[qIndex]),
       });
     });
@@ -147,13 +157,13 @@ const QUESTIONNAIRE_NAME_TO_ELEMENT: { [key: string]: string } = {
   [QuestionnaireNames.GAD_2]: 'חרדה',
   [QuestionnaireNames.PHQ_2]: 'דיכאון',
   [QuestionnaireNames.K5]: 'מצוקה',
-  [QuestionnaireNames.PC_PTSD_5]: 'פוסט-טראומה',
+  [QuestionnaireNames.PC_PTSD_5]: 'פוסט־טראומה',
   [QuestionnaireNames.CSE_T]: 'התמודדות',
   [QuestionnaireNames.Dissociation]: 'דיסוציאציה',
   [QuestionnaireNames.Derealization]: 'דיסוציאציה',
   [QuestionnaireNames.SAST]: 'מתח',
-  [QuestionnaireNames.PCL_5]: 'פוסט-טראומה',
-  [QuestionnaireNames.STO]: 'פוסט-טראומה',
+  [QuestionnaireNames.PCL_5]: 'פוסט־טראומה',
+  [QuestionnaireNames.STO]: 'פוסט־טראומה',
   [QuestionnaireNames.GAD_7]: 'חרדה',
   [QuestionnaireNames.PHQ_9]: 'דיכאון',
   [QuestionnaireNames.ICG]: 'תגובות לאבדן ושכול',
@@ -164,7 +174,7 @@ const QUESTIONNAIRE_NAME_TO_SYMPTOMS: { [key: string]: string } = {
   [QuestionnaireNames.Dissociation]: 'אובדן קשר עם מה שקורה לך או סביבך',
   [QuestionnaireNames.Derealization]: 'אובדן קשר עם מה שקורה לך או סביבך',
   [QuestionnaireNames.SAST]: 'אי-שקט ומצב רוח רע',
-  [QuestionnaireNames.PCL_5]: 'סימני פוסט טראומה',
+  [QuestionnaireNames.PCL_5]: 'סימני פוסט־טראומה',
   [QuestionnaireNames.STO]: 'שינוי לרעה בחייך',
   [QuestionnaireNames.GAD_7]: 'חרדה',
   [QuestionnaireNames.PHQ_9]: 'עצב או דיכאון',

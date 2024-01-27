@@ -47,15 +47,12 @@ export const SummaryTable: React.FC<SummaryTableProps> = ({ questionnairesSummar
               </TableCell>
               <TableCell>
                 {
-                  !_.isNil(s.minScore) && !_.isNil(s.maxScore) && s.questionnaireType !== QuestionnaireTypes.TRUE_FALSE &&
+                  !_.isNil(s.minScore) && !_.isNil(s.maxScore) && typeof s.score === 'number' &&
                   <RangeSlider score={s.score} threshold={s.threshold} min={s.minScore} max={s.maxScore}/>
                 }
                 {
-                  s.questionnaireType === QuestionnaireTypes.TRUE_FALSE &&
-                  <div>{s.score === 0 ? 'לא' : 'כן'}</div>
-                }
-                {
-                  s.questionnaireType === QuestionnaireTypes.FREE_TEXT &&
+                  (s.questionnaireType === QuestionnaireTypes.TRUE_FALSE
+                  || s.questionnaireType === QuestionnaireTypes.FREE_TEXT) &&
                   <div>{s.score}</div>
                 }
               </TableCell>

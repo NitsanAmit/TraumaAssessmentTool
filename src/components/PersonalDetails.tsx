@@ -2,7 +2,7 @@ import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
 import { useCallback } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup } from '@fluentui/react-components';
+import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup, Text } from '@fluentui/react-components';
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
@@ -20,6 +20,12 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
   return (
     <>
       <h1>שאלון היכרות</h1>
+      <Text wrap weight="semibold" className="full-width">
+        * אף נתון מדף זה לא נשמר או נאסף, גם לא לצרכי מחקר.
+      </Text>
+      <Text wrap className="full-width margin-bottom-sm">
+        מילוי הפרטים הוא רק עבורך, אם תבחר/י שיופיעו לצד תוצאות השאלונים עבור התייעצות חיצונית.
+      </Text>
       <PersonalDetailsScreenContainer>
         <LargeTextField type="text" placeholder="שם פרטי" value={personalDetailsStore.firstName}
                         onChange={setProperty('firstName')}/>
@@ -52,7 +58,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
-        <Field label="האם קיבלת עכשיו טיפול נפשי?" className="full-width">
+        <Field label="האם את/ה עכשיו בטיפול נפשי?" className="full-width">
           <RadioGroup onChange={setProperty('mentalTreatmentNow')} value={personalDetailsStore.mentalTreatmentNow}>
             <Radio value="כן" label="כן"/>
             <Radio value="לא" label="לא"/>

@@ -1,8 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button } from '@fluentui/react-components';
+import { Button, Checkbox } from '@fluentui/react-components';
+import { useState } from 'react';
 
 export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ onNextClicked }) => {
+
+  const [optOut, setOptOut] = useState<boolean>(false);
+
   return (
     <IntroContainer>
       <div>
@@ -10,7 +14,7 @@ export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ o
         <h1 className="margin-bottom-xxs">רגע לפני שנתחיל</h1>
         <StyledText className="margin-bottom-xl">
           <p>
-            לפניך סדרת שאלונים בת שני חלקים, שנועדו לעזור לנו להבין האם ייתכן ואת/ה סובל/ת מפוסט טראומה.
+            לפניך סדרת שאלונים בת שני חלקים, שנועדו לעזור לנו להבין האם ייתכן ואת/ה סובל/ת מפוסט־טראומה.
             תוצאות החלק הראשון יקבעו האם כדאי להמשיך ולמלא את השאלונים בחלק השני, על סמך התשובות שתספק/י.
           </p>
           <p>
@@ -21,14 +25,19 @@ export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ o
           מזכירים שהתשובות שנקבל ממך חסויות ולא נשמרות באף מקום אצלנו.
         </StyledText>
       </div>
-      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large" shape="circular">התחלת
-        השלב הראשון</Button>
+      <div className="full-width">
+        <Checkbox label="אני מאשר/ת איסוף מידע אנונימי לצרכי מחקר ושיפור כלי זה" checked={!optOut}
+                  onChange={() => setOptOut(!optOut)} className="margin-bottom-sm"/>
+      <Button className="full-width" appearance="primary" onClick={() => onNextClicked(optOut)} size="large" shape="circular">
+        התחלת החלק הראשון
+      </Button>
+      </div>
     </IntroContainer>
   );
 });
 
 export type FirstSectionIntroProps = {
-  onNextClicked: () => void;
+  onNextClicked: (optOut: boolean) => void;
 }
 
 const IntroContainer = styled.div`

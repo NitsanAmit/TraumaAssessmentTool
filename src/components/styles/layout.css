@@ -56,3 +56,7 @@
 .overflow-x {
     overflow-x: auto;
 }
+
+.pre-wrap {
+    white-space: pre-wrap;
+}

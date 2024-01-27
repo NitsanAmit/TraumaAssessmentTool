@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 export type TrueFalseProps = QuestionnaireBaseProps & {
   questionTitle: string;
-  threshold: 'true' | 'false';
+  threshold: 0 | 1;
 }
 
 export const TrueFalse: React.FC<TrueFalseProps> = observer(({
@@ -20,7 +20,7 @@ export const TrueFalse: React.FC<TrueFalseProps> = observer(({
     if (!onNextClicked) {
       return;
     }
-    const didPassThreshold = threshold === 'true' ? answer : !answer;
+    const didPassThreshold = threshold === 1 ? answer : !answer;
     onNextClicked(answer, didPassThreshold, didPassThreshold ? 1 : 0);
   }, [onNextClicked, threshold]);
 

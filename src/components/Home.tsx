@@ -40,16 +40,16 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.WELCOME &&
-            <WelcomeScreen onNextClicked={(optOut: boolean) => {
+            <WelcomeScreen onNextClicked={() => appStateStore.next()}/>
+          }
+          {
+            appStateStore.step === APPLICATION_STEP.FIRST_SECTION_INTRO &&
+            <FirstSectionIntro onNextClicked={(optOut: boolean) => {
               if (optOut) {
                 optOutOfAnonymousDataCollection();
               }
               appStateStore.next();
-            }} />
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.FIRST_SECTION_INTRO &&
-            <FirstSectionIntro onNextClicked={() => appStateStore.next()}/>
+            }}/>
           }
           {
             appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&

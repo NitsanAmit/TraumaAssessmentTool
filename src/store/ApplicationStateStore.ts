@@ -90,13 +90,22 @@ export class ApplicationStateStore {
   skip() {
     if (this.step === APPLICATION_STEP.QUESTIONNAIRES) {
       let randomScore;
+      let didPassThreshold;
       if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
         // @ts-expect-error
         randomScore = this.questionnairesStore.currentQuestion.questionnaires.map((questionnaire) => this._getRandomQuestionScore(questionnaire));
+        // @ts-expect-error
+        didPassThreshold = randomScore.some((score, index) => score >= this.questionnairesStore.currentQuestion.questionnaires[index].threshold);
+      } else if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.CONDITION_QUESTIONNAIRE) {
+        randomScore = this._getRandomQuestionScore(this.questionnairesStore.currentQuestion);
+        // @ts-expect-error
+        didPassThreshold = randomScore >= this.questionnairesStore.currentQuestion.conditionQuestionnaire.threshold;
       } else {
         randomScore = this._getRandomQuestionScore(this.questionnairesStore.currentQuestion);
+        // @ts-expect-error
+        didPassThreshold = randomScore >= this.questionnairesStore.currentQuestion.threshold;
       }
-      this.questionnairesStore.nextQuestion(undefined, Math.random() > 0.5, randomScore);
+      this.questionnairesStore.nextQuestion(undefined, didPassThreshold, randomScore);
     } else {
       this.next();
     }

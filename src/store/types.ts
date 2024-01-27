@@ -2,7 +2,8 @@
 export type QuestionnairesSummary = ({
   questionnaireName: string;
   questionnaireType: string;
-  score: number;
+  score: number | string;
+  didPassThreshold: boolean;
 } & QuestionnaireRange)[];
 
 export type QuestionnaireRange = {

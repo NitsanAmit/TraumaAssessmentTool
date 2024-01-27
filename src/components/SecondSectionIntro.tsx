@@ -33,7 +33,7 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
           <p>
             {
               questionnairesStore.requiresSecondSection &&
-              `כעת נעבור לשלב הבא שבו יוצגו בפניך שאלות מפורטות ומעמיקות יותר. השאלות הללו נחוצות לצורך קבלת תמונה מלאה ומדויקת של תגובותיך וחוויותיך. יכול להיות שחלק מהשאלות יעסקו בנושאים שכבר נגענו בהם במהלך החלק הראשון. תהליך  ההרחבה והחזרה על נושאים מסוימים הוא חלק מאוד חשוב בתהליך ההערכה הכולל, ואנחנו מעריכים את שיתוף הפעולה והסבלנות שלך!`
+              `כעת נעבור לשלב הבא שבו יוצגו בפניך שאלות מפורטות ומעמיקות יותר. השאלות הללו נחוצות לצורך קבלת תמונה מלאה ומדויקת של תגובותיך וחוויותיך. יכול להיות שחלק מהשאלות יעסקו בנושאים שכבר נגענו בהם במהלך החלק הראשון. להרחבה ולהחזרה על נושאים מסוימים יש חלק מאוד חשוב בתהליך ההערכה הכולל, ואנחנו מעריכים את שיתוף הפעולה והסבלנות שלך!`
             }
             {
               !questionnairesStore.requiresSecondSection &&
@@ -52,7 +52,7 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
           shape="circular"
           onClick={onPrimaryClicked}>
           {
-            questionnairesStore.requiresSecondSection ? 'התחלת שלב ב' : 'סיום האבחון'
+            questionnairesStore.requiresSecondSection ? 'התחלת חלק ב' : 'סיום האבחון'
           }
         </Button>
         {

@@ -13,9 +13,13 @@ export const useQuestions = () => {
       return;
     }
     const getQuestions = async () => {
-      const questions = await getDoc(doc(firestore, 'static', 'questionnaires'));
-      if (questions.exists()) {
-        setQuestions(questions.data()["questionnaires"] as QuestionBase[]);
+      try {
+        const questions = await getDoc(doc(firestore, 'static', 'questionnaires'));
+        if (questions.exists()) {
+          setQuestions(questions.data()['questionnaires'] as QuestionBase[]);
+        }
+      } catch (error) {
+        console.error('Error getting questionnaires from Firestore, using local fallback.', error);
       }
     };
     getQuestions();
