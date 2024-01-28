@@ -4,11 +4,18 @@ import { Button } from '@fluentui/react-components';
 import { ChevronLeft16Regular } from '@fluentui/react-icons/lib/fonts';
 import { ResultsStore } from '../store/ResultsStore';
 import { SECOND_STAGE_RESULT_CATEGORY } from '../store/types';
+import { useFirebase } from './hooks/useFirebase';
+import { useEffect } from 'react';
 
 export const CompletedSecondSection: React.FC<CompletedSecondSectionProps> = observer(({
                                                                                          resultsStore,
                                                                                          onNextClicked
                                                                                        }) => {
+
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('second_section_completed', { resultCategory: resultsStore.secondStageResultCategory });
+  }, [logEvent, resultsStore.secondStageResultCategory]);
 
   return (
     <Container>

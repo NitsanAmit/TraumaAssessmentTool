@@ -21,6 +21,14 @@ export class QuestionnairesStore {
   }
 
   @computed
+  get analyticsData() {
+    return {
+      currentQuestionnaireName: this.currentQuestion.questionnaire,
+      nextQuestionnaireName: this.questions[this.questionnaireIndex + 1]?.questionnaire,
+    };
+  }
+
+  @computed
   get currentQuestionState(): unknown {
     return this.questionnairesStates[this.questionnaireIndex];
   }

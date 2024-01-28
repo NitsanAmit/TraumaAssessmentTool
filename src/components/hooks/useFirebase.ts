@@ -1,29 +1,27 @@
-import { useEffect } from 'react';
-import { getApps, initializeApp } from 'firebase/app';
+import { FirebaseApp } from 'firebase/app';
+import { Analytics, getAnalytics, logEvent } from 'firebase/analytics';
 import { Firestore, getFirestore } from 'firebase/firestore';
+import { useCallback, useContext } from 'react';
+import { FirebaseContext } from '../../networking/firebase';
 
 export const useFirebase = () => {
 
-  useEffect(() => {
-    const initializeFirestore = async () => {
+  const firebaseContext = useContext<FirebaseApp | undefined>(FirebaseContext);
+
+  const _logEvent = useCallback((eventName: string, eventParams?: Record<string, unknown>) => {
+    if (firebaseContext) {
       try {
-        if (!getApps().length) {
-          await initializeApp({
-            apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-            authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-            projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-            storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-            appId: process.env.REACT_APP_FIREBASE_APP_ID,
-          });
-        }
-      } catch (error) {
-        console.error('Error initializing Firebase:', error);
+        logEvent(getAnalytics(firebaseContext), eventName, eventParams);
+      } catch (e) {
+        console.error(e);
       }
-    };
+    }
+  }, [firebaseContext]);
 
-    initializeFirestore();
-  }, []);
+  return {
+    firestore: firebaseContext ? getFirestore(firebaseContext) as Firestore : null,
+    analytics: firebaseContext ? getAnalytics(firebaseContext) as Analytics : null,
+    logEvent: _logEvent,
+  };
 
-  return { firestore: getApps().length ? getFirestore() as Firestore : null };
 };

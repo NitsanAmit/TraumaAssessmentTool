@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AppTheme } from './theme';
 import { QuestionnairesConfig } from './components/questionnaires/QuestionnairesConfig';
 import { Home } from './components/Home';
+import { FirebaseProvider } from './networking/firebase';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -34,6 +35,8 @@ const router = createBrowserRouter([
 
 root.render(
   <FluentProvider theme={AppTheme} dir="rtl">
-    <RouterProvider router={router} />
+    <FirebaseProvider>
+      <RouterProvider router={router}/>
+    </FirebaseProvider>
   </FluentProvider>,
 );

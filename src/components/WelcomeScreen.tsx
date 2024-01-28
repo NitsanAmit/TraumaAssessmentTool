@@ -1,9 +1,15 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { Button } from '@fluentui/react-components';
+import { useEffect } from 'react';
+import { useFirebase } from './hooks/useFirebase';
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextClicked }) => {
 
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('welcome_page_visited');
+  }, [logEvent]);
 
   return (
     <WelcomeScreenContainer>
@@ -25,7 +31,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
           }
         </div>
       </div>
-      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large" shape="circular">התחלה</Button>
+      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large"
+              shape="circular">התחלה</Button>
     </WelcomeScreenContainer>
   );
 });

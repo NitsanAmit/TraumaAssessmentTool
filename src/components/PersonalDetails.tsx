@@ -1,22 +1,25 @@
 import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup, Text } from '@fluentui/react-components';
+import { useFirebase } from './hooks/useFirebase';
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
-  const setProperty = useCallback((property: string, option = false) =>
-    (_, data) => {
+  const setProperty = useCallback((property: string, option = false) => (_, data) => {
       const value = option ? data.optionValue : data.value;
-      if (value.length > 500) {
-        return;
-      }
-      if (value < 0) {
+      if (value.length > 500 || value < 0) {
         return;
       }
       personalDetailsStore.setProperty(property, option ? data.optionValue : data.value);
     }, [personalDetailsStore]);
+
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('personal_details_visited');
+  }, [logEvent]);
+
   return (
     <>
       <h1>שאלון היכרות</h1>

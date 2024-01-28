@@ -1,12 +1,16 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { Button, Checkbox } from '@fluentui/react-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFirebase } from './hooks/useFirebase';
 
 export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ onNextClicked }) => {
 
   const [optOut, setOptOut] = useState<boolean>(false);
-
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('first_section_intro_visited');
+  }, [logEvent]);
   return (
     <IntroContainer>
       <div>

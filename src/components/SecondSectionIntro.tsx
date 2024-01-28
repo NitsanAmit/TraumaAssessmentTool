@@ -3,23 +3,33 @@ import styled from 'styled-components';
 import { Button } from '@fluentui/react-components';
 import { ChevronLeft16Regular } from '@fluentui/react-icons/lib/fonts';
 import { QuestionnairesStore } from '../store/QuestionnairesStore';
+import { useEffect } from 'react';
+import { useFirebase } from './hooks/useFirebase';
 
 export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({ questionnairesStore }) => {
 
   const onPrimaryClicked = () => {
     if (questionnairesStore.requiresSecondSection) {
+      logEvent('second_section_start', { voluntary: false });
       questionnairesStore.skippedSecondSection = false;
       questionnairesStore.nextQuestion(true, false, 0);
     } else {
+      logEvent('second_section_skipped');
       questionnairesStore.skippedSecondSection = true;
       questionnairesStore.skipToSummary();
     }
   }
 
   const onSecondaryClicked = () => {
+    logEvent('second_section_start', { voluntary: true });
     questionnairesStore.skippedSecondSection = false;
     questionnairesStore.nextQuestion(false, false, 0);
   }
+
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('second_section_intro_visited', { shouldProceed: questionnairesStore.requiresSecondSection });
+  }, [logEvent, questionnairesStore.requiresSecondSection]);
 
   return (
     <IntroContainer>

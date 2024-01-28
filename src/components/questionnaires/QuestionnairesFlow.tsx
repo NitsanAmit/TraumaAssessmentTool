@@ -1,22 +1,31 @@
 import { QuestionnairesStore } from '../../store/QuestionnairesStore';
 import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { OnNextClickedFunction, QuestionBase, questionTypeToComponentMap } from './base/types';
 import { SecondSectionIntro } from '../SecondSectionIntro';
 import { QuestionnaireContext } from '../../store/QuestionnaireContext';
 import { QuestionnaireTypes } from '../../data/data.consts';
+import { useFirebase } from '../hooks/useFirebase';
 
 export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({ questionnairesStore }) => {
+
+  const { logEvent } = useFirebase();
   const onNextClicked = useCallback((state: unknown, didPassThreshold: boolean, score?: number | string) => {
+      logEvent('next_question', questionnairesStore.analyticsData);
       questionnairesStore.nextQuestion(state, didPassThreshold, score);
       scrollToTop();
     }
-    , [questionnairesStore]);
+    , [logEvent, questionnairesStore]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  useEffect(() => {
+    logEvent('questionnaires_started');
+  }, [logEvent]);
+
 
   return <div className="full-width flex-column full-height">
     {
@@ -29,7 +38,7 @@ export const QuestionnairesFlow: React.FC<QuestionnairesFlowProps> = observer(({
     }
     {
       questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.CUT_OFF &&
-      <SecondSectionIntro questionnairesStore={questionnairesStore} />
+      <SecondSectionIntro questionnairesStore={questionnairesStore}/>
     }
   </div>;
 });

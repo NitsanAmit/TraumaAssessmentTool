@@ -58,7 +58,7 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
-            <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore}/>
+            <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore} />
           }
           {
             appStateStore.step === APPLICATION_STEP.COMPLETED_QUESTIONNAIRES &&

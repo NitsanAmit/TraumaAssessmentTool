@@ -4,12 +4,23 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { ResultsStore } from '../store/ResultsStore';
 import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY } from '../store/types';
+import { useFirebase } from './hooks/useFirebase';
 
 export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary, sendAnonymousResults }) => {
 
   useEffect(() => {
     sendAnonymousResults && resultsStore.summary && sendAnonymousResults(resultsStore.summary);
   }, [resultsStore.summary, sendAnonymousResults]);
+
+  const { logEvent } = useFirebase();
+  useEffect(() => {
+    logEvent('summary_page_visited', { resultCategory: resultsStore.secondStageResultCategory });
+  }, [logEvent, resultsStore.secondStageResultCategory]);
+
+  const exportToPdf = (withPersonalDetails: boolean) => {
+    logEvent('export_to_pdf', { withPersonalDetails, resultCategory: resultsStore.secondStageResultCategory });
+    resultsStore.exportToPdf(withPersonalDetails ? personalDetailsSummary : undefined);
+  }
 
   return (
     <StyledSummaryContainer className="full-height flex-column space-between full-width">
@@ -49,10 +60,10 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
         </div>
       </StyledVerbalSummaryContainer>
       <Button appearance="primary" size="large" shape="circular" className="full-width"
-              onClick={() => resultsStore.exportToPdf(personalDetailsSummary)}>
+              onClick={() => exportToPdf(true)}>
         שמור תוצאות כ-PDF
       </Button>
-      <StyledButton appearance="primary" size="large" shape="circular" onClick={() => resultsStore.exportToPdf()}>
+      <StyledButton appearance="primary" size="large" shape="circular" onClick={() => exportToPdf(false)}>
         שמור ללא פרטים מזהים
       </StyledButton>
     </StyledSummaryContainer>
