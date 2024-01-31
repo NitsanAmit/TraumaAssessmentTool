@@ -1,10 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button } from '@fluentui/react-components';
-import { ChevronLeft16Regular } from '@fluentui/react-icons/lib/fonts';
 import { QuestionnairesStore } from '../store/QuestionnairesStore';
 import { useEffect } from 'react';
 import { useFirebase } from './hooks/useFirebase';
+import { StickyBottomButtonPage } from './StickyButtonPage';
 
 export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({ questionnairesStore }) => {
 
@@ -32,11 +31,14 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
   }, [logEvent, questionnairesStore.requiresSecondSection]);
 
   return (
-    <IntroContainer>
-      <div>
+    <StickyBottomButtonPage buttonText={questionnairesStore.requiresSecondSection ? 'התחלת חלק ב' : 'סיום האבחון'}
+                            onButtonClick={onPrimaryClicked}
+                            secondaryText={!questionnairesStore.requiresSecondSection ? 'המשך בכל זאת לחלק ב' : undefined}
+                            onSecondaryClick={!questionnairesStore.requiresSecondSection ? onSecondaryClicked : undefined}>
+      <IntroContainer>
         <StyledImage src="/second-section.png"/>
         <h1 className="margin-bottom-xxs">חלק א' הושלם!</h1>
-        <StyledText className="margin-bottom-xl">
+        <StyledText>
           <p>
             {
               'תודה רבה על שהשלמת את החלק הראשון של השאלון.\n'
@@ -53,32 +55,8 @@ export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({
             }
           </p>
         </StyledText>
-      </div>
-      <StyledButtonsContainer>
-        <Button
-          size="large"
-          appearance="primary"
-          className="flex-1 margin-ml"
-          icon={questionnairesStore.requiresSecondSection ? <ChevronLeft16Regular/> : undefined}
-          iconPosition="after"
-          shape="circular"
-          onClick={onPrimaryClicked}>
-          {
-            questionnairesStore.requiresSecondSection ? 'התחלת חלק ב' : 'סיום האבחון'
-          }
-        </Button>
-        {
-          !questionnairesStore.requiresSecondSection &&
-          <Button
-            appearance="secondary"
-            className="flex-1 margin-ml"
-            shape="circular"
-            onClick={onSecondaryClicked}>
-             המשך בכל זאת לחלק ב'
-          </Button>
-        }
-      </StyledButtonsContainer>
-    </IntroContainer>
+      </IntroContainer>
+    </StickyBottomButtonPage>
   );
 });
 
@@ -86,19 +64,11 @@ export type SecondSectionIntroProps = {
   questionnairesStore: QuestionnairesStore;
 }
 
-const StyledButtonsContainer = styled.div`
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          row-gap: 16px;
-          margin-top: 32px;
-  `,
-  IntroContainer = styled.div`
+const IntroContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    justify-content: space-between;
     flex: 1;
     width: 100%;
   `,

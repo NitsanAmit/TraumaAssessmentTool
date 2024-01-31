@@ -64,6 +64,12 @@ const QuestionnaireContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   height: 100%;
   width: 100%;
+  padding: 24px;
+  @media (max-width: 390px) {
+    border-radius: 0;
+    padding: 8px;
+  }
 `;

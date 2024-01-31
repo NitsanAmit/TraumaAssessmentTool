@@ -1,11 +1,10 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button } from '@fluentui/react-components';
-import { ChevronLeft16Regular } from '@fluentui/react-icons/lib/fonts';
 import { ResultsStore } from '../store/ResultsStore';
 import { SECOND_STAGE_RESULT_CATEGORY } from '../store/types';
 import { useFirebase } from './hooks/useFirebase';
 import { useEffect } from 'react';
+import { StickyBottomButtonPage } from './StickyButtonPage';
 
 export const CompletedSecondSection: React.FC<CompletedSecondSectionProps> = observer(({
                                                                                          resultsStore,
@@ -18,8 +17,8 @@ export const CompletedSecondSection: React.FC<CompletedSecondSectionProps> = obs
   }, [logEvent, resultsStore.secondStageResultCategory]);
 
   return (
-    <Container>
-      <div>
+    <StickyBottomButtonPage buttonText={'לתוצאות שלי'} onButtonClick={onNextClicked}>
+      <Container>
         <StyledImage src="/summary.png"/>
         <h1 className="margin-bottom-xxs">זהו, סיימנו!</h1>
         <StyledText className="margin-bottom-xl">
@@ -52,18 +51,8 @@ export const CompletedSecondSection: React.FC<CompletedSecondSectionProps> = obs
             }
           </p>
         </StyledText>
-      </div>
-      <Button
-        size="large"
-        appearance="primary"
-        className="full-width"
-        icon={<ChevronLeft16Regular/>}
-        iconPosition="after"
-        shape="circular"
-        onClick={onNextClicked}>
-        לתוצאות שלי
-      </Button>
-    </Container>
+      </Container>
+    </StickyBottomButtonPage>
   );
 });
 
@@ -77,7 +66,6 @@ const Container = styled.div`
           flex-direction: column;
           align-items: center;
           text-align: center;
-          justify-content: space-between;
           flex: 1;
           width: 100%;
   `,

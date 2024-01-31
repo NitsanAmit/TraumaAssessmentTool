@@ -77,16 +77,22 @@ export type SummaryProps = {
 }
 
 const StyledSummaryContainer = styled.div`
-  font-size: 16px;
-  line-height: 24px;
+          font-size: 16px;
+          line-height: 24px;
+          box-sizing: border-box;
+          padding: 24px;
+          @media (max-width: 390px) {
+            border-radius: 0;
+            padding: 16px 8px;
+          }
   `,
   StyledButton = styled(Button)`
-          margin-top: 16px;
-          width: 100%;
-          background-color: #9196e3;
-          &:hover {
-            background-color: #8085cb;
-          }
+    margin-top: 16px;
+    width: 100%;
+    background-color: #9196e3;
+    &:hover {
+      background-color: #8085cb;
+    }
   `,
   StyledUl = styled.ul`
     margin-top: 8px;

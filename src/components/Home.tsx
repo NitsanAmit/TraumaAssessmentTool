@@ -82,9 +82,10 @@ const StyledCard = styled(Card)`
           display: flex;
           align-items: center;
           max-width: 800px;
+          padding: 0;
           @media (max-width: 390px) {
             border-radius: 0;
-            padding: 8px;
+            padding: 0;
           }
   `,
   ResponsiveLayout = styled.div`

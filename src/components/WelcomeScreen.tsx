@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button } from '@fluentui/react-components';
 import { useEffect } from 'react';
 import { useFirebase } from './hooks/useFirebase';
+import { StickyBottomButtonPage } from './StickyButtonPage';
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextClicked }) => {
 
@@ -12,17 +12,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
   }, [logEvent]);
 
   return (
-    <WelcomeScreenContainer>
-      <div className="margin-sm">
+    <StickyBottomButtonPage buttonText={'התחלה'} onButtonClick={onNextClicked}>
+      <div className="flex-column align-center align-text-center">
         <StyledImage src="/blue-male.png"/>
         <h1>כלי התייעצות אישית בעקבות מצבי דחק בישראל - 2024</h1>
-        <div className="margin-bottom-ml">הכלי פותח ע"י המועצה הישראלית לפוסט־טראומה לצורך אבחון יעיל ומהיר יותר של
-          מצוקה פוסט־טראומטית לאחר אירועי השבעה באוקטובר 2023
-        </div>
         <div className="margin-bottom-xs pre-wrap">
           <p>
             {
-              'מאז השבעה לאוקטובר בוודאי התנסית, כמו כולנו, בחוויות קשות, חרדות דאגה ואירועים חריגים. אנו מציגים לך מקבץ שאלונים שיעריך את תגובותיך לאירועים ויציג לך סיכום אישי לצורך הערכה־עצמית, זיהוי בעיות בוערות, והערכת הצורך בהתייעצות עם גורמי טיפול.\n' +
+              'מאז השבעה לאוקטובר בוודאי התנסית, כמו כולנו, בחוויות קשות, חרדות דאגה ואירועים חריגים. אנו מציגים לך מקבץ שאלונים שיעריך את תגובותיך לאירועים ויציג לך סיכום אישי לצורך הערכה־עצמית, זיהוי בעיות בוערות, והערכת הצורך בהתייעצות עם גורמי טיפול.\n'
+            }
+            </p>
+          <p>
+            {
               'כאשר אנחנו שואלים על אירוע קשה/טראומטי בשאלונים הבאים, הכוונה היא לאירוע שנתפס ככזה על ידך, אירוע שהייתה בו סכנה גופנית או נפשית לך, לבני משפחתך או לסובבים אותך, הייתה בו חשיפה למראות זוועה, אבדן חיים או כל חוויה קשה אחרת. אם עברת מספר אירועים קשים נסה/י לחשוב על האירוע הקשה ביותר.\n'
             }
           </p>
@@ -31,9 +32,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
           }
         </div>
       </div>
-      <Button className="full-width" appearance="primary" onClick={onNextClicked} size="large"
-              shape="circular">התחלה</Button>
-    </WelcomeScreenContainer>
+    </StickyBottomButtonPage>
   );
 });
 

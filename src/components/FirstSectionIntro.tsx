@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button, Checkbox } from '@fluentui/react-components';
+import { Checkbox } from '@fluentui/react-components';
 import { useEffect, useState } from 'react';
 import { useFirebase } from './hooks/useFirebase';
+import { StickyBottomButtonPage } from './StickyButtonPage';
 
 export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ onNextClicked }) => {
 
@@ -12,8 +13,8 @@ export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ o
     logEvent('first_section_intro_visited');
   }, [logEvent]);
   return (
-    <IntroContainer>
-      <div>
+    <StickyBottomButtonPage buttonText={'התחלת החלק הראשון'} onButtonClick={() => onNextClicked(optOut)}>
+      <IntroContainer>
         <StyledImage src="/first-section.png"/>
         <h1 className="margin-bottom-xxs">רגע לפני שנתחיל</h1>
         <StyledText className="margin-bottom-xl">
@@ -28,15 +29,12 @@ export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ o
           </p>
           מזכירים שהתשובות שנקבל ממך חסויות ולא נשמרות באף מקום אצלנו.
         </StyledText>
-      </div>
-      <div className="full-width">
+      </IntroContainer>
+      <div className="full-width align-text-center">
         <Checkbox label="אני מאשר/ת איסוף מידע אנונימי לצרכי מחקר ושיפור כלי זה" checked={!optOut}
                   onChange={() => setOptOut(!optOut)} className="margin-bottom-sm"/>
-      <Button className="full-width" appearance="primary" onClick={() => onNextClicked(optOut)} size="large" shape="circular">
-        התחלת החלק הראשון
-      </Button>
       </div>
-    </IntroContainer>
+    </StickyBottomButtonPage>
   );
 });
 
@@ -50,8 +48,6 @@ const IntroContainer = styled.div`
           align-items: center;
           text-align: center;
           flex: 1;
-          justify-content: space-between;
-          width: 100%;
   `,
   StyledImage = styled.img`
     width: 70%;

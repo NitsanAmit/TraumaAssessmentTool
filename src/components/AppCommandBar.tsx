@@ -5,7 +5,7 @@ import { ChevronRight24Regular, ArrowHookUpLeft24Regular, ArrowBounce24Regular }
 import { Button } from '@fluentui/react-components';
 import { useDebugMode } from './hooks/useDebugMode';
 
-export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateStore}) => {
+export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateStore }) => {
 
   const debugMode = useDebugMode();
 
@@ -18,7 +18,8 @@ export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateS
         }
         {
           appStateStore.step === APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>} shape="circular"
+          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>}
+                  shape="circular"
                   onClick={() => window.location.reload()}>התחלה מחדש</Button>
         }
         {
@@ -37,11 +38,13 @@ export type AppCommandBarProps = {
 }
 
 const CommandBar = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 12px;
+          width: 100%;
+          padding: 16px 16px 0;
+          box-sizing: border-box;
   `,
   StepDisplayName = styled.div`
     font-weight: 300;

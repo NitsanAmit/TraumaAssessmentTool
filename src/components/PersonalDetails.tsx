@@ -2,8 +2,9 @@ import { PersonalDetailsStore } from '../store/PersonalDetailsStore';
 import { useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Button, Dropdown, Field, Input, Option, Radio, RadioGroup, Text } from '@fluentui/react-components';
+import { Dropdown, Field, Input, Option, Radio, RadioGroup, Text } from '@fluentui/react-components';
 import { useFirebase } from './hooks/useFirebase';
+import { StickyBottomButtonPage } from './StickyButtonPage';
 
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
@@ -21,8 +22,8 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
   }, [logEvent]);
 
   return (
-    <>
-      <h1>שאלון היכרות</h1>
+    <StickyBottomButtonPage buttonText={'המשך'} onButtonClick={onNextClicked}>
+    <h1>שאלון היכרות</h1>
       <Text wrap weight="semibold" className="full-width">
         * אף נתון מדף זה לא נשמר או נאסף, גם לא לצרכי מחקר.
       </Text>
@@ -74,10 +75,8 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
           </RadioGroup>
         </Field>
         <StyledImage src="/personal-details.png" />
-
-        <Button onClick={onNextClicked} appearance="primary" size="large" className="full-width" shape="circular">הבא</Button>
       </PersonalDetailsScreenContainer>
-    </>
+    </StickyBottomButtonPage>
   );
 });
 
