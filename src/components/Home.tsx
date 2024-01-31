@@ -1,5 +1,5 @@
 import { APPLICATION_STEP, ApplicationStateStore } from '../store/ApplicationStateStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { WelcomeScreen } from './WelcomeScreen';
 import { PersonalDetails } from './PersonalDetails';
 import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
@@ -15,6 +15,7 @@ import { useAnonymousResults } from './hooks/useAnonymousResults';
 
 export const Home: React.FC = observer(() => {
 
+  const cardRef = useRef<HTMLDivElement>(null);
   const questions = useQuestions();
   const { optOutOfAnonymousDataCollection, sendAnonymousResults } = useAnonymousResults();
   const [appStateStore, setAppStateStore] = useState<ApplicationStateStore>();
@@ -25,8 +26,12 @@ export const Home: React.FC = observer(() => {
     }
   }, [questions]);
 
+  const nextAndScrollToTop = () => {
+    appStateStore?.next();
+    cardRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   return (
-    <StyledCard size="large">
+    <StyledCard size="large" ref={cardRef}>
       {
         !appStateStore &&
         <Spinner/>
@@ -40,7 +45,12 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.WELCOME &&
-            <WelcomeScreen onNextClicked={() => appStateStore.next()}/>
+            <WelcomeScreen onNextClicked={nextAndScrollToTop}/>
+          }
+          {
+            appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
+            <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore}
+                             onNextClicked={nextAndScrollToTop}/>
           }
           {
             appStateStore.step === APPLICATION_STEP.FIRST_SECTION_INTRO &&
@@ -48,13 +58,8 @@ export const Home: React.FC = observer(() => {
               if (optOut) {
                 optOutOfAnonymousDataCollection();
               }
-              appStateStore.next();
+              nextAndScrollToTop();
             }}/>
-          }
-          {
-            appStateStore.step === APPLICATION_STEP.PERSONAL_DETAILS &&
-            <PersonalDetails personalDetailsStore={appStateStore.personalDetailsStore}
-                             onNextClicked={() => appStateStore.next()}/>
           }
           {
             appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
@@ -62,7 +67,7 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.COMPLETED_QUESTIONNAIRES &&
-            <CompletedSecondSection resultsStore={appStateStore.resultsStore} onNextClicked={() => appStateStore.next()} />
+            <CompletedSecondSection resultsStore={appStateStore.resultsStore} onNextClicked={nextAndScrollToTop} />
           }
           {
             appStateStore.step === APPLICATION_STEP.SUMMARY &&
