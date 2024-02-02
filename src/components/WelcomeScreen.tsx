@@ -40,15 +40,7 @@ export type WelcomeScreenProps = {
   onNextClicked: () => void;
 }
 
-const WelcomeScreenContainer = styled.div`
-          display: flex;
-          flex: 1;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          justify-content: space-between;
-  `,
-  StyledImage = styled.img`
+const StyledImage = styled.img`
     width: 70%;
     max-width: 350px;
     margin-bottom: 48px;

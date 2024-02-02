@@ -9,12 +9,12 @@ import { StickyBottomButtonPage } from './StickyButtonPage';
 export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ personalDetailsStore, onNextClicked }) => {
 
   const setProperty = useCallback((property: string, option = false) => (_, data) => {
-      const value = option ? data.optionValue : data.value;
-      if (value.length > 500 || value < 0) {
-        return;
-      }
-      personalDetailsStore.setProperty(property, option ? data.optionValue : data.value);
-    }, [personalDetailsStore]);
+    const value = option ? data.optionValue : data.value;
+    if (value.length > 500 || value < 0) {
+      return;
+    }
+    personalDetailsStore.setProperty(property, option ? data.optionValue : data.value);
+  }, [personalDetailsStore]);
 
   const { logEvent } = useFirebase();
   useEffect(() => {
@@ -23,7 +23,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
 
   return (
     <StickyBottomButtonPage buttonText={'המשך'} onButtonClick={onNextClicked}>
-    <h1>שאלון היכרות</h1>
+      <h1 className="full-width align-text-center">שאלון היכרות</h1>
       <Text wrap weight="semibold" className="full-width">
         * אף נתון מדף זה לא נשמר או נאסף, גם לא לצרכי מחקר.
       </Text>
@@ -74,7 +74,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
-        <StyledImage src="/personal-details.png" />
+        <StyledImage src="/personal-details.png"/>
       </PersonalDetailsScreenContainer>
     </StickyBottomButtonPage>
   );

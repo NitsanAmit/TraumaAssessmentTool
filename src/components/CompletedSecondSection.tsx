@@ -75,7 +75,7 @@ const Container = styled.div`
     margin-bottom: 48px;
     @media (max-width: 390px) {
       width: 80%;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
   `,
   StyledText = styled.div`

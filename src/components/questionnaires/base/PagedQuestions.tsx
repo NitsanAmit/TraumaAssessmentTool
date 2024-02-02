@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { observer } from 'mobx-react-lite';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { PagedQuestion } from './PagedQuestion';
-import { Button, ProgressBar } from '@fluentui/react-components';
+import { Button } from '@fluentui/react-components';
 import { ChevronLeft16Regular, ChevronRight16Regular } from '@fluentui/react-icons/lib/fonts';
 import styled from 'styled-components';
 import { QuestionnaireBase } from './QuestionnaireBase';
@@ -34,6 +34,14 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
   const isFirstQuestion = currentQuestionIndex === 0;
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
+  const onNextClicked = useCallback(() => {
+    if (isLastQuestion) {
+      onNext?.(answersValues, forcePassthreshold);
+    } else {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  }, [answersValues, currentQuestionIndex, forcePassthreshold, isLastQuestion, onNext]);
+
   return (
     <QuestionnaireBase questionTitle={isFirstQuestion ? questionTitle : undefined}
     subQuestionIndex={currentQuestionIndex} maxSubQuestions={questions.length - 1}>
@@ -51,7 +59,7 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
             icon={<ChevronLeft16Regular/>}
             iconPosition="after"
             shape="circular"
-            onClick={() => isLastQuestion ? onNext?.(answersValues, forcePassthreshold) : setCurrentQuestionIndex(currentQuestionIndex + 1)}
+            onClick={onNextClicked}
             disabled={_.isNil(answersValues?.[currentQuestionIndex])}>
             {isLastQuestion ? 'לשאלון הבא' : 'לשאלה הבאה'}
           </Button>
@@ -67,13 +75,6 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
             </Button>
           }
         </StyledButtonsContainer>
-        <ProgressBar
-          className="margin-top-sm w-90"
-          thickness="medium"
-          shape="rounded"
-          value={currentQuestionIndex}
-          max={questions.length - 1}
-        />
       </div>
     </QuestionnaireBase>
   );

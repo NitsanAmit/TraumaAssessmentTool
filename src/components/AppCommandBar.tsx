@@ -13,19 +13,19 @@ export const AppCommandBar: React.FC<AppCommandBarProps> = observer(({ appStateS
     <CommandBar>
       <div>
         {
-          <Button appearance="subtle" size="small" icon={<ChevronRight24Regular/>} shape="circular"
-                  onClick={() => appStateStore.back()}>{appStateStore.backText}</Button>
+          <StyledButton appearance="subtle" size="small" icon={<ChevronRight24Regular/>} shape="circular"
+                        onClick={() => appStateStore.back()}>{appStateStore.backText}</StyledButton>
         }
         {
           appStateStore.step === APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>}
-                  shape="circular"
-                  onClick={() => window.location.reload()}>התחלה מחדש</Button>
+          <StyledButton appearance="subtle" iconPosition="after" size="small" icon={<ArrowHookUpLeft24Regular/>}
+                        shape="circular"
+                        onClick={() => window.location.reload()}>התחלה מחדש</StyledButton>
         }
         {
           debugMode && appStateStore.step !== APPLICATION_STEP.SUMMARY &&
-          <Button appearance="subtle" iconPosition="after" size="small" icon={<ArrowBounce24Regular/>} shape="circular"
-                  onClick={() => appStateStore.skip()}>דלג</Button>
+          <StyledButton appearance="subtle" iconPosition="after" size="small" icon={<ArrowBounce24Regular/>} shape="circular"
+                        onClick={() => appStateStore.skip()}>דלג</StyledButton>
         }
       </div>
       <StepDisplayName>{appStateStore.stepDisplayName}</StepDisplayName>
@@ -41,7 +41,7 @@ const CommandBar = styled.div`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 12px;
+          font-size: 14px;
           width: 100%;
           padding: 16px 16px 0;
           box-sizing: border-box;
@@ -49,4 +49,7 @@ const CommandBar = styled.div`
   StepDisplayName = styled.div`
     font-weight: 300;
     margin-right: 8px;
+  `,
+  StyledButton = styled(Button)`
+    font-size: 14px;
   `;

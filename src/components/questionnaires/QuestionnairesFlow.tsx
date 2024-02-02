@@ -70,6 +70,6 @@ const QuestionnaireContainer = styled.div`
   padding: 24px;
   @media (max-width: 390px) {
     border-radius: 0;
-    padding: 8px;
+    padding: 16px;
   }
 `;

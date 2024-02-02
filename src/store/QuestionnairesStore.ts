@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { QuestionBase } from '../components/questionnaires/base/types';
 import { QuestionnaireRange } from './types';
 import { QuestionnaireTypes } from '../data/data.consts';
+import { QuestionnaireContextType } from './QuestionnaireContext';
 
 export class QuestionnairesStore {
 
@@ -46,9 +47,9 @@ export class QuestionnairesStore {
   @computed
   get progress(): number {
     if (this.beforeCutoff) {
-      return this.questionnaireIndex + 1;
+      return this.questionnaireIndex;
     } else {
-      return this.questionnaireIndex - this.cutoffQuestionIndex;
+      return this.questionnaireIndex - this.cutoffQuestionIndex - 1;
     }
   }
 
@@ -62,16 +63,10 @@ export class QuestionnairesStore {
   }
 
   @computed
-  get verbalProgress(): string {
-    return `שאלון ${this.progress} מתוך ${this.maxProgress}`;
-  }
-
-  @computed
-  get questionnaireContext() {
+  get questionnaireContext(): QuestionnaireContextType {
     return  {
       progress: this.progress,
       maxProgress: this.maxProgress,
-      verbalProgress: this.verbalProgress,
     }
   }
 

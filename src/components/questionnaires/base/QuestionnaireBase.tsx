@@ -1,4 +1,5 @@
-import { Button, ProgressBar, tokens } from '@fluentui/react-components';
+import { Button, ProgressBar } from '@fluentui/react-components';
+import _ from 'lodash';
 import styled from 'styled-components';
 import { PropsWithChildren, useContext } from 'react';
 import { QuestionnaireContext, QuestionnaireContextType } from '../../../store/QuestionnaireContext';
@@ -14,22 +15,23 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
                                                                                                       }) => {
 
   const context = useContext<QuestionnaireContextType>(QuestionnaireContext);
-  const hasSubQuestions = subQuestionIndex !== undefined && maxSubQuestions !== undefined;
   return (
     <>
       <div className="full-width flex-column">
-        <ProgressBar
-          className="margin-top-sm"
-          thickness="large"
-          shape="rounded"
-          value={context?.progress}
-          max={context?.maxProgress}
-        />
-        <div className="full-width flex-row space-between">
-          <StyledProgressText $align="right">{context?.verbalProgress}</StyledProgressText>
-          <StyledProgressText $align="left">
-            {hasSubQuestions ? `שאלה ${subQuestionIndex + 1} מתוך ${maxSubQuestions + 1}` : ''}
-          </StyledProgressText>
+        <div className="flex-row" style={{columnGap: '2px'}}>
+          {
+            context &&
+            Array(context?.maxProgress ?? 0).fill(0).map((q, i) => {
+              return <ProgressBar
+                key={i}
+                className="margin-bottom-xs"
+                thickness="large"
+                shape="rounded"
+                value={i < context?.progress ? 1 : (i === context?.progress && !_.isNil(subQuestionIndex) ? subQuestionIndex : 0)}
+                max={i < context?.progress ? 1 : (i === context?.progress ? maxSubQuestions : 1)}
+              />
+            })
+          }
         </div>
       </div>
       {
@@ -72,10 +74,4 @@ const QuestionTitle = styled.h2`
     margin-bottom: 48px;
     overflow-x: auto;
     overflow-y: hidden;
-  `,
-  StyledProgressText = styled.div<{ $align: string; }>`
-    font-size: 12px;
-    width: 100%;
-    text-align: ${props => props.$align};
-    color: ${props => (props.$align === 'left' ? tokens.colorBrandBackground : tokens.colorNeutralForeground4)};
   `;

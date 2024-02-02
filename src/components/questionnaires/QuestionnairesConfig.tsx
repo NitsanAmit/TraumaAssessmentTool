@@ -57,6 +57,7 @@ export const QuestionnairesConfig: React.FC = observer(() => {
 
 const StyledCard = styled(Card)`
           overflow-y: auto;
+          background: white;
   `,
   StyledTable = styled(Table)`
     width: 100%;
