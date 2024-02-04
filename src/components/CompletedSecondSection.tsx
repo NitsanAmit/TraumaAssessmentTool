@@ -28,27 +28,21 @@ export const CompletedSecondSection: React.FC<CompletedSecondSectionProps> = obs
             }
           </p>
           <p>
-            {
-              resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.NEGATIVE &&
-              <>
-                <span className="semi-bold">{'בהתחשב באירועים שעברת, תגובותיך היום אינן חריגות ואינן מסכנות את בריאותך הנפשית.\n'}</span>
-                כדאי לחזור על ההערכה הזו בעוד שבועיים כדי לבדוק שמצבך יציב. אחרי לחיצה על כפתור "לתוצאות שלי", נציג לך את סיכום השאלונים המלא עם המלצות שהתאימו אישית למצבך.
-              </>
-            }
-            {
-              resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE &&
-              <>
-                <span className="semi-bold">{'בהתחשב באירועים שעברת, יש חשיבות לתת תשומת לב לחלק מהתגובות שלך ולפעול בהתאם.\n'}</span>
-                כדאי לחזור על ההערכה הזו בעוד שבועיים כדי לבדוק אם ישנם שינויים. אחרי לחיצה על כפתור "לתוצאות שלי", נציג לך את סיכום השאלונים המלא עם המלצות שהתאימו אישית למצבך.
-              </>
-            }
-            {
-              resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.POSITIVE &&
-              <>
-                <span className="semi-bold">{'בהתחשב באירועים שעברת, התגובות שלך מחייבות תשומת לב ופעולה מצידך.\n'}</span>
-                אחרי לחיצה על כפתור "לתוצאות שלי", נציג לך את סיכום השאלונים המלא עם המלצות שהתאימו אישית למצבך.
-              </>
-            }
+              <span className="semi-bold">
+                {
+                  resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.NEGATIVE &&
+                  'בהתחשב באירועים שעברת, תגובותיך היום אינן חריגות ואינן מסכנות את בריאותך הנפשית.\n'
+                }
+                {
+                  resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE &&
+                  'בהתחשב באירועים שעברת, יש חשיבות לתת תשומת לב לחלק מהתגובות שלך ולפעול בהתאם.\n'
+                }
+                {
+                  resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.POSITIVE &&
+                  'בהתחשב באירועים שעברת, התגובות שלך מחייבות תשומת לב ופעולה מצידך.\n'
+                }
+              </span>
+            אחרי לחיצה על כפתור "לתוצאות שלי", נציג לך את סיכום השאלונים המלא עם המלצות שיתאימו אישית למצבך.
           </p>
         </StyledText>
       </Container>

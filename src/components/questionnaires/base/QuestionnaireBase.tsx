@@ -44,10 +44,10 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
         </ChildrenContainer>
         {
           onNextClicked &&
-          <Button appearance="primary" size="large" className="full-width" onClick={onNextClicked}
+          <StyledButton appearance="primary" size="large" className="full-width" onClick={onNextClicked}
                   shape="circular" disabled={!nextEnabled}>
             {nextButtonText || 'המשך'}
-          </Button>
+          </StyledButton>
         }
       </div>
     </>
@@ -74,4 +74,7 @@ const QuestionTitle = styled.h2`
     margin-bottom: 48px;
     overflow-x: auto;
     overflow-y: hidden;
+  `,
+  StyledButton = styled(Button)`
+    padding: 12px;
   `;

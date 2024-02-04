@@ -51,12 +51,16 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
           </>
         }
         <div className="margin-bottom-xl margin-top-m">
-          {resultsStore.resultsVerbalSummary}
-          {
-            resultsStore.secondStageResultCategory === SECOND_STAGE_RESULT_CATEGORY.POSITIVE
-              ? ' כדאי לשמור את התוצאות בדף זה ולהשתמש בהן כדי לעזור בפנייתך.'
-              : ' באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.'
-          }
+          {resultsStore.resultsVerbalSummary.summary}
+          <h2>מה עכשיו?</h2>
+          <StyledUl>
+            {
+              resultsStore.resultsVerbalSummary.actions.map((r, index) => (
+                <li key={index}>{r}</li>
+              ))
+            }
+          </StyledUl>
+
         </div>
       </StyledVerbalSummaryContainer>
       <Button appearance="primary" size="large" shape="circular" className="full-width"

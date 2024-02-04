@@ -34,13 +34,6 @@ export class ResultsStore {
     }, []);
   }
 
-  private _getQuestionnaireSummaryScore(questionnaire: QuestionBase, score: number | string): number | string {
-    if (questionnaire.questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
-      return score === 0 ? 'לא' : 'כן';
-    }
-    return score;
-  }
-
   @computed
   get rangedSummary(): QuestionnairesSummary {
     if (this.questionnairesStore.skippedSecondSection) {
@@ -64,7 +57,12 @@ export class ResultsStore {
       return SECOND_STAGE_RESULT_CATEGORY.NEGATIVE;
     }
     if (this.questionnairesOverThreshold.length < 3) {
-      const isSlightlyPositive = this.questionnairesOverThreshold.every(({ questionnaireType, score, maxScore, threshold }) => {
+      const isSlightlyPositive = this.questionnairesOverThreshold.every(({
+                                                                           questionnaireType,
+                                                                           score,
+                                                                           maxScore,
+                                                                           threshold
+                                                                         }) => {
         if (typeof score !== 'number') {
           return true;
         }
@@ -76,16 +74,6 @@ export class ResultsStore {
       }
     }
     return SECOND_STAGE_RESULT_CATEGORY.POSITIVE;
-  }
-
-  private _toDelimitedString(elements: string[] | null) {
-    if (!elements || elements?.length === 0) {
-      return null;
-    }
-    if (elements.length === 1) {
-      return elements[0];
-    }
-    return elements.slice(0, elements.length - 1).join(', ') + ' ו' + elements.slice(-1).pop();
   }
 
   @computed
@@ -117,35 +105,75 @@ export class ResultsStore {
   }
 
   @computed
-  get resultsVerbalSummary(): string {
+  get resultsVerbalSummary(): { summary: string; actions: string[]; } {
+    const baseActions = [
+      'אם רוצים, כדאי לדבר עם אדם שסומכים עליו, קרוב/ה או חבר/ה, ולשתף במה שאת/ה מרגיש/ה וחווה, ולא להישאר לבד עם התחושות הקשות.',
+      'אפשר להתקשר לארגוני תמיכה נפשית כמו ער"ן (1-201) או נט"ל (1-800-363-363) במידה ומרגישים מצוקה גדולה כרגע.',
+    ];
     switch (this.secondStageResultCategory) {
       case SECOND_STAGE_RESULT_CATEGORY.NEGATIVE:
+        const actions = [
+          'אם את/ה בכל זאת מרגיש/ה צורך בכך, כדאי לפנות לייעוץ בהקדם. באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.',
+          'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.',
+          ...baseActions,
+        ];
         if (this.questionnairesStore.skippedSecondSection) {
-          return 'הסימנים עליהם דיווחת דומים לאלה שרוב האנשים מרגישים. הם אינם מדאיגים ויחלפו עם הזמן וכאשר האירועים יירגעו, ונראה שאינך זקוק לעזרה טיפולית כרגע. ' +
-            'יש לך כוח היום לעזור לאחרים, לשמור על שיגרת החיים, לתת למי שצריך או צריכה, וגם לנהל לחיים בריאים. ' +
-            'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.';
+          return {
+            summary: 'הסימנים עליהם דיווחת דומים לאלה שרוב האנשים מרגישים. הם אינם מדאיגים ויחלפו עם הזמן וכאשר האירועים יירגעו, ונראה שאינך זקוק/ה לעזרה טיפולית כרגע. ' +
+              'יש לך כוח היום לעזור לאחרים, לשמור על שיגרת החיים, לתת למי שצריך או צריכה, וגם לנהל חיים בריאים. ',
+            actions,
+          }
         }
-        return 'דיווחת על רמות מצוקה, שלמרות שהן עשויות להיות כואבות עבורך, הן אופייניות לרוב האנשים במצבים דומים. ' +
-          'אנשים המדווחים על רמות סבירות של מצוקה יכולים לעודד אחרים, ובמיוחד בני משפחה, ולנחם ולשתף תחושות חיוביות ולחזור לחיים בריאים. ' +
-          'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים. ' +
-          'אם את/ה בכל זאת מרגיש/ה צורך בכך, כדאי לפנות לייעוץ בהקדם.\n' +
-          'כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים, כדי לוודא שהמצב נשאר יציב והתגובות עדיין תקינות.';
+        return {
+          summary: 'דיווחת על רמות מצוקה, שלמרות שהן עשויות להיות כואבות עבורך, הן אופייניות לרוב האנשים במצבים דומים. ' +
+            'אנשים המדווחים על רמות סבירות של מצוקה יכולים לעודד אחרים ובמיוחד בני משפחה, לנחם או לשתף תחושות חיוביות, ולחזור לחיים בריאים. ' +
+            'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים. ',
+          actions,
+        };
       case SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE:
-        return 'בתחומים אחרים הסימפטומים שלך אינם שונים ממה שאנשים מרגישים בדרך כלל במצבים דומים.\n' +
-          'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים.\n' +
-          'אם את/ה בכל זאת מרגיש/ה צורך בכך, או אם את/ה מאוד לבד או איבדת תקווה - כדאי לפנות לייעוץ. ' +
-          'בכל מקרה כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים.';
+        return {
+          summary: 'בתחומים אחרים הסימפטומים שלך אינם שונים ממה שאנשים מרגישים בדרך כלל במצבים דומים.\n' +
+            'אין הכרח לפנות לעזרה מקצועית עכשיו, ורוב הסיכויים הם שתחלימ/י עם חלוף הזמן ועם תמיכה של אחרים. ',
+          actions: [
+            'אם את/ה בכל זאת מרגיש/ה צורך בכך, או אם את/ה מאוד לבד או במצוקה - כדאי לפנות לייעוץ.',
+            'אפשר לפנות לארגוני עזרה ראשונה נפשית כמו ער"ן או נט"ל במידה ומרגישים מצוקה גדולה כרגע.',
+            'בכל מקרה כדאי לחזור ולבצע שוב את ההערכה בעוד שבועיים.',
+            ...baseActions,
+          ],
+        };
       case SECOND_STAGE_RESULT_CATEGORY.POSITIVE:
-        return 'הסימפטומים שלך לא קלים, וחשוב מאד לפנות להערכה מקצועית ולטיפול. ' +
-          'חשוב לא להתעכב עם הפנייה, ולגשת בהקדם לגורם מקצועי. ' +
-          'כדאי לפנות ראשית לגורם הכי זמין – למשל רופא/ת המשפחה או עובד/ת סוציאלי/ת.';
+        return {
+          summary: 'הסימפטומים שלך לא קלים, וחשוב מאד לפנות להערכה מקצועית ולטיפול. ' +
+            'חשוב לא להתעכב עם הפנייה, ולגשת בהקדם לגורם מקצועי. ',
+          actions: [
+            'כדאי לפנות ראשית לגורם הכי זמין – למשל רופא/ת המשפחה או עובד/ת סוציאלי/ת. כדאי לשמור את התוצאות בדף זה ולהשתמש בהן כדי לעזור בפנייתך.',
+            ...baseActions,
+          ],
+        };
       default:
-        return '';
+        return { summary: '', actions: [] };
     }
   }
 
   public async exportToPdf(personalDetailsSummary?: Record<string, string | undefined>) {
-    return exportToPdf(this.rangedSummary, this.resultsVerbalSummary, this.resultsSymptomsString, personalDetailsSummary);
+    return exportToPdf(this.rangedSummary, this.resultsVerbalSummary.summary, this.resultsSymptomsString, personalDetailsSummary);
+  }
+
+  private _getQuestionnaireSummaryScore(questionnaire: QuestionBase, score: number | string): number | string {
+    if (questionnaire.questionnaireType === QuestionnaireTypes.TRUE_FALSE) {
+      return score === 0 ? 'לא' : 'כן';
+    }
+    return score;
+  }
+
+  private _toDelimitedString(elements: string[] | null) {
+    if (!elements || elements?.length === 0) {
+      return null;
+    }
+    if (elements.length === 1) {
+      return elements[0];
+    }
+    return elements.slice(0, elements.length - 1).join(', ') + ' ו' + elements.slice(-1).pop();
   }
 
   private _getMultiDiscreteScaleQuestionnaireSummary(scores, question, didPassThreshold) {

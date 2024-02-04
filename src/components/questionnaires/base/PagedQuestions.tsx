@@ -52,23 +52,21 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
                        answers={answers}
                        onChange={value => onSelect(currentQuestion, value)}/>
         <StyledButtonsContainer>
-          <Button
+          <StyledButton
             size="large"
             appearance="primary"
             className="flex-1 margin-ml"
-            icon={<ChevronLeft16Regular/>}
             iconPosition="after"
             shape="circular"
             onClick={onNextClicked}
             disabled={_.isNil(answersValues?.[currentQuestionIndex])}>
             {isLastQuestion ? 'לשאלון הבא' : 'לשאלה הבאה'}
-          </Button>
+          </StyledButton>
           {
             !isFirstQuestion &&
             <Button
-              appearance="secondary"
+              appearance="transparent"
               className="flex-1 margin-ml"
-              icon={<ChevronRight16Regular/>}
               shape="circular"
               onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>
               לשאלה הקודמת
@@ -97,4 +95,7 @@ const StyledButtonsContainer = styled.div`
   width: 100%;
   row-gap: 16px;
   margin-top: 16px;
-`;
+`,
+  StyledButton = styled(Button)`
+    padding: 12px;
+  `;

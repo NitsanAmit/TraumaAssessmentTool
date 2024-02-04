@@ -180,7 +180,7 @@
   {
     "questionnaire": "SAST",
     "questionnaireType": "discrete-scale",
-    "threshold": 15,
+    "threshold": 25,
     "questionTitle": "ענה/עני על השאלות הבאות בהתייחס למצבך בשבועיים האחרונים",
     "questions": [
       "האם את/ה מרגיש/ה מתוחה או על הקצה?",

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
-import { Checkbox } from '@fluentui/react-components';
+import { Checkbox, Divider } from '@fluentui/react-components';
 import { useEffect, useState } from 'react';
 import { useFirebase } from './hooks/useFirebase';
 import { StickyBottomButtonPage } from './StickyButtonPage';
@@ -17,22 +17,33 @@ export const FirstSectionIntro: React.FC<FirstSectionIntroProps> = observer(({ o
       <IntroContainer>
         <StyledImage src="/first-section.png"/>
         <h1 className="margin-bottom-xxs">רגע לפני שנתחיל</h1>
-        <StyledText className="margin-bottom-xl">
+        <StyledText className="flex-column align-center margin-bottom-xl">
           <p>
-            לפניך סדרת שאלונים בת שני חלקים, שנועדו לעזור לנו להבין האם ייתכן ואת/ה סובל/ת מפוסט־טראומה.
-            תוצאות החלק הראשון יקבעו האם כדאי להמשיך ולמלא את השאלונים בחלק השני, על סמך התשובות שתספק/י.
+            {
+              'לפניך סדרת שאלונים בת שני חלקים, שנועדו לעזור לנו להבין האם ייתכן ואת/ה סובל/ת מפוסט־טראומה. ' +
+              'תוצאות החלק הראשון יקבעו האם כדאי להמשיך ולמלא את השאלונים בחלק השני, על סמך התשובות שתספק/י.\n'
+            }
+            כאשר אנחנו שואלים על אירוע קשה או טראומטי, הכוונה היא לאירוע שנתפס ככזה על ידך. זה יכול להיות אירוע שהייתה
+            בו סכנה גופנית או נפשית לך או לסובבים אותך, חשיפה למראות זוועה, אבדן חיים או כל חוויה קשה אחרת.
+            ייתכן שלא עברת אף אירוע ייחודי כזה ובכל זאת את/ה מרגיש/ה מצוקה, ובמקרה זה התייחס/י בשאלות לתקופה עצמה בתור
+            האירוע.
           </p>
           <p>
             שימ/י לב שיש שאלות שחוזרות על עצמן - זה חלק מהתהליך והמטרה היא לוודא שאנו מקבלים את המידע המדויק והאמין
             ביותר.
             מומלץ לבחור מקום שקט ונוח למילוי השאלונים, כדי שתוכל/י להתמקד בשאלות ולתת את התשובות הנכונות ביותר עבורך.
           </p>
-          מזכירים שהתשובות שנקבל ממך חסויות ולא נשמרות באף מקום אצלנו.
+          <StyledDivider className="margin-vertical-sm" appearance="brand" inset={true}/>
+          {
+            'אם עוזבים את הדף התשובות לא נשמרות, ולכן חשוב למלא ברצף מההתחלה ועד הסוף.\n' +
+            'מזכירים שהתשובות שנקבל ממך חסויות ולא נשמרות באף מקום אצלנו.'
+          }
+          <StyledDivider className="margin-vertical-sm" appearance="brand" inset={true}/>
         </StyledText>
       </IntroContainer>
       <div className="full-width align-text-center">
         <Checkbox label="אני מאשר/ת איסוף מידע אנונימי לצרכי מחקר ושיפור כלי זה" checked={!optOut}
-                  onChange={() => setOptOut(!optOut)} className="margin-bottom-sm"/>
+                  onChange={() => setOptOut(!optOut)}/>
       </div>
     </StickyBottomButtonPage>
   );
@@ -60,4 +71,7 @@ const IntroContainer = styled.div`
   `,
   StyledText = styled.div`
     white-space: pre-wrap;
+  `,
+  StyledDivider = styled(Divider)`
+    max-width: 500px;
   `;

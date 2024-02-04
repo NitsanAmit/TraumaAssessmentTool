@@ -250,7 +250,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     });
   }
 
-  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח ע"י המועצה הישראלית לפוסט־טראומה';
+  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח עבור המועצה הישראלית לפוסט־טראומה';
   page.drawText(footerText, {
     x: width / 2 - font.widthOfTextAtSize(footerText, BODY_FONT_SIZE) / 2,
     y: footerRowY,
