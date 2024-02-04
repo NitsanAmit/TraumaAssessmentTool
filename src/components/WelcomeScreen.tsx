@@ -40,7 +40,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
             <li>אם את מרגישה מצוקה כתוצאה מאירועי המלחמה והמצב.</li>
           </StyledUl>
           <StyledDivider className="margin-bottom-ml" appearance="brand" inset={true}/>
-          <p>הכלי פותח עבור המועצה הלאומית לפוסט-טראומה, ע"י פסיכיאטרים ופסיכולוגיים מומחים בתחום.</p>
+          <p>הכלי פותח עבור המועצה הלאומית לפוסט-טראומה, ע"י פסיכיאטרים ופסיכולוגים מומחים בתחום.</p>
         </div>
       </div>
     </StickyBottomButtonPage>
