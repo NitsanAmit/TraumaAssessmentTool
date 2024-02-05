@@ -40,7 +40,7 @@
   {
     "questionnaire": "CSE-T",
     "questionnaireType": "discrete-scale",
-    "threshold": 29,
+    "threshold": 37,
     "questionTitle": "עד כמה את/ה מסוגל/ת להתמודד בהצלחה עם כל אחד מהמצבים המתוארים להלן?",
     "questions": [
       "להתמודד עם הרגשות שלי (כעס, עצב, דיכאון, חרדה) מאז החוויה הטראומטית",
