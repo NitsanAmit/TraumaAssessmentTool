@@ -6,11 +6,14 @@ import './components/styles/layout.css';
 import { App } from './components/App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FluentProvider } from '@fluentui/react-components';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { AppTheme } from './theme';
-import { QuestionnairesConfig } from './components/questionnaires/QuestionnairesConfig';
+import { QuestionnairesConfig } from './back-office/QuestionnairesConfig';
 import { Home } from './components/Home';
 import { FirebaseProvider } from './networking/firebase';
+import { Login } from './back-office/Login';
+import { ProtectedRoute } from './back-office/protected-route';
+import { QuestionnairesData } from './back-office/QuestionnairesData';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,17 +21,32 @@ const root = ReactDOM.createRoot(
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <ErrorBoundary><App /></ErrorBoundary>,
+    path: '/',
+    element: <ErrorBoundary><App/></ErrorBoundary>,
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <Home/>,
       },
       {
-        path: '/config',
-        element: <QuestionnairesConfig />,
+        path: '/login',
+        element: <Login />,
       },
+      {
+        path: '/manage',
+        element: <ProtectedRoute><Outlet/></ProtectedRoute>,
+
+        children: [
+          {
+            path: 'questionnaires',
+            element: <QuestionnairesConfig />,
+          },
+          {
+            path: 'data',
+            element: <QuestionnairesData />,
+          },
+        ],
+      }
     ],
   },
 ]);

@@ -33,7 +33,7 @@ export const useAnonymousResults = () => {
     }
     const docData = {
       results: questionnaireResults.filter(questionnaire => !PII_QUESTIONNAIRES.includes(questionnaire.questionnaireType)),
-      create: new Date(),
+      created: new Date(),
     };
     const anonymousResultsCollectionRef = collection(firestore, 'anonymousResults');
     return anonymousUserId

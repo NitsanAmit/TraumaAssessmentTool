@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import { QuestionBase } from './base/types';
+import { QuestionBase } from '../components/questionnaires/base/types';
 import {
   Accordion,
   AccordionHeader,

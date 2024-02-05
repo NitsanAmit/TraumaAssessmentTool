@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import { useQuestions } from '../hooks/useQuestions';
-import { QuestionnaireTypes } from '../../data/data.consts';
+import { useQuestions } from '../components/hooks/useQuestions';
+import { QuestionnaireTypes } from '../data/data.consts';
 import {
+  Button,
   Card,
   Divider,
   Table,
@@ -14,13 +15,28 @@ import {
 import { tableRowClassName } from '@fluentui/react-table';
 import styled from 'styled-components';
 import { QuestionnaireConfigCell } from './QuestionnaireConfigCell';
+import { useFirebase } from '../components/hooks/useFirebase';
+import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const QuestionnairesConfig: React.FC = observer(() => {
 
   const questions = useQuestions();
+  const { auth } = useFirebase();
+  const navigate = useNavigate();
+
+  const onSignOut = () => {
+    auth && signOut(auth).finally(() => {
+      navigate('/');
+    });
+  }
 
   return (
     <StyledCard>
+      <div className="flex-row flex-1 full-width space-between">
+        <div/>
+        <Button onClick={onSignOut} appearance="subtle">התנתק/י</Button>
+      </div>
       <StyledTable size="small">
         <TableHeader>
           <TableRow>

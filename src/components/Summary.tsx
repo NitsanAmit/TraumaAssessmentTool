@@ -3,7 +3,7 @@ import { SummaryTable } from './SummaryTable';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { ResultsStore } from '../store/ResultsStore';
-import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY } from '../store/types';
+import { QuestionnairesSummary } from '../store/types';
 import { useFirebase } from './hooks/useFirebase';
 
 export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary, sendAnonymousResults }) => {
@@ -101,7 +101,7 @@ const StyledSummaryContainer = styled.div`
   StyledUl = styled.ul`
     margin-top: 8px;
     margin-bottom: 8px;
-    padding-inline-start: 16px;
+    padding-inline-start: 0;
   `,
   StyledVerbalSummaryContainer = styled.div`
     white-space: pre-wrap;
