@@ -66,7 +66,7 @@ const StyledImage = styled.img`
     align-items: center;
     margin-top: 8px;
     margin-bottom: 24px;
-    padding-inline-start: 0;
+    padding-inline-start: 16px;
   `,
   StyledH2 = styled.h2`
     margin-top: 16px;

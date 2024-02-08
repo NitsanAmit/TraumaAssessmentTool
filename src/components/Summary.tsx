@@ -101,7 +101,7 @@ const StyledSummaryContainer = styled.div`
   StyledUl = styled.ul`
     margin-top: 8px;
     margin-bottom: 8px;
-    padding-inline-start: 0;
+    padding-inline-start: 24px;
   `,
   StyledVerbalSummaryContainer = styled.div`
     white-space: pre-wrap;
