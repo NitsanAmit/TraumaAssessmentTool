@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button } from '@fluentui/react-components';
+import { getAnalytics, logEvent } from 'firebase/analytics';
+import { getApps } from 'firebase/app';
 
 export class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
   constructor(props) {
@@ -7,7 +9,9 @@ export class ErrorBoundary extends React.Component<any, { hasError: boolean }> {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(error) {
+    const app = getApps()?.[0];
+    app && logEvent(getAnalytics(app), 'error_boundary_caught_error', { error });
     return { hasError: true };
   }
 
