@@ -17,7 +17,7 @@ export const FreeText: React.FC<FreeTextProps> = observer(({ initialState, quest
   return (
     <QuestionnaireBase nextEnabled onNextClicked={onNext}>
       {
-        questions.map((question, qi) => (
+        questions.map(question => (
           <div className="full-width flex-column" key={question}>
             <h2>{question}</h2>
             <Textarea className="full-width"

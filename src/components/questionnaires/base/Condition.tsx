@@ -16,7 +16,6 @@ export const Condition: React.FC<ConditionProps> = observer(({
                                                                initialState,
                                                                onNextClicked,
                                                                questionTitle,
-                                                               conditionResult,
                                                                conditionQuestionnaire
                                                              }) => {
 

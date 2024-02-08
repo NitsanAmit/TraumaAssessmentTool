@@ -54,11 +54,9 @@ export const QuestionnairesConfig: React.FC = observer(() => {
                 return <TableRow><TableCell><Divider>סוף שלב א</Divider></TableCell></TableRow>;
               }
               if (question.questionnaireType === QuestionnaireTypes.CONDITION_QUESTIONNAIRE) {
-                // @ts-ignore
                 return <QuestionnaireConfigCell question={question.conditionQuestionnaire}/>
               }
               if (question.questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
-                // @ts-ignore
                 return question.questionnaires.map((questionnaire) => <QuestionnaireConfigCell
                   question={{ ...questionnaire, questionnaireType: QuestionnaireTypes.DISCRETE_SCALE }}/>);
               }

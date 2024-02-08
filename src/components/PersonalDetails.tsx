@@ -23,12 +23,12 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
 
   return (
     <StickyBottomButtonPage buttonText={'המשך'} onButtonClick={onNextClicked}>
-      <h1 className="full-width align-text-center">שאלון היכרות</h1>
+      <h1 className="full-width align-text-center">שאלון היכרות (רשות)</h1>
       <Text wrap weight="semibold" className="full-width">
         * אף נתון מדף זה לא נשמר או נאסף, גם לא לצרכי מחקר.
       </Text>
       <Text wrap className="full-width margin-bottom-sm">
-        מילוי הפרטים הוא רק עבורך, אם תבחר/י שיופיעו לצד תוצאות השאלונים עבור התייעצות חיצונית.
+        מילוי הפרטים הוא רק עבורך, אם תרצה/י שיופיעו לצד תוצאות השאלונים בסיכום שתקבל/י, עבור התייעצות חיצונית.
       </Text>
       <PersonalDetailsScreenContainer>
         <LargeTextField type="text" placeholder="שם פרטי" value={personalDetailsStore.firstName}

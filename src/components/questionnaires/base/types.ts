@@ -13,6 +13,9 @@ export type OnNextClickedFunction = (state: unknown, didPassThreshold: boolean, 
 export type QuestionBase = {
   questionnaire: string;
   questionnaireType: string;
+  questionnaires?: QuestionBase[];
+  conditionQuestionnaire?: QuestionBase;
+  threshold?: number;
 }
 
 export type QuestionnaireBaseProps = QuestionBase & {

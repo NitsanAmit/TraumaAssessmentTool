@@ -151,7 +151,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
       });
     }
     const lines = _breakLines(summary.score.toString(), font, BODY_FONT_SIZE, width - secondColumnX - horizontalMargin);
-    lines.forEach((line, lineIndex) => {
+    lines.forEach(line => {
       page.drawText(line, {
         x: getAdjustedXPosition(secondColumnX, line, BODY_FONT_SIZE),
         y: tableRowsY - (index * 2 * BODY_FONT_SIZE),

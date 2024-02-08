@@ -21,7 +21,6 @@ export const FreeNumeric: React.FC<FreeNumericProps> = observer(({
                                                                    initialState,
                                                                    threshold,
                                                                    questions,
-                                                                   questionTitle,
                                                                    onNextClicked,
                                                                  }) => {
 

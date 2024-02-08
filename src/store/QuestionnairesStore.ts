@@ -86,7 +86,8 @@ export class QuestionnairesStore {
     return this.currentQuestion?.questionnaire;
   }
 
-  public getQuestionnaireRange(question): QuestionnaireRange | {} {
+  public getQuestionnaireRange(question): QuestionnaireRange | Record<string, never> {
+    const subQuestionsCount = question.questions?.length;
     switch (question.questionnaireType) {
       case QuestionnaireTypes.MIN_MAX_SCALE:
         return {
@@ -95,7 +96,6 @@ export class QuestionnairesStore {
           minScore: question.min,
         };
       case QuestionnaireTypes.DISCRETE_SCALE:
-        const subQuestionsCount = question.questions.length;
         return {
           threshold: question.threshold,
           maxScore: _.maxBy(question.answers, 'value').value * subQuestionsCount,

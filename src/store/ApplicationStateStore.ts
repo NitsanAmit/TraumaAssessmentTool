@@ -95,18 +95,14 @@ export class ApplicationStateStore {
       let randomScore;
       let didPassThreshold;
       if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.MULTI_DISCRETE_SCALE) {
-        // @ts-expect-error
-        randomScore = this.questionnairesStore.currentQuestion.questionnaires.map((questionnaire) => this._getRandomQuestionScore(questionnaire));
-        // @ts-expect-error
-        didPassThreshold = randomScore.some((score, index) => score >= this.questionnairesStore.currentQuestion.questionnaires[index].threshold);
+        randomScore = this.questionnairesStore.currentQuestion.questionnaires?.map((questionnaire) => this._getRandomQuestionScore(questionnaire));
+        didPassThreshold = randomScore.some((score, index) => score >= (this.questionnairesStore.currentQuestion.questionnaires?.[index].threshold ?? 0));
       } else if (this.questionnairesStore.currentQuestion.questionnaireType === QuestionnaireTypes.CONDITION_QUESTIONNAIRE) {
         randomScore = this._getRandomQuestionScore(this.questionnairesStore.currentQuestion);
-        // @ts-expect-error
-        didPassThreshold = randomScore >= this.questionnairesStore.currentQuestion.conditionQuestionnaire.threshold;
+        didPassThreshold = randomScore >= (this.questionnairesStore.currentQuestion.conditionQuestionnaire?.threshold ?? 0);
       } else {
         randomScore = this._getRandomQuestionScore(this.questionnairesStore.currentQuestion);
-        // @ts-expect-error
-        didPassThreshold = randomScore >= this.questionnairesStore.currentQuestion.threshold;
+        didPassThreshold = randomScore >= (this.questionnairesStore.currentQuestion.threshold ?? 0);
       }
       this.questionnairesStore.nextQuestion(undefined, didPassThreshold, randomScore);
     } else {

@@ -5,7 +5,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Spinner } from '@fluentui/react-components';
 
-export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = observer(({ children }) => {
+export const ProtectedRoute: React.FC<PropsWithChildren> = observer(({ children }) => {
   const { auth } = useFirebase();
   const [user, setUser] = useState(auth?.currentUser);
   const [loading, setLoading] = useState(true);

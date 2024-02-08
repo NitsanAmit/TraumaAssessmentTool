@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite';
 import { useCallback, useMemo, useState } from 'react';
 import { PagedQuestion } from './PagedQuestion';
 import { Button } from '@fluentui/react-components';
-import { ChevronLeft16Regular, ChevronRight16Regular } from '@fluentui/react-icons/lib/fonts';
 import styled from 'styled-components';
 import { QuestionnaireBase } from './QuestionnaireBase';
 

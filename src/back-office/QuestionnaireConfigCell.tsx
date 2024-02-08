@@ -10,22 +10,18 @@ import {
 } from '@fluentui/react-components';
 import styled from 'styled-components';
 
-export const QuestionnaireConfigCell: React.FC<{ question: QuestionBase }> = observer(({ question }) => {
+export const QuestionnaireConfigCell: React.FC<{ question: ConfigCellQuestion }> = observer(({ question }) => {
 
   return (
     <TableRow>
       <NameCell>{question.questionnaire}</NameCell>
       <TableCell>{question.questionnaireType}</TableCell>
-      {/*// @ts-ignore*/}
       <TableCell>{question.threshold ?? ''}</TableCell>
       {
-        // @ts-ignore
         question.questionTitle &&
-        // @ts-ignore
         <TableCell className="rtl">{question.questionTitle}</TableCell>
       }
       {
-        // @ts-ignore
         question.questions &&
         <TableCell>
           <Accordion collapsible className="full-width">
@@ -34,7 +30,6 @@ export const QuestionnaireConfigCell: React.FC<{ question: QuestionBase }> = obs
               <AccordionPanel dir="rtl">
                 <StyledUl>
                   {
-                    // @ts-ignore
                     question.questions.map((question) => {
                       const questionText = typeof question === 'string' ? question : question.text;
                       return <li key={questionText}>{questionText}</li>;
@@ -49,6 +44,13 @@ export const QuestionnaireConfigCell: React.FC<{ question: QuestionBase }> = obs
     </TableRow>
   );
 });
+
+type ConfigCellQuestion = QuestionBase & {
+  threshold?: number;
+  questionTitle?: string;
+  questions?: Array<string | { text: string }>;
+};
+
 
 const NameCell = styled(TableCell)`
   font-weight: 700;

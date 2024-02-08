@@ -21,13 +21,18 @@ export const PagedQuestion: React.FC<PagedQuestionProps> = observer(({
   const isObject = typeof question !== 'string';
   const questionText = isObject ? question.text : question;
   const maxAnswersValue = _.maxBy(answers, 'value')?.value;
+  const orderedAnswers = isObject && question.reverseScore ? _.orderBy(answers, 'value', 'desc') : answers;
 
   return (
     <div className="flex-column full-width">
       <h3 className="full-width align-text-center" style={{ transition: 'all 3s'}}>{questionText}</h3>
+      {
+        isObject && question.reverseScore &&
+        <div className="margin-bottom-sm full-width align-text-center">* שימ/י לב שסדר התשובות בשאלה זו הפוך</div>
+      }
       <RadioGroup onChange={onSelectionChanged}>
         {
-          answers.map(answer => {
+          orderedAnswers.map(answer => {
             const value = isObject && question.reverseScore ? (maxAnswersValue - answer.value + 1) : answer.value;
             return <Radio key={value} label={answer.label} value={value.toString()} checked={checkedAnswer === value}/>;
           })
