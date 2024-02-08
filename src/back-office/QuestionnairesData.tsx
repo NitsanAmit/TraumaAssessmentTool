@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Card, Text } from '@fluentui/react-components';
 import { collection, getDocs, Timestamp } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { ResultsHistogram } from './ResultsHistogram';
 
-type Entry = { created: Timestamp; results: any[] };
+export type Entry = { created: Timestamp; results: any[] };
 export const QuestionnairesData = () => {
 
   const { firestore } = useFirebase();
@@ -24,6 +25,10 @@ export const QuestionnairesData = () => {
 
   return (
     <StyledCard size="large">
+      {
+        data &&
+        <ResultsHistogram data={data} />
+      }
       <Accordion className="full-width flex-1" collapsible>
         {
           data?.map((entry) => {
@@ -55,7 +60,6 @@ const StyledCard = styled(Card)`
   overflow-y: auto;
   display: flex;
   align-items: center;
-  max-width: 800px;
   @media (max-width: 390px) {
     border-radius: 0;
     padding: 16px;
