@@ -57,19 +57,19 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
                                  onOptionSelect={setProperty('supportCircle', true)}
                                  options={['תמיכה מלאה', 'קצת תומכים', 'תמיכה בסדר', 'לא תומכים מספיק']}/>
         <Field label="האם קיבלת בעבר טיפול נפשי?" className="full-width">
-          <RadioGroup onChange={setProperty('mentalTreatmentPast')} value={personalDetailsStore.mentalTreatmentPast}>
+          <RadioGroup onChange={setProperty('mentalTreatmentPast')} value={personalDetailsStore.mentalTreatmentPast} name="mental-treatment-past">
             <Radio value="כן" label="כן"/>
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
         <Field label="האם את/ה עכשיו בטיפול נפשי?" className="full-width">
-          <RadioGroup onChange={setProperty('mentalTreatmentNow')} value={personalDetailsStore.mentalTreatmentNow}>
+          <RadioGroup onChange={setProperty('mentalTreatmentNow')} value={personalDetailsStore.mentalTreatmentNow} name="mental-treatment-now">
             <Radio value="כן" label="כן"/>
             <Radio value="לא" label="לא"/>
           </RadioGroup>
         </Field>
         <Field label="האם את/ה משתמש/ת היום בתרופות לחרדה, שינה או מצב רוח?" className="full-width">
-          <RadioGroup onChange={setProperty('drugsUsage')} value={personalDetailsStore.drugsUsage}>
+          <RadioGroup onChange={setProperty('drugsUsage')} value={personalDetailsStore.drugsUsage} name="drugs-usage">
             <Radio value="כן" label="כן"/>
             <Radio value="לא" label="לא"/>
           </RadioGroup>

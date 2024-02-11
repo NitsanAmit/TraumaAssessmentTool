@@ -16,6 +16,10 @@
     align-items: center;
 }
 
+.flex-start {
+    align-items: flex-start;
+}
+
 .justify-center {
     justify-content: center;
 }
@@ -38,6 +42,14 @@
 
 .align-text-center {
     text-align: center;
+}
+
+.align-text-left {
+    text-align: left;
+}
+
+.align-text-right {
+    text-align: right;
 }
 
 .scrollable {
