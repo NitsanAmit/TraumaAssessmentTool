@@ -5,9 +5,12 @@ import styled from 'styled-components';
 import { ResultsStore } from '../store/ResultsStore';
 import { QuestionnairesSummary } from '../store/types';
 import { useFirebase } from './hooks/useFirebase';
+import { useDebugMode } from './hooks/useDebugMode';
+import { DebugResults } from './DebugResults';
 
 export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsSummary, sendAnonymousResults }) => {
 
+  const debugMode = useDebugMode();
   useEffect(() => {
     sendAnonymousResults && resultsStore.summary && sendAnonymousResults(resultsStore.summary);
   }, [resultsStore.summary, sendAnonymousResults]);
@@ -24,6 +27,10 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
 
   return (
     <StyledSummaryContainer className="full-height flex-column space-between full-width">
+      {
+        debugMode &&
+        <DebugResults resultsSummary={resultsStore.rangedSummary} personalDetailsSummary={personalDetailsSummary}/>
+      }
       {
         resultsStore.resultsElements &&
         <h2 className="margin-vertical-sm">
