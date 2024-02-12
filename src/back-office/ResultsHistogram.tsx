@@ -6,8 +6,10 @@ import { getTestData } from '../data/test-data';
 const dayInMs = 1000 * 60 * 60 * 24;
 const weekInMs = dayInMs * 7;
 const monthInMs = dayInMs * 30;
+const intervals = [{ date: weekInMs, label: 'Past week' }, { date: monthInMs, label: 'Past month' }];
 
 export const ResultsHistogram = ({ data }: { data: Entry[] }) => {
+  console.log(data);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -15,7 +17,7 @@ export const ResultsHistogram = ({ data }: { data: Entry[] }) => {
     // take only the past month's data:
     const testData = getTestData();
     const plots: ((SVGSVGElement | HTMLElement) & Plot.Plot)[] = [];
-    for (const interval of [{ date: weekInMs, label: 'Past week' }, { date: monthInMs, label: 'Past month' }]) {
+    for (const interval of intervals) {
       const plot = Plot.plot({
         title: `Results logged (${interval.label})`,
         x: { round: true, label: 'Date', domain: [new Date(Date.now() - interval.date), new Date()] },
