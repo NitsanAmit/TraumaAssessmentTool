@@ -37,7 +37,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
           <StyledUl>
             <li>אם חווית בעצמך אירוע טראומטי.</li>
             <li>אם קרובים או מכרים שלך עברו אירוע טראומטי.</li>
-            <li>אם את מרגישה מצוקה כתוצאה מאירועי המלחמה והמצב.</li>
+            <li>אם את/ה מרגיש/ה מצוקה כתוצאה מאירועי המלחמה והמצב.</li>
           </StyledUl>
           <StyledDivider className="margin-bottom-ml" appearance="brand" inset={true}/>
           <p>הכלי פותח עבור המועצה הלאומית לפוסט-טראומה, על־ידי מומחיות ומומחים בתחום.</p>
