@@ -1,4 +1,8 @@
-
+function skipToSummary() {
+  for (let i = 0; i < 19; i++) {
+    cy.contains('דלג').click();
+  }
+}
 describe('Personal Details Step', () => {
   it('Should save personal details correctly', () => {
     cy.visit('http://localhost:3006?mode=debug');
@@ -29,6 +33,21 @@ describe('Personal Details Step', () => {
     cy.get('input[name="mental-treatment-now"][value="כן"]').click();
     cy.get('input[name="mental-treatment-past"][value="כן"]').click();
     cy.get('input[name="drugs-usage"][value="לא"]').click();
-    cy.contains('המשך').click();
+    skipToSummary();
+    cy.contains('Personal Details Debug Data').click();
+    cy.get('#personal-details-debug').should('have.text',
+      "שם פרטי: ניצן" +
+      "שם משפחה: עמית" +
+      "מגדר: נקבה" +
+      "גיל: 28" +
+      "מצב משפחתי: גרוש/ה" +
+      "מספר ילדים: 10" +
+      "מצב בריאות כללי: בסך הכל בסדר" +
+      "מצב כללי: לחצים בלתי נסבלים" +
+      "מעגלי תמיכה: תמיכה בסדר" +
+      "טיפול נפשי בעבר: כן" +
+      "טיפול נפשי כיום: כן" +
+      "טיפול נפשי תרופתי: לא"
+    );
   });
 })

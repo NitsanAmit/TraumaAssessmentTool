@@ -27,8 +27,18 @@ export const QuestionnairesData = () => {
     <StyledCard size="large">
       {
         data &&
-        <ResultsHistogram data={data} />
+        <ResultsHistogram data={data}/>
       }
+      <div className="flex-column flex-start full-width">
+        <div>
+          <span>Total results in past week: </span>
+          {data?.filter(value => value.created.toDate() > new Date(Date.now() - 1000 * 60 * 60 * 24 * 7)).length}
+        </div>
+        <div>
+          <span>Total results in past month: </span>
+          {data?.filter(value => value.created.toDate() > new Date(Date.now() - 1000 * 60 * 60 * 24 * 30)).length}
+        </div>
+      </div>
       <Accordion className="full-width flex-1" collapsible>
         {
           data?.map((entry) => {
@@ -40,7 +50,9 @@ export const QuestionnairesData = () => {
                   {
                     entry.results.map((result) => {
                       return <div className="flex-column">
-                        <div><Text weight="bold">{result.questionnaireName}: </Text>{result.score}{result.didPassThreshold ? ' (Passed threshold)' : ''}</div>
+                        <div><Text
+                          weight="bold">{result.questionnaireName}: </Text>{result.score}{result.didPassThreshold ? ' (Passed threshold)' : ''}
+                        </div>
                       </div>;
                     })
                   }

@@ -8,7 +8,7 @@ export const DebugResults: React.FC<DebugResultsProps> = observer(({ resultsSumm
     <Accordion collapsible className="full-width align-text-left" dir="ltr">
       <AccordionItem value="1">
         <AccordionHeader expandIconPosition="end">Questionnaires Debug Data</AccordionHeader>
-        <AccordionPanel>
+        <AccordionPanel id="questionnaires-debug">
           {
             resultsSummary.map(({ score, questionnaireName, didPassThreshold }, index) => {
               return (
@@ -22,7 +22,7 @@ export const DebugResults: React.FC<DebugResultsProps> = observer(({ resultsSumm
       </AccordionItem>
       <AccordionItem value="2">
         <AccordionHeader expandIconPosition="end">Personal Details Debug Data</AccordionHeader>
-        <AccordionPanel>
+        <AccordionPanel id="personal-details-debug">
           {
             Object.entries(personalDetailsSummary).map(([key, value], index) => {
               return (
