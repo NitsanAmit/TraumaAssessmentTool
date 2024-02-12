@@ -1,3 +1,7 @@
+/**
+ * values range: 0-3
+ * questions count: 9
+ */
 
 describe('PHQ-9', () => {
   it('Should be under threshold', () => {

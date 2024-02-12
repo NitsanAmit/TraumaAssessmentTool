@@ -39,7 +39,7 @@ export class ResultsStore {
     if (this.questionnairesStore.skippedSecondSection) {
       return this.summary.slice(0, this.questionnairesStore.cutoffQuestionIndex + 1);
     } else {
-      return this.summary.slice(this.questionnairesStore.cutoffQuestionIndex + 1, this.summary.length);
+      return this.summary.slice(this.questionnairesStore.cutoffQuestionIndex, this.summary.length);
     }
   }
 
