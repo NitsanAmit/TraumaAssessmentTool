@@ -3,6 +3,8 @@ import { webLightTheme } from '@fluentui/react-components';
 export const AppTheme = {
   ...webLightTheme,
   "fontFamilyBase": 'Rubik, sans-serif',
+  fontSizeBase300: '16px',
+  fontSizeBase400: '18px',
   "borderRadiusNone": "0",
   "borderRadiusSmall": "4px",
   "borderRadiusMedium": "6px",
