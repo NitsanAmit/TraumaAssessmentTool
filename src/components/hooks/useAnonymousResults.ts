@@ -10,9 +10,13 @@ const PII_QUESTIONNAIRES = ['free-text'];
 export const useAnonymousResults = () => {
 
   const debugMode = useDebugMode();
+  const { logEvent } = useFirebase();
   const [optOut, setOptOut] = useState(false);
   const [anonymousUserId, setAnonymousUserId] = useState<string | null>(null);
-  const optOutOfAnonymousDataCollection = useCallback(() => setOptOut(true), []);
+  const optOutOfAnonymousDataCollection = useCallback(() => {
+    logEvent('opt_out_anonymous_data_collection');
+    setOptOut(true);
+  }, []);
   const { firestore, analytics } = useFirebase();
 
   useEffect(() => {
@@ -44,6 +48,6 @@ export const useAnonymousResults = () => {
   return {
     anonymousUserId,
     sendAnonymousResults,
-    optOutOfAnonymousDataCollection: () => setOptOut(true),
+    optOutOfAnonymousDataCollection,
   };
 };
