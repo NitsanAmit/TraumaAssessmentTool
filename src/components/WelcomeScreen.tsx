@@ -65,7 +65,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(({ onNextCli
       <Footer>
         <div className="margin-bottom-xs">הכלי פותח בשיתוף המועצה הלאומית לפוסט-טראומה.
         </div>
-        <div>פיתוח מקצועי ותוכן: פרופ' אריה שלו, ד"ר שרה פרידמן, ד"ר יעל שובל-צוקרמן. מנהל הפרויקט: צחי זאבי.
+        <div>פיתוח מקצועי ותוכן: פרופ' אריה שלו, פרופ' שרה פרידמן, ד"ר יעל שובל-צוקרמן. מנהל הפרויקט: צחי זאבי.
         </div>
       </Footer>
     </div>

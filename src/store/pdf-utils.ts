@@ -1,15 +1,17 @@
 import { LineCapStyle, PDFDocument, PDFFont, ReadingDirection, rgb } from 'pdf-lib';
 import * as fontkit from 'fontkit';
 import { QuestionnairesSummary } from './types';
+import { QUESTIONNAIRE_NAME_TO_PURPOSE } from '../data/data.consts';
 
-const BODY_FONT_SIZE = 10;
-const SUBTITLE_FONT_SIZE = 14;
-const TITLE_FONT_SIZE = 20;
+const BODY_FONT_SIZE = 9;
+const SUBTITLE_FONT_SIZE = 12;
+const TITLE_FONT_SIZE = 18;
 
 type PersonalDetailsSummary = { [key: string]: string | undefined };
 
 export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
                                   resultsVerbalSummary: string,
+                                  resultsActions: string[],
                                   symptoms: string | null,
                                   personalDetailsSummary?: PersonalDetailsSummary) => {
   const { pdfDoc, font, getAdjustedXPosition, boldFont, getBoldAdjustedXPosition, page } = await _createPdf();
@@ -20,13 +22,15 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
 
   //Columns:
   const horizontalMargin = 30;
-  const firstColumnWidth = 140;
-  const secondColumnWidth = 80;
-  const thirdColumnWidth = 80;
+  const firstColumnWidth = 110;
+  const secondColumnWidth = 100;
+  const thirdColumnWidth = 65;
+  const fourthColumnWidth = 70;
   const firstColumnX = width - horizontalMargin;
   const secondColumnX = firstColumnX - firstColumnWidth;
   const thirdColumnX = secondColumnX - secondColumnWidth;
-  const rangeColumnX = thirdColumnX - thirdColumnWidth;
+  const fourthColumnX = thirdColumnX - thirdColumnWidth;
+  const rangeColumnX = fourthColumnX - fourthColumnWidth;
   const tableEndx = horizontalMargin;
 
   // Rows:
@@ -63,14 +67,20 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     size: SUBTITLE_FONT_SIZE,
     font: boldFont,
   });
+  page.drawText('מה נבדק', {
+    x: getBoldAdjustedXPosition(secondColumnX, 'מה נבדק', SUBTITLE_FONT_SIZE),
+    y: tableHeaderRowY,
+    size: SUBTITLE_FONT_SIZE,
+    font: boldFont,
+  });
   page.drawText('הציון שלי', {
-    x: getBoldAdjustedXPosition(secondColumnX, 'הציון שלי', SUBTITLE_FONT_SIZE),
+    x: getBoldAdjustedXPosition(thirdColumnX, 'הציון שלי', SUBTITLE_FONT_SIZE),
     y: tableHeaderRowY,
     size: SUBTITLE_FONT_SIZE,
     font: boldFont,
   });
   page.drawText('טווח תקין', {
-    x: getBoldAdjustedXPosition(thirdColumnX, 'טווח תקין', SUBTITLE_FONT_SIZE),
+    x: getBoldAdjustedXPosition(fourthColumnX, 'טווח תקין', SUBTITLE_FONT_SIZE),
     y: tableHeaderRowY,
     size: SUBTITLE_FONT_SIZE,
     font: boldFont,
@@ -90,6 +100,13 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
   let lastLineY = tableRowsY - (questionnairesSummary.length * BODY_FONT_SIZE) + 3;
   const lineTotalWidth = rangeColumnX - 50 - tableEndx;
   questionnairesSummary.forEach((summary, index) => {
+    const purpose = _flipParentheses(QUESTIONNAIRE_NAME_TO_PURPOSE[summary.questionnaireName]);
+    page.drawText(purpose, {
+      x: getAdjustedXPosition(secondColumnX, purpose, BODY_FONT_SIZE),
+      y: tableRowsY - (index * 2 * BODY_FONT_SIZE),
+      size: BODY_FONT_SIZE,
+      font
+    });
     page.drawText(summary.questionnaireName, {
       x: getBoldAdjustedXPosition(firstColumnX, summary.questionnaireName, BODY_FONT_SIZE),
       y: tableRowsY - (index * 2 * BODY_FONT_SIZE),
@@ -99,7 +116,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     if (typeof summary.score === 'number') {
       const thresholdRange = `${summary.threshold} - ${summary.minScore}`;
       page.drawText(thresholdRange, {
-        x: getAdjustedXPosition(thirdColumnX, thresholdRange, BODY_FONT_SIZE),
+        x: getAdjustedXPosition(fourthColumnX, thresholdRange, BODY_FONT_SIZE),
         y: tableRowsY - (index * 2 * BODY_FONT_SIZE),
         size: BODY_FONT_SIZE,
         font    });
@@ -153,7 +170,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     const lines = _breakLines(summary.score.toString(), font, BODY_FONT_SIZE, width - secondColumnX - horizontalMargin);
     lines.forEach(line => {
       page.drawText(line, {
-        x: getAdjustedXPosition(secondColumnX, line, BODY_FONT_SIZE),
+        x: getAdjustedXPosition(thirdColumnX, line, BODY_FONT_SIZE),
         y: tableRowsY - (index * 2 * BODY_FONT_SIZE),
         size: BODY_FONT_SIZE,
         font,
@@ -212,6 +229,21 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     });
   });
   lastRecommendationLineY -= recommendationsLines.length * 1.3 * BODY_FONT_SIZE;
+  let actionsRowY = lastRecommendationLineY - BODY_FONT_SIZE;
+  resultsActions.forEach(action => {
+    const lines = _breakLines(action, font, BODY_FONT_SIZE, width - 2 * horizontalMargin);
+    lines.forEach((line, lineIndex) => {
+      const adjustedLine = _flipParentheses(line);
+      page.drawText(adjustedLine, {
+        x: getAdjustedXPosition(firstColumnX, adjustedLine, BODY_FONT_SIZE),
+        y: actionsRowY - (lineIndex * 1.3 * BODY_FONT_SIZE),
+        size: BODY_FONT_SIZE,
+        font,
+      });
+    });
+    actionsRowY -= lines.length * 1.3 * BODY_FONT_SIZE;
+  });
+  lastRecommendationLineY = actionsRowY;
 
   if (personalDetailsSummary) {
     const personalDetailsHeaderY = lastRecommendationLineY - 2 * BODY_FONT_SIZE;
@@ -250,7 +282,7 @@ export const exportToPdf = async (questionnairesSummary: QuestionnairesSummary,
     });
   }
 
-  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח עבור המועצה הישראלית לפוסט־טראומה';
+  const footerText = 'סיכום זה הופק באמצעות כלי האבחון המקוון שפותח בשיתוף המועצה הישראלית לפוסט־טראומה';
   page.drawText(footerText, {
     x: width / 2 - font.widthOfTextAtSize(footerText, BODY_FONT_SIZE) / 2,
     y: footerRowY,
@@ -300,6 +332,8 @@ const _breakParagraph = (text: string, font:PDFFont, fontSize: number, maxLineLe
   lines.push(line);
   return lines;
 }
+
+const _flipParentheses = (text: string) => text.replaceAll(')', '*').replaceAll('(', ')').replaceAll('*', '(');
 
 const _download = (pdfBytes: Uint8Array) => {
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });

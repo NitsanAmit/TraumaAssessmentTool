@@ -154,7 +154,8 @@ export class ResultsStore {
   }
 
   public async exportToPdf(personalDetailsSummary?: Record<string, string | undefined>) {
-    return exportToPdf(this.rangedSummary, this.resultsVerbalSummary.summary, this.resultsSymptomsString, personalDetailsSummary);
+    return exportToPdf(this.rangedSummary, this.resultsVerbalSummary.summary, this.resultsVerbalSummary.actions,
+      this.resultsSymptomsString, personalDetailsSummary);
   }
 
   private _getQuestionnaireSummaryScore(questionnaire: QuestionBase, score: number | string): number | string {
