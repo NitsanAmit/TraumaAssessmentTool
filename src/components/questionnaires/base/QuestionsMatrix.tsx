@@ -13,6 +13,7 @@ import {
   TableRow
 } from '@fluentui/react-components';
 import { tableRowClassName } from '@fluentui/react-table';
+import { mobile } from '../../styles/style.consts';
 
 
 export const QuestionsMatrix: React.FC<QuestionsMatrixProps> = observer(({
@@ -84,7 +85,7 @@ const StyledTable = styled(Table)`
           .${tableRowClassName} {
             background: white;
           }
-          @media (max-width: 480px) {
+          @media (max-width: ${mobile.max}) {
             font-size: 12px;
           }
   `,

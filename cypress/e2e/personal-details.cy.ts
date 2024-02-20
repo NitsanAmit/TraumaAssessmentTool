@@ -8,16 +8,14 @@ describe('Personal Details Step', () => {
     cy.visit('http://localhost:3006?mode=debug');
     cy.wait(1000);
     cy.contains('התחלה').click();
-    cy.contains('שאלון היכרות (רשות)');
-    cy.contains('פרטים אישיים');
+    cy.contains('שאלות אישיות (רשות)');
+    cy.contains('שאלות אישיות');
     cy.contains('לשלב הקודם');
     cy.contains('המשך');
     cy.contains('דלג').click();
     cy.contains('רגע לפני שנתחיל');
     cy.contains('לשלב הקודם').click();
-    cy.contains('שאלון היכרות (רשות)');
-    cy.get('input[placeholder="שם פרטי"]').type('ניצן');
-    cy.get('input[placeholder="שם משפחה"]').type('עמית');
+    cy.contains('שאלות אישיות (רשות)');
     cy.contains('מגדר').click();
     cy.contains('נקבה').click();
     cy.get('input[placeholder="גיל"]').type('28');
@@ -36,8 +34,6 @@ describe('Personal Details Step', () => {
     skipToSummary();
     cy.contains('Personal Details Debug Data').click();
     cy.get('#personal-details-debug').should('have.text',
-      "שם פרטי: ניצן" +
-      "שם משפחה: עמית" +
       "מגדר: נקבה" +
       "גיל: 28" +
       "מצב משפחתי: גרוש/ה" +

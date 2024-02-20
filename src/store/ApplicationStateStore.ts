@@ -47,7 +47,7 @@ export class ApplicationStateStore {
       case APPLICATION_STEP.WELCOME:
         return 'התחלה';
       case APPLICATION_STEP.PERSONAL_DETAILS:
-        return 'פרטים אישיים';
+        return 'שאלות אישיות';
       case APPLICATION_STEP.FIRST_SECTION_INTRO:
         return 'מבוא';
       case APPLICATION_STEP.QUESTIONNAIRES:

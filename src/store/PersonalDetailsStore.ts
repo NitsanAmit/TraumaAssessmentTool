@@ -2,10 +2,6 @@ import { action, computed, makeAutoObservable } from 'mobx';
 
 export class PersonalDetailsStore {
 
-  firstName: string = "";
-
-  lastName: string = "";
-
   gender: string | undefined;
 
   age: string = "";
@@ -38,8 +34,6 @@ export class PersonalDetailsStore {
   @computed
   get summary(): Record<string, string | undefined> {
     return {
-      "שם פרטי": this.firstName,
-      "שם משפחה": this.lastName,
       "מגדר": this.gender,
       "גיל": this.age,
       "מצב משפחתי": this.familyStatus,

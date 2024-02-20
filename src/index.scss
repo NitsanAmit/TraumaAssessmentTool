@@ -1,3 +1,10 @@
+
+// Breakpoints:
+$small-desktop-min: 1024px;
+$small-desktop-max: 1023px;
+$mobile-min: 768px;
+$mobile-max: 767px;
+
 $header-color: #5658bf;
 body {
   margin: 0;
@@ -15,16 +22,32 @@ html, body, #root{
 
 h1 {
   color: $header-color;
-  font-size: 24px;
-  line-height: 28px;
+  font-size: 48px;
+  line-height: 56px;
   font-weight: bold;
+  @media (max-width: $small-desktop-max) {
+    font-size: 40px;
+    line-height: 42px;
+  }
+  @media (max-width: $mobile-max) {
+    font-size: 32px;
+    line-height: 36px;
+  }
 }
 
 h2 {
   color: $header-color;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 32px;
+  line-height: 36px;
   font-weight: bold;
+  @media (max-width: $small-desktop-max) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  @media (max-width: $mobile-max) {
+    font-size: 20px;
+    line-height: 24px;
+  }
 }
 
 

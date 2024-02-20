@@ -20,8 +20,16 @@
     align-items: flex-start;
 }
 
+.flex-end {
+    align-items: flex-end;
+}
+
 .justify-center {
     justify-content: center;
+}
+
+.border-box {
+    box-sizing: border-box;
 }
 
 .full-width {
@@ -67,6 +75,10 @@
 
 .overflow-x {
     overflow-x: auto;
+}
+
+.overflow-hidden {
+    overflow: hidden;
 }
 
 .pre-wrap {

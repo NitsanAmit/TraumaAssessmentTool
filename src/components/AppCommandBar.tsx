@@ -48,11 +48,12 @@ const CommandBar = styled.div`
           align-items: center;
           font-size: 14px;
           width: 100%;
-          padding: 16px 16px 0;
+          padding: 16px;
           box-sizing: border-box;
+          border-bottom: 1px solid #e5e5e5;
   `,
   StepDisplayName = styled.div`
-    font-weight: 300;
+    font-weight: 400;
     margin-right: 8px;
   `,
   StyledButton = styled(Button)`

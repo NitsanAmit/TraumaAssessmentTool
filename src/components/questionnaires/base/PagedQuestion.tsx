@@ -25,7 +25,7 @@ export const PagedQuestion: React.FC<PagedQuestionProps> = observer(({
 
   return (
     <div className="flex-column full-width">
-      <h3 className="full-width align-text-center" style={{ transition: 'all 3s'}}>{questionText}</h3>
+      <h3 className="full-width align-text-center padding-horizontal-sm border-box" style={{ transition: 'all 3s'}}>{questionText}</h3>
       {
         isObject && question.reverseScore &&
         <div className="margin-bottom-sm full-width align-text-center">* שימ/י לב שסדר התשובות בשאלה זו הפוך</div>

@@ -24,23 +24,12 @@ export const App: React.FC = observer(() => {
 });
 
 const AppContainer = styled.div`
-  background-color: #efefef;
+  background-color: white;
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  width: calc(100% - 32px);
-  height: calc(100vh - 32px);
-  height: calc(var(--vh, 1vh) * 100 - 32px);
-  padding: 16px;
-  @media (max-width: 560px) {
-    padding: 8px;
-    width: calc(100% - 16px);
-    height: calc(100vh - 16px);
-    height: calc(var(--vh, 1vh) * 100 - 16px);
-  }
-  @media (max-width: 390px) {
-    padding: 0;
-    width: 100%;
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
-  }
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;

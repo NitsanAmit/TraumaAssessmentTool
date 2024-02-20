@@ -4,6 +4,7 @@ import { QuestionnairesStore } from '../store/QuestionnairesStore';
 import { useEffect } from 'react';
 import { useFirebase } from './hooks/useFirebase';
 import { StickyBottomButtonPage } from './StickyButtonPage';
+import { mobile } from './styles/style.consts';
 
 export const SecondSectionIntro: React.FC<SecondSectionIntroProps> = observer(({ questionnairesStore }) => {
 
@@ -83,5 +84,9 @@ const IntroContainer = styled.div`
   `,
   StyledText = styled.div`
     white-space: pre-wrap;
+    padding: 24px 48px;
+    @media (max-width: ${mobile.max}) {
+      padding: 16px;
+    }
   `;
 

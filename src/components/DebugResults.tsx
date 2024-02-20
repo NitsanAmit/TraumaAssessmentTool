@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import { Accordion, AccordionHeader, AccordionItem, AccordionPanel } from '@fluentui/react-components';
 import { QuestionnairesSummary } from '../store/types';
+import styled from 'styled-components';
 
 
 export const DebugResults: React.FC<DebugResultsProps> = observer(({ resultsSummary, personalDetailsSummary }) => {
   return (
-    <Accordion collapsible className="full-width align-text-left" dir="ltr">
+    <StyledAccordion collapsible className="full-width align-text-left" dir="ltr">
       <AccordionItem value="1">
         <AccordionHeader expandIconPosition="end">Questionnaires Debug Data</AccordionHeader>
         <AccordionPanel id="questionnaires-debug">
@@ -34,7 +35,7 @@ export const DebugResults: React.FC<DebugResultsProps> = observer(({ resultsSumm
           }
         </AccordionPanel>
       </AccordionItem>
-    </Accordion>
+    </StyledAccordion>
   );
 });
 
@@ -42,3 +43,9 @@ type DebugResultsProps = {
   resultsSummary: QuestionnairesSummary;
   personalDetailsSummary: Record<string, string | undefined>;
 }
+
+const StyledAccordion = styled(Accordion)`
+  max-height: 300px;
+  overflow-y: auto;
+  flex: 1;
+`;

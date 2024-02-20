@@ -1,8 +1,4 @@
-/**
- * values range: 1-4
- * questions count: 10
- */
-
+// @ts-ignore
 describe('SAST', () => {
   it('Should be under threshold', () => {
     cy.visit('http://localhost:3006?mode=debug');
@@ -54,7 +50,7 @@ describe('SAST', () => {
     cy.contains('SAST: 25 passed');
   });
 
-  it.only('Should reverse 4,5,9 question scores', () => {
+  it('Should reverse 4,5,9 question scores', () => {
     cy.visit('http://localhost:3006?mode=debug');
     cy.wait(1000);
     cy.contains('התחלה').click();

@@ -23,18 +23,14 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
 
   return (
     <StickyBottomButtonPage buttonText={'המשך'} onButtonClick={onNextClicked}>
-      <h1 className="full-width align-text-center">שאלון היכרות (רשות)</h1>
+      <h1 className="full-width align-text-right">שאלות אישיות (רשות)</h1>
       <Text wrap weight="semibold" className="full-width">
         * אף נתון מדף זה לא נשמר או נאסף, גם לא לצרכי מחקר.
       </Text>
-      <Text wrap className="full-width margin-bottom-sm">
+      <Text wrap className="full-width margin-bottom-ml">
         מילוי הפרטים הוא רק עבורך, אם תרצה/י שיופיעו לצד תוצאות השאלונים בסיכום שתקבל/י, עבור התייעצות חיצונית.
       </Text>
       <PersonalDetailsScreenContainer>
-        <LargeTextField type="text" placeholder="שם פרטי" value={personalDetailsStore.firstName}
-                        onChange={setProperty('firstName')}/>
-        <LargeTextField type="text" placeholder="שם משפחה" value={personalDetailsStore.lastName}
-                        onChange={setProperty('lastName')}/>
         <PersonalDetailsDropdown placeholder="מגדר" value={personalDetailsStore.gender}
                                  onOptionSelect={setProperty('gender', true)}
                                  options={['זכר', 'נקבה', 'מעדיפ/ה לא לציין']}/>
@@ -51,7 +47,7 @@ export const PersonalDetails: React.FC<PersonalDetailsProps> = observer(({ perso
         <PersonalDetailsDropdown placeholder="האם יש עליך לחצים היום (כמו מעבר דירה, אבטלה, קרובי משפחה חטופים)?"
                                  value={personalDetailsStore.generalState}
                                  onOptionSelect={setProperty('generalState', true)}
-                                 options={['אין בכלל', 'קצת לחץ', 'מאוד לחוץ', 'לחצים בלתי נסבלים']}/>
+                                 options={['אין בכלל', 'מעט לחץ', 'הרבה לחץ', 'לחצים בלתי נסבלים']}/>
         <PersonalDetailsDropdown placeholder="האם אנשים אחרים (חברים, מכרים, קרובי משפחה) תומכים בך היום?"
                                  value={personalDetailsStore.supportCircle}
                                  onOptionSelect={setProperty('supportCircle', true)}
@@ -105,7 +101,7 @@ const PersonalDetailsScreenContainer = styled.div`
           flex-direction: column;
           align-items: center;
           width: 100%;
-          row-gap: 16px;
+          row-gap: 24px;
   `,
   StyledDropdown = styled(Dropdown)`
     width: 100%;

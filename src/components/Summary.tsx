@@ -26,7 +26,7 @@ export const Summary: React.FC<SummaryProps> = ({ resultsStore, personalDetailsS
   }
 
   return (
-    <StyledSummaryContainer className="full-height flex-column space-between full-width">
+    <StyledSummaryContainer>
       {
         debugMode &&
         <DebugResults resultsSummary={resultsStore.rangedSummary} personalDetailsSummary={personalDetailsSummary}/>
@@ -88,6 +88,9 @@ export type SummaryProps = {
 }
 
 const StyledSummaryContainer = styled.div`
+          display: flex;
+          flex-direction: column;
+          flex: 1;
           font-size: 16px;
           line-height: 24px;
           box-sizing: border-box;

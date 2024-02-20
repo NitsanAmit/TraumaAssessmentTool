@@ -18,7 +18,7 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
   return (
     <>
       <div className="full-width flex-column">
-        <div className="flex-row" style={{columnGap: '2px'}}>
+        <div className="flex-row" style={{ columnGap: '2px' }}>
           {
             context &&
             Array(context?.maxProgress ?? 0).fill(0).map((q, i) => {
@@ -38,14 +38,14 @@ export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<Questi
         questionTitle &&
         <QuestionTitle>{questionTitle}</QuestionTitle>
       }
-      <div className="full-height flex-column full-width">
+      <div className="full-height flex-column full-width align-center">
         <ChildrenContainer>
           {children}
         </ChildrenContainer>
         {
           onNextClicked &&
           <StyledButton appearance="primary" size="large" className="full-width" onClick={onNextClicked}
-                  shape="circular" disabled={!nextEnabled}>
+                        shape="circular" disabled={!nextEnabled}>
             {nextButtonText || 'המשך'}
           </StyledButton>
         }
@@ -66,6 +66,8 @@ export type QuestionnaireBaseProps = {
 const QuestionTitle = styled.h2`
           text-align: center;
           white-space: pre-line;
+          padding: 0 24px;
+          box-sizing: border-box;
   `,
   ChildrenContainer = styled.div`
     display: flex;
@@ -77,4 +79,5 @@ const QuestionTitle = styled.h2`
   `,
   StyledButton = styled(Button)`
     padding: 12px;
+    max-width: 600px;
   `;

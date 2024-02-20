@@ -6,10 +6,9 @@ import { QuestionnairesFlow } from './questionnaires/QuestionnairesFlow';
 import { Summary } from './Summary';
 import { observer } from 'mobx-react-lite'
 import { AppCommandBar } from './AppCommandBar';
-import { Card, Spinner } from '@fluentui/react-components';
+import { Spinner } from '@fluentui/react-components';
 import { useQuestions } from './hooks/useQuestions';
 import { FirstSectionIntro } from './FirstSectionIntro';
-import styled from 'styled-components';
 import { CompletedSecondSection } from './CompletedSecondSection';
 import { useAnonymousResults } from './hooks/useAnonymousResults';
 
@@ -31,14 +30,14 @@ export const Home: React.FC = observer(() => {
     cardRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }
   return (
-    <StyledCard size="large" ref={cardRef}>
+    <div className="flex-column flex-1 full-width" ref={cardRef}>
       {
         !appStateStore &&
         <Spinner/>
       }
       {
         appStateStore &&
-        <ResponsiveLayout>
+        <>
           {
             appStateStore.step !== APPLICATION_STEP.WELCOME &&
             <AppCommandBar appStateStore={appStateStore}/>
@@ -63,39 +62,21 @@ export const Home: React.FC = observer(() => {
           }
           {
             appStateStore.step === APPLICATION_STEP.QUESTIONNAIRES &&
-            <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore} />
+            <QuestionnairesFlow questionnairesStore={appStateStore.questionnairesStore}/>
           }
           {
             appStateStore.step === APPLICATION_STEP.COMPLETED_QUESTIONNAIRES &&
-            <CompletedSecondSection resultsStore={appStateStore.resultsStore} onNextClicked={nextAndScrollToTop} />
+            <CompletedSecondSection resultsStore={appStateStore.resultsStore} onNextClicked={nextAndScrollToTop}/>
           }
           {
             appStateStore.step === APPLICATION_STEP.SUMMARY &&
-            <Summary resultsStore={appStateStore.resultsStore} personalDetailsSummary={appStateStore.personalDetailsStore.summary}
-                     sendAnonymousResults={sendAnonymousResults} />
+            <Summary resultsStore={appStateStore.resultsStore}
+                     personalDetailsSummary={appStateStore.personalDetailsStore.summary}
+                     sendAnonymousResults={sendAnonymousResults}/>
           }
-        </ResponsiveLayout>
+        </>
       }
-    </StyledCard>
+    </div>
   );
-})
+});
 
-const StyledCard = styled(Card)`
-          width: 100%;
-          height: 100%;
-          overflow-y: auto;
-          display: flex;
-          align-items: center;
-          max-width: 800px;
-          padding: 0;
-          @media (max-width: 390px) {
-            border-radius: 0;
-            padding: 0;
-          }
-  `,
-  ResponsiveLayout = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  `;
