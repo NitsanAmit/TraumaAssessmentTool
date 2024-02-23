@@ -24,8 +24,8 @@ export const PagedQuestion: React.FC<PagedQuestionProps> = observer(({
   const orderedAnswers = isObject && question.reverseScore ? _.orderBy(answers, 'value', 'desc') : answers;
 
   return (
-    <div className="flex-column full-width">
-      <h3 className="full-width align-text-center padding-horizontal-sm border-box" style={{ transition: 'all 3s'}}>{questionText}</h3>
+    <div className="flex-column full-width margin-bottom-xl">
+      <h3 className="full-width align-text-center padding-horizontal-sm border-box">{questionText}</h3>
       {
         isObject && question.reverseScore &&
         <div className="margin-bottom-sm full-width align-text-center">* שימ/י לב שסדר התשובות בשאלה זו הפוך</div>

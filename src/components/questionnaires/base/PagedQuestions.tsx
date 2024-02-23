@@ -5,6 +5,7 @@ import { PagedQuestion } from './PagedQuestion';
 import { Button } from '@fluentui/react-components';
 import styled from 'styled-components';
 import { QuestionnaireBase } from './QuestionnaireBase';
+import { mobile } from '../../styles/style.consts';
 
 
 export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
@@ -63,13 +64,13 @@ export const PagedQuestions: React.FC<PagedQuestionsProps> = observer(({
           </StyledButton>
           {
             !isFirstQuestion &&
-            <Button
+            <StyledBackButton
               appearance="transparent"
               className="flex-1 margin-ml"
               shape="circular"
               onClick={() => setCurrentQuestionIndex(currentQuestionIndex - 1)}>
               לשאלה הקודמת
-            </Button>
+            </StyledBackButton>
           }
         </StyledButtonsContainer>
       </div>
@@ -91,10 +92,17 @@ export type PagedQuestionsProps = {
 const StyledButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   row-gap: 16px;
   margin-top: 16px;
 `,
   StyledButton = styled(Button)`
     padding: 12px;
+    max-width: ${mobile.min};
+    width: 100%;
+  `,
+  StyledBackButton = styled(Button)`
+    max-width: ${mobile.min};
+    width: 100%;
   `;

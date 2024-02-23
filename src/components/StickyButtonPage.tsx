@@ -115,6 +115,6 @@ const StyledStickyBottomButtonPage = styled.div<{ $smallScreenOnly?: boolean }>`
   }
   .sticky-bottom-button > button {
     width: 100%;
-    max-width: 600px;
+    max-width: ${mobile.min};
   }
 `;

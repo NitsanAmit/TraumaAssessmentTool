@@ -41,6 +41,21 @@ h2 {
   line-height: 36px;
   font-weight: bold;
   @media (max-width: $small-desktop-max) {
+    font-size: 28px;
+    line-height: 32px;
+  }
+  @media (max-width: $mobile-max) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+}
+
+h3 {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: bold;
+  margin: 16px 0 24px;
+  @media (max-width: $small-desktop-max) {
     font-size: 24px;
     line-height: 28px;
   }

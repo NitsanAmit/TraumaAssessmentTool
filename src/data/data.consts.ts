@@ -81,3 +81,6 @@ export const QUESTIONNAIRE_NAME_TO_SYMPTOMS: Partial<Record<QuestionnaireName, s
   [QuestionnaireNames.ICG]: 'אבל ואובדן מתמשך',
   [QuestionnaireNames.WANT_HELP]: 'רצון בייעוץ או טיפול',
 }
+
+export const PHQ9SuicidalQuestionIndex = 8;
+export const PHQ9SuicidalQuestionThreshold = 2;

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { PropsWithChildren, useContext } from 'react';
 import { QuestionnaireContext, QuestionnaireContextType } from '../../../store/QuestionnaireContext';
+import { mobile } from '../../styles/style.consts';
 
 export const QuestionnaireBase: React.FunctionComponent<PropsWithChildren<QuestionnaireBaseProps>> = ({
                                                                                                         questionTitle,
@@ -76,8 +77,9 @@ const QuestionTitle = styled.h2`
     margin-bottom: 48px;
     overflow-x: auto;
     overflow-y: hidden;
+    max-width: ${mobile.min};
   `,
   StyledButton = styled(Button)`
     padding: 12px;
-    max-width: 600px;
+    max-width: ${mobile.min};
   `;

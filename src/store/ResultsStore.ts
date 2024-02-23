@@ -4,7 +4,13 @@ import { QuestionnairesStore } from './QuestionnairesStore';
 import { QuestionBase } from '../components/questionnaires/base/types';
 import { QuestionnairesSummary, SECOND_STAGE_RESULT_CATEGORY, SecondStageResultCategory } from './types';
 import { exportToPdf } from './pdf-utils';
-import { QUESTIONNAIRE_NAME_TO_ELEMENT, QUESTIONNAIRE_NAME_TO_SYMPTOMS, QuestionnaireTypes } from '../data/data.consts';
+import {
+  QUESTIONNAIRE_NAME_TO_ELEMENT,
+  QUESTIONNAIRE_NAME_TO_SYMPTOMS,
+  QuestionnaireTypes,
+  PHQ9SuicidalQuestionIndex,
+  PHQ9SuicidalQuestionThreshold
+} from '../data/data.consts';
 
 export class ResultsStore {
 
@@ -68,7 +74,7 @@ export class ResultsStore {
         const percentage = this._percentOverThreshold(score, maxScore, threshold);
         return percentage <= 20;
       });
-      if (isSlightlyPositive) {
+      if (isSlightlyPositive && !this.phq9SuicidalPositive) {
         return SECOND_STAGE_RESULT_CATEGORY.SLIGHTLY_POSITIVE;
       }
     }
@@ -104,10 +110,17 @@ export class ResultsStore {
   }
 
   @computed
+  get phq9SuicidalPositive(): boolean {
+    const phqIndex = this.questionnairesStore.questions.findIndex(q => q.questionnaire === 'PHQ-9');
+    const suicidalQuestionScore = this.questionnairesStore.questionnairesStates[phqIndex]?.[PHQ9SuicidalQuestionIndex];
+    return !_.isNil(suicidalQuestionScore) && suicidalQuestionScore >= PHQ9SuicidalQuestionThreshold;
+  }
+
+  @computed
   get resultsVerbalSummary(): { summary: string; actions: string[]; } {
     const baseActions = [
       'אם רוצים, כדאי לדבר עם אדם שסומכים עליו, קרוב/ה או חבר/ה, ולשתף במה שאת/ה מרגיש/ה וחווה, ולא להישאר לבד עם התחושות הקשות.',
-      'אפשר להתקשר לארגוני תמיכה נפשית כמו ער"ן (1-201) או נט"ל (1-800-363-363) אם מרגישים מצוקה גדולה כרגע.',
+      'אפשר ליצור קשר עם ארגוני תמיכה נפשית כמו ער"ן (1-201), נט"ל (1-800-363-363), או סה"ר (https://sahar.org.il) אם מרגישים מצוקה גדולה כרגע.',
     ];
     const negativeActions = [
       'אם את/ה בכל זאת מרגיש/ה צורך בכך, כדאי לפנות לייעוץ בהקדם. באפשרותך להדפיס את התוצאות ולהציגן למטפל/ת שתבחרי או לרופא/ת המשפחה, כדי לקבל עזרה או לקבל המלצות לטיפול נוסף.',

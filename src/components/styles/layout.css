@@ -69,6 +69,10 @@
     text-align: right;
 }
 
+.bold {
+    font-weight: 700;
+}
+
 .semi-bold {
     font-weight: 600;
 }
